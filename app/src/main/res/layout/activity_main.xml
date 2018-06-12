@@ -1,18 +1,172 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MainActivity">
+<LinearLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:orientation="vertical"
+tools:context="com.tarareapp_3.reproductor_tarareapp.MainActivity">
 
-    <TextView
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:textSize="20sp"
+    android:fontFamily="sans-serif-light"
+    android:textColor="@android:color/secondary_text_light_nodisable"
+    android:layout_marginLeft="16dp"
+    android:layout_marginTop="16dp"
+    android:text="Indice Compas" />
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+    <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:text="0"
+        android:textSize="20sp"
+        android:fontFamily="sans-serif"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp"
+        android:id="@+id/compasEditText"/>
+</LinearLayout>
 
-</android.support.constraint.ConstraintLayout>
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="100sp"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="100sp"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:fontFamily="sans-serif-light"
+            android:textColor="@android:color/secondary_text_light_nodisable"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:text="Bit Inicial"/>
+
+        <EditText
+            android:id="@+id/bitInicialText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="100"
+            android:inputType="numberSigned">
+        </EditText>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="100sp"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:fontFamily="sans-serif-light"
+            android:textColor="@android:color/secondary_text_light_nodisable"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:text="Bit Final"/>
+        <EditText
+            android:id="@+id/bitFinalText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="100"
+            android:inputType="numberSigned" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="100sp"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:fontFamily="sans-serif-light"
+            android:textColor="@android:color/secondary_text_light_nodisable"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:text="Octava"/>
+        <com.tarareapp.reproductor.MyNumberPicker
+            android:id="@+id/octavaPicker"
+            android:layout_width="50sp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            min="0"
+            value="4"
+            max="8">
+        </com.tarareapp.reproductor.MyNumberPicker>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="100sp"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:fontFamily="sans-serif-light"
+            android:textColor="@android:color/secondary_text_light_nodisable"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:text="Nota"/>
+        <Spinner
+            android:id="@+id/notaSpinner"
+            android:layout_width="50sp"
+            android:layout_height="50sp"
+            android:layout_marginLeft="16dp"
+            android:entries="@array/array_notas"
+            android:prompt="@string/prompt_notas">
+        </Spinner>
+    </LinearLayout>
+</LinearLayout>
+
+<Button
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Crear"
+    android:textSize="20sp"
+    android:fontFamily="sans-serif"
+    android:layout_marginLeft="16dp"
+    android:layout_marginTop="16dp"
+    android:onClick="addNota"/>
+
+<Button
+    android:id="@+id/button_rep"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="Reproducir todo"
+    android:onClick="reproducirPartitura"/>
+
+<Button
+    android:id="@+id/button_rep_bit"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="Reproducir desde bit seleccionado"
+    android:onClick="reproducirPartitura_desde_bit_x"/>
+
+<Button
+    android:id="@+id/button_pause"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="Pausar"
+    android:onClick="pausar_reproduccion"/>
+
+<Button
+    android:id="@+id/button_stop"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="Detener"
+    android:onClick="detener_reproduccion"/>
+
+</LinearLayout>
