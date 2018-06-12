@@ -275,13 +275,25 @@ public class Partitura_t
         {
             boolean es_primer_compas = true;
 
-            int compas_inicial = (int) Math.floor((a_duracion_bit * a_num_bits_en_compas) / a_cronometro.crono_get_bit_actual());
+            int compas_inicial, bit_inicial;
 
-            int bit_inicial = (int) Math.floor((a_duracion_bit * a_num_bits_en_compas) % a_cronometro.crono_get_bit_actual());
+            if (a_cronometro.crono_get_bit_actual() >= a_num_bits_en_compas)
+            {
+                compas_inicial = (int) Math.floor(a_cronometro.crono_get_bit_actual() / a_num_bits_en_compas);
+                bit_inicial = (int) Math.floor(a_cronometro.crono_get_bit_actual() % a_num_bits_en_compas);
+            }
+            else
+            {
+                compas_inicial = 0;
+                bit_inicial = a_cronometro.crono_get_bit_actual();
+            }
 
             a_cronometro.crono_iniciar();
 
-            for (int i = compas_inicial - 1; i < av_compases.size(); i++)
+            System.out.println("compas_inicial " + compas_inicial);
+            System.out.println("bit_inicial " + compas_inicial);
+
+            for (int i = compas_inicial; i < av_compases.size(); i++)
             {
                 if (i > compas_inicial - 1)
                     es_primer_compas = false;
