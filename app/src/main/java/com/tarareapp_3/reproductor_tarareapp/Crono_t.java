@@ -74,7 +74,7 @@ public class Crono_t
 
             a_en_reproduccion = true;
 
-            a_hilo = new Thread(new Runnable()
+            final Thread hilo = new Thread(new Runnable()
             {
                 Timer timer = new Timer();
 
@@ -90,7 +90,9 @@ public class Crono_t
                     }, 500, (long) Math.floor(a_duracion_bit * 1000));
                 }
             });
-            a_hilo.start();
+            hilo.start();
+
+            a_hilo = hilo;
         }
         else
         {

@@ -151,7 +151,7 @@ public class Hilo_Reproduccion_t {
 
         i_libera_audioTrack_hilo();
 
-        a_hilo = new Thread(new Runnable() {
+        final Thread hilo = new Thread(new Runnable() {
             Timer timer = new Timer();
 
             public void run() {
@@ -172,7 +172,9 @@ public class Hilo_Reproduccion_t {
                 }, p_delay + (long) Math.floor(a_duracion * 1000));
             }
         });
-        a_hilo.start();
+        hilo.start();
+
+        a_hilo = hilo;
 
         a_duracion = duracion_aux;
     }
