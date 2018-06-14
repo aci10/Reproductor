@@ -81,7 +81,7 @@ public class Hilo_Reproduccion_t {
 
     private void i_play()
     {
-        System.out.println("reproduce hilo nota");
+        // System.out.println("reproduce hilo nota");
 
         try {
             a_audioTrack = new AudioTrack(
@@ -109,9 +109,9 @@ public class Hilo_Reproduccion_t {
 
             if (a_audioTrack != null && a_audioTrack.getState() != AudioTrack.STATE_UNINITIALIZED)
             {
-                System.out.println("se ejecuta sonido, id: " + a_audioTrack.getAudioSessionId());
+                // System.out.println("se ejecuta sonido, id: " + a_audioTrack.getAudioSessionId());
 
-                System.out.println("Numero de muestras: " + a_num_muestras);
+                // System.out.println("Numero de muestras: " + a_num_muestras);
 
                 a_audioTrack.write(av_sonido_generado, 0, av_sonido_generado.length);
 
@@ -135,7 +135,7 @@ public class Hilo_Reproduccion_t {
     private void i_libera_audioTrack_hilo()
     {
         if (a_audioTrack != null){
-            System.out.println("entra en liberacion audioTrack, id: " + a_audioTrack.getAudioSessionId());
+            // System.out.println("entra en liberacion audioTrack, id: " + a_audioTrack.getAudioSessionId());
             a_audioTrack.release();
             a_audioTrack = null;
         }
@@ -214,8 +214,15 @@ public class Hilo_Reproduccion_t {
 
     public void hilo_reproduccion_detener()
     {
+        System.out.println("Detencion reproduccion hilo");
+        System.out.println("a_audioTrack");
+        System.out.println("a_hilo: " + a_hilo);
+        System.out.println("hilo vivo: " + a_hilo.isAlive());
+        System.out.println("hilo interrumpido: " + a_hilo.isInterrupted());
+
         if ( a_audioTrack != null && a_hilo != null && a_hilo.isAlive() && !a_hilo.isInterrupted())
         {
+            System.out.println("Entra en detencion");
             i_libera_audioTrack_hilo();
             a_hilo.interrupt();
             a_nota.nota_finaliza_reproduccion();

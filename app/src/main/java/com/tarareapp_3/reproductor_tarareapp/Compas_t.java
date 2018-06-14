@@ -9,14 +9,20 @@ import java.util.ArrayList;
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class Compas_t
 {
+    private int a_id;
     private Partitura_t a_partitura;
 
     private ArrayList<Nota_t>[] av_notas;
 
     // ---------------------------------------------------------------------------------------------
 
-    public Compas_t(Partitura_t p_partitura)
+    public Compas_t(int p_id, Partitura_t p_partitura)
     {
+        if (p_id > 0)
+            a_id = p_id;
+        else
+            a_id = 0;
+
         if(p_partitura != null)
             a_partitura = p_partitura;
         else
@@ -31,6 +37,13 @@ public class Compas_t
         {
             av_notas[i] = new ArrayList<>();
         }
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
+    public int compas_get_pos_bit_inicial()
+    {
+        return a_id * a_partitura.partitura_get_num_bits_en_compas();
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -141,57 +154,31 @@ public class Compas_t
 
     // ---------------------------------------------------------------------------------------------
 
-    public void compas_inicializar_notas(int p_indice_compas, boolean p_es_ultimo_compas)
-    {
-        if (av_notas != null)
-        {
-            for (int i = 0; i < av_notas.length; i++)
-            {
-                if (av_notas[i] != null)
-                {
-                    for (int j = 0; j < av_notas[i].size(); j++)
-                    {
-                        double double_delay = a_partitura.partitura_get_duracion_bit() * 1000;
-
-                        long delay = (long) Math.floor(double_delay * i +
-                                (p_indice_compas * av_notas.length * double_delay)) + 500;
-
-                        System.out.println("Delay: " + delay);
-
-                        av_notas[i].get(j).nota_inicializar_hilo(delay);
-                    }
-                }
-            }
-        }
-    }
-
-    // ---------------------------------------------------------------------------------------------
-
     public void compas_inicializar_notas(
-            int p_indice_compas,
-            int p_bit_inicial,
-            boolean p_es_primer_compas)
+                        int p_indice_compas,
+                        int p_bit_inicial,
+                        boolean p_es_primer_compas)
     {
         if (av_notas != null)
         {
             double double_delay = a_partitura.partitura_get_duracion_bit() * 1000;
 
-            for (int i = 0; i < av_notas.length; i++)
+            long delay_bit_inicial = (long) Math.floor(double_delay * p_bit_inicial +
+                    (p_indice_compas * av_notas.length * double_delay)) + 500;
+
+            for (int i = p_bit_inicial; i < av_notas.length; i++)
             {
                 if (av_notas[i] != null)
                 {
-                    long delay_bit_inicial = (long) Math.floor(double_delay * i +
+                    long delay = (long) Math.floor(double_delay * i +
                             (p_indice_compas * av_notas.length * double_delay)) + 500;
 
                     for (int j = 0; j < av_notas[i].size(); j++)
                     {
-                        long delay = (long) Math.floor(double_delay * i +
-                                (p_indice_compas * av_notas.length * double_delay)) + 500;
-
                         if (delay >= delay_bit_inicial
                                 || av_notas[i].get(j).nota_ocupa_rejilla(p_bit_inicial))
                         {
-                            System.out.println("Delay: " + delay);
+                            // System.out.println("Delay: " + delay);
 
                             av_notas[i].get(j).nota_inicializar_hilo(delay_bit_inicial, p_bit_inicial, p_es_primer_compas);
                         }

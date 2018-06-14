@@ -112,6 +112,8 @@ public class Crono_t
                 a_hilo.interrupt();
 
             a_hilo = null;
+
+            a_bit_inicial = a_bit_actual;
         }
         else
         {

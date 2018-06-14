@@ -1060,9 +1060,37 @@ public class Nota_t
 
     // ---------------------------------------------------------------------------------------------
 
+    private int i_get_num_bit_final(int p_bit_inicial)
+    {
+        int num_bit_final;
+
+        num_bit_final = p_bit_inicial + a_num_bits;
+
+        if (a_nota_ligada != null)
+            num_bit_final = a_nota_ligada.i_get_num_bit_final(num_bit_final);
+
+        return num_bit_final;
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
     public double nota_get_frecuencia()
     {
         return a_frecuencia;
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
+    public int nota_get_num_bit_final()
+    {
+        int num_bit_final;
+
+        num_bit_final = a_compas.compas_get_pos_bit_inicial() + a_num_bits;
+
+        if (a_nota_ligada != null)
+            num_bit_final = a_nota_ligada.i_get_num_bit_final(num_bit_final);
+
+        return num_bit_final;
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -1106,25 +1134,25 @@ public class Nota_t
     {
         double nueva_duracion;
 
-        System.out.println("nota_inicializar");
+        // System.out.println("nota_inicializar");
 
         if (!a_en_reproduccion )
         {
             if (a_nota_padre == null || !a_nota_padre.i_en_reproduccion())
             {
-                a_en_reproduccion = true;
-
-                if (p_bit_inicio_rep > a_bit_inicial)
-                {
-                    int num_bits = a_num_bits - (p_bit_inicio_rep - a_bit_inicial);
-
-                    nueva_duracion = i_calcula_duracion(num_bits);
-                }
-                else
-                    nueva_duracion = -1;
-
                 if (p_es_compas_inicial || a_nota_padre == null)
                 {
+                    a_en_reproduccion = true;
+
+                    if (p_bit_inicio_rep > a_bit_inicial)
+                    {
+                        int num_bits = a_num_bits - p_bit_inicio_rep;
+
+                        nueva_duracion = i_calcula_duracion(num_bits);
+                    }
+                    else
+                        nueva_duracion = -1;
+
                     if (a_hilo_rep == null)
                         a_hilo_rep = new Hilo_Reproduccion_t(this, nueva_duracion, a_frecuencia);
 
@@ -1202,6 +1230,7 @@ public class Nota_t
         System.out.println("Num Bits: " + a_num_bits);
         System.out.println("Frecuencia: " + a_frecuencia);
         System.out.println("Duracion: " + this.nota_get_duracion());
+        System.out.println("Ultima nota: " + a_es_ultima);
 
         if (a_nota_ligada != null)
             System.out.println("Notas_ligada: " + a_nota_ligada.nota_get_duracion());

@@ -147,7 +147,7 @@ public class Partitura_t
 
             for(int i = 0; i < diferencia; i++)
             {
-                av_compases.add(new Compas_t(this));
+                av_compases.add(new Compas_t(av_compases.size() + i,this));
             }
 
         }else if(p_indice_compas < 0)
@@ -185,9 +185,8 @@ public class Partitura_t
             String p_nombre,
             int p_octava)
     {
-        int compases_extra, bits_restantes, tamanyo_en_ultimo_compas, bits_nota;
-        int indice_nota;
-        Nota_t nota_padre;
+        int compases_extra, bits_restantes, tamanyo_en_ultimo_compas, bits_nota, indice_nota;
+        Nota_t nota_padre, nota_raiz;
 
         bits_restantes = p_num_bits - (a_num_bits_en_compas - p_bit_inicial);
 
@@ -211,10 +210,10 @@ public class Partitura_t
 
         i_redimensiona_vec_compases(p_indice_compas + compases_extra);
 
-        if (compases_extra == 0)
-            compases_extra++;
+        compases_extra++;
 
         nota_padre = null;
+        nota_raiz = null;
         indice_nota = p_bit_inicial;
 
         for (int i = 0; i < compases_extra; i++)
@@ -239,16 +238,23 @@ public class Partitura_t
 
             nota_aux = av_compases.get(i + p_indice_compas).compas_get_nota(indice_nota, p_nombre, p_octava);
 
-            if (i == 0 && (a_ultima_nota == null
-                    || nota_aux.nota_get_duracion() > a_ultima_nota.nota_get_duracion()))
+            if (i == 0)
+                nota_raiz = av_compases.get(i + p_indice_compas).compas_get_nota(indice_nota, p_nombre, p_octava);
+
+            if (i == compases_extra - 1
+                    && (a_ultima_nota == null
+                        || (nota_raiz != null
+                            && nota_raiz.nota_get_num_bit_final() > a_ultima_nota.nota_get_num_bit_final()
+                            )
+                        )
+                )
             {
                 if (a_ultima_nota != null)
                     a_ultima_nota.nota_set_es_ultima(false);
 
-                a_ultima_nota = nota_aux;
+                a_ultima_nota = nota_raiz;
                 a_ultima_nota.nota_set_es_ultima(true);
             }
-
 
             if (nota_padre != null)
                 nota_padre.nota_set_hijo(nota_aux);
@@ -280,7 +286,7 @@ public class Partitura_t
             if (a_cronometro.crono_get_bit_actual() >= a_num_bits_en_compas)
             {
                 compas_inicial = (int) Math.floor(a_cronometro.crono_get_bit_actual() / a_num_bits_en_compas);
-                bit_inicial = (int) Math.floor(a_cronometro.crono_get_bit_actual() % a_num_bits_en_compas);
+                bit_inicial = a_cronometro.crono_get_bit_actual() % a_num_bits_en_compas;
             }
             else
             {
@@ -291,17 +297,24 @@ public class Partitura_t
             a_cronometro.crono_iniciar();
 
             System.out.println("compas_inicial " + compas_inicial);
-            System.out.println("bit_inicial " + compas_inicial);
+            System.out.println("bit_inicial " + bit_inicial);
+
+            int indice_compas_reproduccion = 0;
 
             for (int i = compas_inicial; i < av_compases.size(); i++)
             {
-                if (i > compas_inicial - 1)
+                if (i >= compas_inicial)
                     es_primer_compas = false;
 
+                if (i > compas_inicial)
+                    bit_inicial = 0;
+
                 if (av_compases.get(i) != null)
-                    av_compases.get(i).compas_inicializar_notas(i, bit_inicial, es_primer_compas);
+                    av_compases.get(i).compas_inicializar_notas(indice_compas_reproduccion, bit_inicial, es_primer_compas);
                 else
                     Log.e("partitura_rep_compases", "av_compas[i] es NULL");
+
+                indice_compas_reproduccion++;
             }
         }
     }
