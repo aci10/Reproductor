@@ -28,22 +28,13 @@ public class Nota_t
 
     private double i_calcula_duracion(int p_num_bits)
     {
-        double duracion;
+        double duracion = 0.;
 
         if (a_compas != null)
         {
             if (a_nota_padre == null)
-            {
                 duracion = p_num_bits * a_compas.compas_get_partitura().partitura_get_duracion_bit();
-
-                if (a_nota_ligada != null)
-                    duracion += a_nota_ligada.nota_get_duracion();
-            }
-            else
-                duracion = 0.;
         }
-        else
-            duracion = 0.;
 
         return duracion;
     }
@@ -1134,7 +1125,7 @@ public class Nota_t
     {
         double nueva_duracion;
 
-        // System.out.println("nota_inicializar");
+        System.out.println("nota_inicializar");
 
         if (!a_en_reproduccion )
         {
@@ -1187,6 +1178,23 @@ public class Nota_t
             duracion = 0.;
 
         return duracion;
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
+    public void nota_recalcula_duracion()
+    {
+        if (a_compas != null)
+        {
+            double duracion;
+
+            duracion = a_num_bits * a_compas.compas_get_partitura().partitura_get_duracion_bit();
+
+            if (a_nota_ligada != null)
+                duracion += a_nota_ligada.nota_get_duracion();
+
+            a_hilo_rep.hilo_reproduccion_set_duracion(duracion);
+        }
     }
 
     // ---------------------------------------------------------------------------------------------

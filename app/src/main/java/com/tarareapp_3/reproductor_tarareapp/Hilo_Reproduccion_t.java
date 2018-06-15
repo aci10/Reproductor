@@ -81,7 +81,7 @@ public class Hilo_Reproduccion_t {
 
     private void i_play()
     {
-        // System.out.println("reproduce hilo nota");
+        System.out.println("reproduce hilo nota");
 
         try {
             a_audioTrack = new AudioTrack(
@@ -109,9 +109,9 @@ public class Hilo_Reproduccion_t {
 
             if (a_audioTrack != null && a_audioTrack.getState() != AudioTrack.STATE_UNINITIALIZED)
             {
-                // System.out.println("se ejecuta sonido, id: " + a_audioTrack.getAudioSessionId());
+                System.out.println("se ejecuta sonido, id: " + a_audioTrack.getAudioSessionId());
 
-                // System.out.println("Numero de muestras: " + a_num_muestras);
+                System.out.println("Numero de muestras: " + a_num_muestras);
 
                 a_audioTrack.write(av_sonido_generado, 0, av_sonido_generado.length);
 
@@ -135,7 +135,7 @@ public class Hilo_Reproduccion_t {
     private void i_libera_audioTrack_hilo()
     {
         if (a_audioTrack != null){
-            // System.out.println("entra en liberacion audioTrack, id: " + a_audioTrack.getAudioSessionId());
+            System.out.println("entra en liberacion audioTrack, id: " + a_audioTrack.getAudioSessionId());
             a_audioTrack.release();
             a_audioTrack = null;
         }
@@ -206,6 +206,9 @@ public class Hilo_Reproduccion_t {
     {
         if (p_duracion < 0)
             p_duracion = a_duracion;
+
+        System.out.println(p_duracion);
+        System.out.println(a_duracion);
 
         i_inicializa_reproduccion(p_delay, p_duracion);
     }

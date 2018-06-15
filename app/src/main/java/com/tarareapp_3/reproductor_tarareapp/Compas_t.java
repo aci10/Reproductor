@@ -175,11 +175,14 @@ public class Compas_t
 
                     for (int j = 0; j < av_notas[i].size(); j++)
                     {
-                        if (delay >= delay_bit_inicial
-                                || av_notas[i].get(j).nota_ocupa_rejilla(p_bit_inicial))
+                        if (delay >= delay_bit_inicial)
                         {
-                            // System.out.println("Delay: " + delay);
-
+                            System.out.println("Delay: " + delay);
+                            av_notas[i].get(j).nota_inicializar_hilo(delay, p_bit_inicial, p_es_primer_compas);
+                        }
+                        else if (av_notas[i].get(j).nota_ocupa_rejilla(p_bit_inicial))
+                        {
+                            System.out.println("Delay: " + delay_bit_inicial);
                             av_notas[i].get(j).nota_inicializar_hilo(delay_bit_inicial, p_bit_inicial, p_es_primer_compas);
                         }
                     }

@@ -261,6 +261,9 @@ public class Partitura_t
 
             nota_padre = nota_aux;
         }
+
+        if (nota_raiz != null)
+            nota_raiz.nota_recalcula_duracion();
     }
 
     // ---------------------------------------------------------------------------------------------
