@@ -25,12 +25,13 @@ public class Hilo_Reproduccion_t {
 
     private Thread a_hilo;
     private AudioTrack a_audioTrack;
+    private Runnable am_play;
 
     private byte av_sonido_generado[];
 
     private android.os.Handler a_handler;
 
-    private boolean a_detenido;
+    // private boolean a_detenido;
 
     // ---------------------------------------------------------------------------------------------
 
@@ -59,7 +60,9 @@ public class Hilo_Reproduccion_t {
 
         a_hilo = null;
 
-        a_detenido = false;
+        am_play = null;
+
+        // a_detenido = false;
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -87,8 +90,8 @@ public class Hilo_Reproduccion_t {
     {
         // System.out.println("reproduce hilo nota");
 
-        if (!a_detenido)
-        {
+        //if (!a_detenido)
+        // {
             try
             {
                 a_audioTrack = new AudioTrack(
@@ -140,9 +143,9 @@ public class Hilo_Reproduccion_t {
             {
                 e.printStackTrace();
             }
-        }
-        else
-            a_detenido = false;
+        // }
+        // else
+           // a_detenido = false;
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -172,11 +175,14 @@ public class Hilo_Reproduccion_t {
 
             public void run() {
                 i_gen_tone();
-                a_handler.postDelayed(new Runnable() {
+
+                am_play = new Runnable() {
                     public void run() {
                         i_play();
                     }
-                }, p_delay);
+                };
+
+                a_handler.postDelayed(am_play, p_delay);
 
                 timer.schedule(new TimerTask() {
                     @Override
@@ -184,6 +190,7 @@ public class Hilo_Reproduccion_t {
                     {
                         i_libera_audioTrack_hilo();
                         a_nota.nota_finaliza_reproduccion();
+                        am_play = null;
                     }
                 }, p_delay + (long) Math.floor(a_duracion * 1000));
             }
@@ -241,10 +248,19 @@ public class Hilo_Reproduccion_t {
         if (a_hilo != null && !a_hilo.isInterrupted())
         {
             System.out.println("Entra en detencion hilo");
+
             if (a_audioTrack != null)
                 i_libera_audioTrack_hilo();
             else
-                a_detenido = true;
+            {
+                if (a_handler != null && am_play != null)
+                {
+                    a_handler.removeCallbacks(am_play);
+                    a_handler = null;
+                    am_play = null;
+                    // a_detenido = true;
+                }
+            }
 
             a_hilo.interrupt();
             a_nota.nota_finaliza_reproduccion();
