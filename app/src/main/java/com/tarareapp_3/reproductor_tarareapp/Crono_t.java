@@ -69,7 +69,7 @@ public class Crono_t
     {
         if (!a_en_reproduccion)
         {
-            if (a_hilo != null && a_hilo.isAlive() && !a_hilo.isInterrupted())
+            if (a_hilo != null && !a_hilo.isInterrupted())
                 a_hilo.interrupt();
 
             a_en_reproduccion = true;
@@ -108,7 +108,7 @@ public class Crono_t
         {
             a_en_reproduccion = false;
 
-            if (a_hilo != null && a_hilo.isAlive() && !a_hilo.isInterrupted())
+            if (a_hilo != null && !a_hilo.isInterrupted())
                 a_hilo.interrupt();
 
             a_hilo = null;
@@ -133,7 +133,7 @@ public class Crono_t
         {
             a_en_reproduccion = false;
 
-            if (a_hilo != null && a_hilo.isAlive() && !a_hilo.isInterrupted())
+            if (a_hilo != null && !a_hilo.isInterrupted())
                 a_hilo.interrupt();
 
             a_hilo = null;

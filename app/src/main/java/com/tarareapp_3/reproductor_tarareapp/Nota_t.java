@@ -1098,8 +1098,10 @@ public class Nota_t
 
     public void nota_detener_reproduccion()
     {
-        if (a_en_reproduccion)
+        if (a_en_reproduccion) {
+            Log.e("Inicio detencion nota_2", "detencion");
             a_hilo_rep.hilo_reproduccion_detener();
+        }
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -1113,7 +1115,7 @@ public class Nota_t
 
     public void nota_inicializar_hilo(long p_delay)
     {
-        System.out.println("nota_inicializar");
+        // System.out.println("nota_inicializar");
 
         if (a_hilo_rep != null && a_nota_padre == null)
             a_hilo_rep.hilo_reproduccion_inicializar(p_delay);
@@ -1125,7 +1127,7 @@ public class Nota_t
     {
         double nueva_duracion;
 
-        System.out.println("nota_inicializar");
+        // System.out.println("nota_inicializar");
 
         if (!a_en_reproduccion )
         {

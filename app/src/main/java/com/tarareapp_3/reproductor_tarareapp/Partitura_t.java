@@ -350,16 +350,28 @@ public class Partitura_t
 
     public void partitura_detener_reproduccion(boolean p_pausar)
     {
-        int compas_inicial;
+        int compas_inicial = 0;
 
-        compas_inicial = (int) Math.floor((a_duracion_bit * a_num_bits_en_compas) / a_cronometro.crono_get_bit_inicial());
+        if (a_cronometro.crono_get_bit_inicial() > 0)
+            compas_inicial = (int) Math.floor((a_duracion_bit * a_num_bits_en_compas) / a_cronometro.crono_get_bit_inicial());
+
+        /*Log.e("Inicio detencion compas", "" + compas_inicial);
+        Log.e("Inicio detencion compas", "" + a_duracion_bit);
+        Log.e("Inicio detencion compas", "" + a_num_bits_en_compas);
+        Log.e("Inicio detencion compas", "" + a_cronometro.crono_get_bit_inicial());*/
 
         if (a_cronometro.crono_get_en_reproduccion())
         {
-            if (p_pausar)
+            Log.e("Inicio detencion partitura", "pasa");
+
+            if (p_pausar) {
                 a_cronometro.crono_parar();
-            else
+                Log.e("Inicio detencion partitura_2", "pausa");
+            }
+            else {
                 a_cronometro.crono_reiniciar();
+                Log.e("Inicio detencion partitura_3", "detencion");
+            }
 
             for (int i = compas_inicial; i < av_compases.size(); i++)
             {
