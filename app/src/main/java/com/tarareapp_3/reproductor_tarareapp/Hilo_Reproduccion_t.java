@@ -26,12 +26,11 @@ public class Hilo_Reproduccion_t {
     private Thread a_hilo;
     private AudioTrack a_audioTrack;
     private Runnable am_play;
+    private Timer a_timer;
 
     private byte av_sonido_generado[];
 
     private android.os.Handler a_handler;
-
-    // private boolean a_detenido;
 
     // ---------------------------------------------------------------------------------------------
 
@@ -62,7 +61,7 @@ public class Hilo_Reproduccion_t {
 
         am_play = null;
 
-        // a_detenido = false;
+        a_timer = null;
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -88,64 +87,59 @@ public class Hilo_Reproduccion_t {
 
     private void i_play()
     {
-        // System.out.println("reproduce hilo nota");
+        System.out.println("reproduce hilo nota");
 
-        //if (!a_detenido)
-        // {
-            try
+        try
+        {
+            a_audioTrack = new AudioTrack(
+                    new AudioAttributes.Builder()
+                            .setUsage(AudioAttributes.USAGE_MEDIA)
+                            .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                            .build(),
+                    new AudioFormat.Builder()
+                            .setEncoding(AudioFormat.ENCODING_PCM_16BIT)
+                            .setChannelMask(AudioFormat.CHANNEL_OUT_STEREO)
+                            .setSampleRate(a_frecuencia_muestreo)
+                            .build(),
+                    a_num_muestras,
+                    AudioTrack.MODE_STATIC,
+                    AudioManager.AUDIO_SESSION_ID_GENERATE);
+
+        /*VolumeShaper.Configuration config =
+                new VolumeShaper.Configuration.Builder()
+                        .setDuration((long) (a_duracion * 1000))
+                        .setCurve(
+                                new float[] {0.f, 0.05f, 0.95f, 1.f},
+                                new float[] {0.2f, 1.f, 1.f, 0.2f})
+                        .setInterpolatorType(VolumeShaper.Configuration.INTERPOLATOR_TYPE_LINEAR)
+                        .build();*/
+
+            if (a_audioTrack != null && a_audioTrack.getState() != AudioTrack.STATE_UNINITIALIZED)
             {
-                a_audioTrack = new AudioTrack(
-                        new AudioAttributes.Builder()
-                                .setUsage(AudioAttributes.USAGE_MEDIA)
-                                .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                                .build(),
-                        new AudioFormat.Builder()
-                                .setEncoding(AudioFormat.ENCODING_PCM_16BIT)
-                                .setChannelMask(AudioFormat.CHANNEL_OUT_STEREO)
-                                .setSampleRate(a_frecuencia_muestreo)
-                                .build(),
-                        a_num_muestras,
-                        AudioTrack.MODE_STATIC,
-                        AudioManager.AUDIO_SESSION_ID_GENERATE);
+                // System.out.println("se ejecuta sonido, id: " + a_audioTrack.getAudioSessionId());
 
-            /*VolumeShaper.Configuration config =
-                    new VolumeShaper.Configuration.Builder()
-                            .setDuration((long) (a_duracion * 1000))
-                            .setCurve(
-                                    new float[] {0.f, 0.05f, 0.95f, 1.f},
-                                    new float[] {0.2f, 1.f, 1.f, 0.2f})
-                            .setInterpolatorType(VolumeShaper.Configuration.INTERPOLATOR_TYPE_LINEAR)
-                            .build();*/
+                // System.out.println("Numero de muestras: " + a_num_muestras);
 
-                if (a_audioTrack != null && a_audioTrack.getState() != AudioTrack.STATE_UNINITIALIZED)
-                {
-                    // System.out.println("se ejecuta sonido, id: " + a_audioTrack.getAudioSessionId());
+                a_audioTrack.write(av_sonido_generado, 0, av_sonido_generado.length);
 
-                    // System.out.println("Numero de muestras: " + a_num_muestras);
+                //VolumeShaper vol_shaper = a_audioTrack.createVolumeShaper(config);
 
-                    a_audioTrack.write(av_sonido_generado, 0, av_sonido_generado.length);
+                //vol_shaper.apply(VolumeShaper.Operation.PLAY);
 
-                    //VolumeShaper vol_shaper = a_audioTrack.createVolumeShaper(config);
+                a_audioTrack.play();
 
-                    //vol_shaper.apply(VolumeShaper.Operation.PLAY);
-
-                    a_audioTrack.play();
-
-                }
-                else
-                {
-                    Log.e("hilo_play", "audioTrack no inicializado.");
-                    a_audioTrack.release();
-                    a_audioTrack = null;
-                }
             }
-            catch (Exception e)
+            else
             {
-                e.printStackTrace();
+                Log.e("hilo_play", "audioTrack no inicializado.");
+                a_audioTrack.release();
+                a_audioTrack = null;
             }
-        // }
-        // else
-           // a_detenido = false;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -193,6 +187,8 @@ public class Hilo_Reproduccion_t {
                         am_play = null;
                     }
                 }, p_delay + (long) Math.floor(a_duracion * 1000));
+
+                a_timer = timer;
             }
         });
         hilo.start();
@@ -256,9 +252,7 @@ public class Hilo_Reproduccion_t {
                 if (a_handler != null && am_play != null)
                 {
                     a_handler.removeCallbacks(am_play);
-                    a_handler = null;
-                    am_play = null;
-                    // a_detenido = true;
+                    a_timer.cancel();
                 }
             }
 

@@ -8,10 +8,12 @@ import java.util.TimerTask;
 public class Crono_t
 {
     private int a_bit_inicial;
+    private int a_bit_rep_inicial;
     private int a_bit_actual;
     private double a_duracion_bit;
 
     private Thread a_hilo;
+    private Timer a_timer;
 
     private boolean a_en_reproduccion;
 
@@ -20,6 +22,7 @@ public class Crono_t
     public Crono_t(double p_duracion_bit)
     {
         a_bit_inicial = 0;
+        a_bit_rep_inicial = 0;
         a_bit_actual = 0;
 
         if (p_duracion_bit >= 0.)
@@ -30,11 +33,36 @@ public class Crono_t
         a_en_reproduccion = false;
 
         a_hilo = null;
+
+        a_timer = null;
     }
 
     // ---------------------------------------------------------------------------------------------
 
-    public int crono_get_bit_inicial()
+    private void i_detener_crono(boolean reiniciar)
+    {
+        if (a_en_reproduccion)
+        {
+            a_en_reproduccion = false;
+
+            if (a_timer != null)
+                a_timer.cancel();
+
+            if (a_hilo != null && !a_hilo.isInterrupted())
+                a_hilo.interrupt();
+
+            a_hilo = null;
+
+            if (reiniciar)
+                a_bit_actual = a_bit_inicial;
+            else
+                a_bit_rep_inicial = a_bit_actual;
+        }
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
+    public int crono_get_bit_rep_inicial()
     {
         return a_bit_inicial;
     }
@@ -73,6 +101,7 @@ public class Crono_t
                 a_hilo.interrupt();
 
             a_en_reproduccion = true;
+            a_bit_actual = a_bit_rep_inicial;
 
             final Thread hilo = new Thread(new Runnable()
             {
@@ -88,6 +117,8 @@ public class Crono_t
                             a_bit_actual++;
                         }
                     }, 500, (long) Math.floor(a_duracion_bit * 1000));
+
+                    a_timer = timer;
                 }
             });
             hilo.start();
@@ -104,21 +135,7 @@ public class Crono_t
 
     public int crono_parar()
     {
-        if (a_en_reproduccion)
-        {
-            a_en_reproduccion = false;
-
-            if (a_hilo != null && !a_hilo.isInterrupted())
-                a_hilo.interrupt();
-
-            a_hilo = null;
-
-            a_bit_inicial = a_bit_actual;
-        }
-        else
-        {
-            Log.e("crono_parar", "crono ya parado.");
-        }
+        i_detener_crono(false);
 
         return a_bit_actual;
     }
@@ -127,17 +144,8 @@ public class Crono_t
 
     public void crono_reiniciar()
     {
-        a_bit_actual = a_bit_inicial;
-
-        if (a_en_reproduccion)
-        {
-            a_en_reproduccion = false;
-
-            if (a_hilo != null && !a_hilo.isInterrupted())
-                a_hilo.interrupt();
-
-            a_hilo = null;
-        }
+        a_bit_rep_inicial = a_bit_inicial;
+        i_detener_crono(true);
     }
 }
 

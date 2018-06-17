@@ -157,6 +157,52 @@ public class Partitura_t
 
     // ---------------------------------------------------------------------------------------------
 
+    private void i_reproducir_partitura()
+    {
+        if (av_compases != null && !av_compases.isEmpty())
+        {
+            boolean es_primer_compas = true;
+
+            int compas_inicial, bit_inicial;
+
+            if (a_cronometro.crono_get_bit_actual() >= a_num_bits_en_compas)
+            {
+                compas_inicial = (int) Math.floor(a_cronometro.crono_get_bit_actual() / a_num_bits_en_compas);
+                bit_inicial = a_cronometro.crono_get_bit_actual() % a_num_bits_en_compas;
+            }
+            else
+            {
+                compas_inicial = 0;
+                bit_inicial = a_cronometro.crono_get_bit_actual();
+            }
+
+            a_cronometro.crono_iniciar();
+
+            System.out.println("compas_inicial " + compas_inicial);
+            System.out.println("bit_inicial " + bit_inicial);
+
+            int indice_compas_reproduccion = 0;
+
+            for (int i = compas_inicial; i < av_compases.size(); i++)
+            {
+                if (i >= compas_inicial)
+                    es_primer_compas = false;
+
+                if (i > compas_inicial)
+                    bit_inicial = 0;
+
+                if (av_compases.get(i) != null)
+                    av_compases.get(i).compas_inicializar_notas(indice_compas_reproduccion, bit_inicial, es_primer_compas);
+                else
+                    Log.e("partitura_rep_compases", "av_compas[i] es NULL");
+
+                indice_compas_reproduccion++;
+            }
+        }
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
     public int partitura_get_num_bits_en_compas()
     {
         return a_num_bits_en_compas;
@@ -280,70 +326,28 @@ public class Partitura_t
 
     public void partitura_reproducir_notas_compases()
     {
-        if (av_compases != null && !av_compases.isEmpty())
-        {
-            boolean es_primer_compas = true;
-
-            int compas_inicial, bit_inicial;
-
-            if (a_cronometro.crono_get_bit_actual() >= a_num_bits_en_compas)
-            {
-                compas_inicial = (int) Math.floor(a_cronometro.crono_get_bit_actual() / a_num_bits_en_compas);
-                bit_inicial = a_cronometro.crono_get_bit_actual() % a_num_bits_en_compas;
-            }
-            else
-            {
-                compas_inicial = 0;
-                bit_inicial = a_cronometro.crono_get_bit_actual();
-            }
-
-            a_cronometro.crono_iniciar();
-
-            System.out.println("compas_inicial " + compas_inicial);
-            System.out.println("bit_inicial " + bit_inicial);
-
-            int indice_compas_reproduccion = 0;
-
-            for (int i = compas_inicial; i < av_compases.size(); i++)
-            {
-                if (i >= compas_inicial)
-                    es_primer_compas = false;
-
-                if (i > compas_inicial)
-                    bit_inicial = 0;
-
-                if (av_compases.get(i) != null)
-                    av_compases.get(i).compas_inicializar_notas(indice_compas_reproduccion, bit_inicial, es_primer_compas);
-                else
-                    Log.e("partitura_rep_compases", "av_compas[i] es NULL");
-
-                indice_compas_reproduccion++;
-            }
-        }
+        i_reproducir_partitura();
     }
 
     // ---------------------------------------------------------------------------------------------
 
     public void partitura_reproducir_notas_compases(int p_compas_inicial, int p_bit_inicial)
     {
-        if (av_compases != null && !av_compases.isEmpty())
-        {
-            boolean es_primer_compas = true;
+        int compas_inicial = 0;
+        int bit_inicial = 0;
+        int bit_crono_inicial;
 
-            a_cronometro.crono_reiniciar();
-            a_cronometro.crono_iniciar();
+        if (p_compas_inicial >= 0)
+            compas_inicial = p_compas_inicial;
 
-            for (int i = p_compas_inicial - 1; i < av_compases.size(); i++)
-            {
-                if (i > p_compas_inicial - 1)
-                    es_primer_compas = false;
+        if (p_bit_inicial >= 0)
+            bit_inicial = p_bit_inicial;
 
-                if (av_compases.get(i) != null)
-                    av_compases.get(i).compas_inicializar_notas(i, p_bit_inicial, es_primer_compas);
-                else
-                    Log.e("partitura_rep_compases", "av_compas[i] es NULL");
-            }
-        }
+        bit_crono_inicial = compas_inicial * a_num_bits_en_compas + bit_inicial;
+
+        a_cronometro.crono_set_bit_inicial(bit_crono_inicial);
+
+        i_reproducir_partitura();
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -352,8 +356,8 @@ public class Partitura_t
     {
         int compas_inicial = 0;
 
-        if (a_cronometro.crono_get_bit_inicial() > 0)
-            compas_inicial = (int) Math.floor((a_duracion_bit * a_num_bits_en_compas) / a_cronometro.crono_get_bit_inicial());
+        if (a_cronometro.crono_get_bit_rep_inicial() > 0)
+            compas_inicial = (int) Math.floor((a_duracion_bit * a_num_bits_en_compas) / a_cronometro.crono_get_bit_rep_inicial());
 
         /*Log.e("Inicio detencion compas", "" + compas_inicial);
         Log.e("Inicio detencion compas", "" + a_duracion_bit);
@@ -362,16 +366,10 @@ public class Partitura_t
 
         if (a_cronometro.crono_get_en_reproduccion())
         {
-            Log.e("Inicio detencion partitura", "pasa");
-
-            if (p_pausar) {
+            if (p_pausar)
                 a_cronometro.crono_parar();
-                Log.e("Inicio detencion partitura_2", "pausa");
-            }
-            else {
+            else
                 a_cronometro.crono_reiniciar();
-                Log.e("Inicio detencion partitura_3", "detencion");
-            }
 
             for (int i = compas_inicial; i < av_compases.size(); i++)
             {
