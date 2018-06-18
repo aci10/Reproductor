@@ -101,7 +101,7 @@ public class Crono_t
                 a_hilo.interrupt();
 
             a_en_reproduccion = true;
-            a_bit_actual = a_bit_rep_inicial;
+            // a_bit_actual = a_bit_rep_inicial;
 
             final Thread hilo = new Thread(new Runnable()
             {
@@ -115,8 +115,9 @@ public class Crono_t
                         public void run()
                         {
                             a_bit_actual++;
+                            Log.e("bit_actual", ""+a_bit_actual);
                         }
-                    }, 500, (long) Math.floor(a_duracion_bit * 1000));
+                    }, 0, (long) Math.floor(a_duracion_bit * 1000));
 
                     a_timer = timer;
                 }

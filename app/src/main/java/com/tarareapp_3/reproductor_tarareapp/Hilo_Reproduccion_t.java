@@ -156,13 +156,16 @@ public class Hilo_Reproduccion_t {
 
     // ---------------------------------------------------------------------------------------------
 
-    private void i_inicializa_reproduccion(final long p_delay, double p_duracion)
+    private void i_inicializa_reproduccion(final long p_delay, double p_duracion, final boolean p_inicia_crono)
     {
         double duracion_aux = a_duracion;
 
         a_duracion = p_duracion;
 
         i_libera_audioTrack_hilo();
+
+        if (p_inicia_crono)
+            Log.e("inicializa_reproduccion", "Inicializamos crono: "+p_inicia_crono);
 
         final Thread hilo = new Thread(new Runnable() {
             Timer timer = new Timer();
@@ -172,6 +175,10 @@ public class Hilo_Reproduccion_t {
 
                 am_play = new Runnable() {
                     public void run() {
+
+                        if (a_nota != null && p_inicia_crono)
+                            a_nota.nota_inicia_crono();
+
                         i_play();
                     }
                 };
@@ -214,14 +221,7 @@ public class Hilo_Reproduccion_t {
         i_calcula_variables();
     }
 
-    // ---------------------------------------------------------------------------------------------
-
-    public void hilo_reproduccion_inicializar(final long p_delay)
-    {
-        i_inicializa_reproduccion(p_delay, a_duracion);
-    }
-
-    public void hilo_reproduccion_inicializar(final long p_delay, double p_duracion)
+    public void hilo_reproduccion_inicializar(final long p_delay, final boolean p_inicia_crono, double p_duracion)
     {
         if (p_duracion < 0)
             p_duracion = a_duracion;
@@ -229,7 +229,7 @@ public class Hilo_Reproduccion_t {
         System.out.println(p_duracion);
         System.out.println(a_duracion);
 
-        i_inicializa_reproduccion(p_delay, p_duracion);
+        i_inicializa_reproduccion(p_delay, p_duracion, p_inicia_crono);
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -246,7 +246,11 @@ public class Hilo_Reproduccion_t {
             System.out.println("Entra en detencion hilo");
 
             if (a_audioTrack != null)
+            {
                 i_libera_audioTrack_hilo();
+                am_play = null;
+                a_timer.cancel();
+            }
             else
             {
                 if (a_handler != null && am_play != null)

@@ -1065,6 +1065,15 @@ public class Nota_t
 
     // ---------------------------------------------------------------------------------------------
 
+    public void nota_inicia_crono()
+    {
+        Log.e("nota inicia crono", "Inicia");
+        if (a_compas != null)
+            a_compas.compas_get_partitura().partitura_inicia_crono();
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
     public double nota_get_frecuencia()
     {
         return a_frecuencia;
@@ -1082,6 +1091,38 @@ public class Nota_t
             num_bit_final = a_nota_ligada.i_get_num_bit_final(num_bit_final);
 
         return num_bit_final;
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
+    public void nota_set_hijo(Nota_t p_hijo)
+    {
+        a_nota_ligada = p_hijo;
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
+    public void nota_set_es_ultima(boolean es_ultima)
+    {
+        a_es_ultima = es_ultima;
+
+        if (a_nota_ligada != null)
+            a_nota_ligada.nota_set_es_ultima(es_ultima);
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
+    public boolean nota_ocupa_rejilla(int p_bit_rejilla)
+    {
+        boolean ocupa_rejilla = false;
+
+        if (a_bit_inicial <= p_bit_rejilla)
+        {
+            if (p_bit_rejilla < a_bit_inicial + a_num_bits)
+                ocupa_rejilla = true;
+        }
+
+        return ocupa_rejilla;
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -1113,17 +1154,11 @@ public class Nota_t
 
     // ---------------------------------------------------------------------------------------------
 
-    public void nota_inicializar_hilo(long p_delay)
-    {
-        // System.out.println("nota_inicializar");
-
-        if (a_hilo_rep != null && a_nota_padre == null)
-            a_hilo_rep.hilo_reproduccion_inicializar(p_delay);
-    }
-
-    // ---------------------------------------------------------------------------------------------
-
-    public void nota_inicializar_hilo(long p_delay, int p_bit_inicio_rep, boolean p_es_compas_inicial)
+    public void nota_inicializar_hilo(
+                        long p_delay,
+                        int p_bit_inicio_rep,
+                        boolean p_es_compas_inicial,
+                        boolean p_es_primera_nota)
     {
         double nueva_duracion;
 
@@ -1149,7 +1184,7 @@ public class Nota_t
                     if (a_hilo_rep == null)
                         a_hilo_rep = new Hilo_Reproduccion_t(this, nueva_duracion, a_frecuencia);
 
-                    a_hilo_rep.hilo_reproduccion_inicializar(p_delay, nueva_duracion);
+                    a_hilo_rep.hilo_reproduccion_inicializar(p_delay, p_es_primera_nota, nueva_duracion);
                 }
             }
             else
@@ -1197,38 +1232,6 @@ public class Nota_t
 
             a_hilo_rep.hilo_reproduccion_set_duracion(duracion);
         }
-    }
-
-    // ---------------------------------------------------------------------------------------------
-
-    public boolean nota_ocupa_rejilla(int p_bit_rejilla)
-    {
-        boolean ocupa_rejilla = false;
-
-        if (a_bit_inicial <= p_bit_rejilla)
-        {
-            if (p_bit_rejilla < a_bit_inicial + a_num_bits)
-                ocupa_rejilla = true;
-        }
-
-        return ocupa_rejilla;
-    }
-
-    // ---------------------------------------------------------------------------------------------
-
-    public void nota_set_hijo(Nota_t p_hijo)
-    {
-        a_nota_ligada = p_hijo;
-    }
-
-    // ---------------------------------------------------------------------------------------------
-
-    public void nota_set_es_ultima(boolean es_ultima)
-    {
-        a_es_ultima = es_ultima;
-
-        if (a_nota_ligada != null)
-            a_nota_ligada.nota_set_es_ultima(es_ultima);
     }
 
     // ---------------------------------------------------------------------------------------------

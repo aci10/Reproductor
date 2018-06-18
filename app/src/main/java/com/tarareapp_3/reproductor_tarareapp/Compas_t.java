@@ -161,29 +161,44 @@ public class Compas_t
     {
         if (av_notas != null)
         {
+            boolean es_primer_bit = false;
+
+            if (p_es_primer_compas)
+                es_primer_bit = true;
+
             double double_delay = a_partitura.partitura_get_duracion_bit() * 1000;
 
             long delay_bit_inicial = (long) Math.floor(double_delay * p_bit_inicial +
-                    (p_indice_compas * av_notas.length * double_delay)) + 500;
+                    (p_indice_compas * av_notas.length * double_delay));
 
-            for (int i = p_bit_inicial; i < av_notas.length; i++)
+            long delay_primer_bit_compas = (long) Math.floor(p_indice_compas * av_notas.length * double_delay);
+
+            for (int i = 0; i < av_notas.length; i++)
             {
                 if (av_notas[i] != null)
                 {
                     long delay = (long) Math.floor(double_delay * i +
-                            (p_indice_compas * av_notas.length * double_delay)) + 500;
+                            (p_indice_compas * av_notas.length * double_delay));
 
                     for (int j = 0; j < av_notas[i].size(); j++)
                     {
                         if (delay >= delay_bit_inicial)
                         {
-                            System.out.println("Delay: " + delay);
-                            av_notas[i].get(j).nota_inicializar_hilo(delay, p_bit_inicial, p_es_primer_compas);
+                            System.out.println("Delay_1: " + delay);
+                            System.out.println("Primer_bit: " + es_primer_bit);
+                            av_notas[i].get(j).nota_inicializar_hilo(delay, p_bit_inicial, p_es_primer_compas, es_primer_bit);
+                            es_primer_bit = false;
                         }
                         else if (av_notas[i].get(j).nota_ocupa_rejilla(p_bit_inicial))
                         {
-                            System.out.println("Delay: " + delay_bit_inicial);
-                            av_notas[i].get(j).nota_inicializar_hilo(delay_bit_inicial, p_bit_inicial, p_es_primer_compas);
+                            System.out.println("Delay_2: " + delay_bit_inicial);
+                            System.out.println("Primer_bit: " + es_primer_bit);
+                            av_notas[i].get(j).nota_inicializar_hilo(delay_primer_bit_compas, p_bit_inicial, p_es_primer_compas, es_primer_bit);
+                            es_primer_bit = false;
+                        }
+                        else
+                        {
+                            Log.e("nota compas no reproducida", "" + es_primer_bit);
                         }
                     }
                 }
