@@ -158,51 +158,60 @@ public class Hilo_Reproduccion_t {
 
     private void i_inicializa_reproduccion(final long p_delay, double p_duracion, final boolean p_inicia_crono)
     {
-        double duracion_aux = a_duracion;
+        if (p_duracion > 0.)
+        {
+            double duracion_aux = a_duracion;
 
-        a_duracion = p_duracion;
+            a_duracion = p_duracion;
 
-        i_libera_audioTrack_hilo();
+            i_libera_audioTrack_hilo();
 
-        if (p_inicia_crono)
-            Log.e("inicializa_reproduccion", "Inicializamos crono: "+p_inicia_crono);
+            if (p_inicia_crono)
+                Log.e("inicializa_reproduccion", "Inicializamos crono: "+p_inicia_crono);
 
-        final Thread hilo = new Thread(new Runnable() {
-            Timer timer = new Timer();
+            final Thread hilo = new Thread(new Runnable() {
+                Timer timer = new Timer();
 
-            public void run() {
-                i_gen_tone();
+                public void run() {
+                    i_gen_tone();
 
-                am_play = new Runnable() {
-                    public void run() {
+                    am_play = new Runnable() {
+                        public void run() {
 
-                        if (a_nota != null && p_inicia_crono)
-                            a_nota.nota_inicia_crono();
+                            if (a_nota != null && p_inicia_crono)
+                                a_nota.nota_inicia_crono();
 
-                        i_play();
-                    }
-                };
+                            i_play();
+                        }
+                    };
 
-                a_handler.postDelayed(am_play, p_delay);
+                    a_handler.postDelayed(am_play, p_delay);
 
-                timer.schedule(new TimerTask() {
-                    @Override
-                    public void run()
-                    {
-                        i_libera_audioTrack_hilo();
-                        a_nota.nota_finaliza_reproduccion();
-                        am_play = null;
-                    }
-                }, p_delay + (long) Math.floor(a_duracion * 1000));
+                    timer.schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            i_libera_audioTrack_hilo();
+                            a_nota.nota_finaliza_reproduccion();
+                            am_play = null;
+                        }
+                    }, p_delay + (long) Math.floor(a_duracion * 1000));
 
-                a_timer = timer;
-            }
-        });
-        hilo.start();
+                    a_timer = timer;
+                }
+            });
+            hilo.start();
 
-        a_hilo = hilo;
+            a_hilo = hilo;
 
-        a_duracion = duracion_aux;
+            a_duracion = duracion_aux;
+        }
+        else
+        {
+            i_libera_audioTrack_hilo();
+            a_nota.nota_finaliza_reproduccion();
+            am_play = null;
+            Log.e("Inicializa reproduccion hilo", "p_duracion es 0 o menor");
+        }
     }
 
     // ---------------------------------------------------------------------------------------------

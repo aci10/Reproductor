@@ -32,8 +32,10 @@ public class Nota_t
 
         if (a_compas != null)
         {
-            if (a_nota_padre == null)
-                duracion = p_num_bits * a_compas.compas_get_partitura().partitura_get_duracion_bit();
+            duracion = p_num_bits * a_compas.compas_get_partitura().partitura_get_duracion_bit();
+
+            if (a_nota_ligada != null)
+                duracion += a_nota_ligada.nota_get_duracion();
         }
 
         return duracion;
@@ -76,16 +78,12 @@ public class Nota_t
 
         double duracion = i_calcula_duracion(a_num_bits);
 
-        if(duracion > 0.)
+        if(a_nota_padre == null)
             a_hilo_rep = new Hilo_Reproduccion_t(this, duracion, a_frecuencia);
         else
         {
             a_hilo_rep = null;
-
-            if (a_nota_padre == null)
-                Log.e("Nota Constructor", "a_hilo_rep es NULL");
-            else
-                Log.e("Nota Constructor", "ligadura creada");
+            Log.e("Nota Constructor", "ligadura creada");
         }
     }
 
@@ -1133,6 +1131,9 @@ public class Nota_t
 
         if (a_es_ultima)
             a_compas.compas_get_partitura().partitura_finaliza_reproduccion();
+        else if (a_nota_padre != null)
+            a_nota_padre.nota_finaliza_reproduccion();
+
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -1166,26 +1167,25 @@ public class Nota_t
 
         if (!a_en_reproduccion )
         {
-            if (a_nota_padre == null || !a_nota_padre.i_en_reproduccion())
+            if (a_nota_padre == null || (!a_nota_padre.i_en_reproduccion() && p_es_compas_inicial))
             {
-                if (p_es_compas_inicial || a_nota_padre == null)
+                a_en_reproduccion = true;
+
+                if (p_bit_inicio_rep > a_bit_inicial)
                 {
-                    a_en_reproduccion = true;
+                    int num_bits = a_num_bits - p_bit_inicio_rep;
 
-                    if (p_bit_inicio_rep > a_bit_inicial)
-                    {
-                        int num_bits = a_num_bits - p_bit_inicio_rep;
+                    nueva_duracion = i_calcula_duracion(num_bits);
 
-                        nueva_duracion = i_calcula_duracion(num_bits);
-                    }
-                    else
-                        nueva_duracion = -1;
-
-                    if (a_hilo_rep == null)
-                        a_hilo_rep = new Hilo_Reproduccion_t(this, nueva_duracion, a_frecuencia);
-
-                    a_hilo_rep.hilo_reproduccion_inicializar(p_delay, p_es_primera_nota, nueva_duracion);
+                    Log.e("inicializa hilo de nota", "nueva duracion: " + nueva_duracion);
                 }
+                else
+                    nueva_duracion = -1;
+
+                if (a_hilo_rep == null)
+                    a_hilo_rep = new Hilo_Reproduccion_t(this, nueva_duracion, a_frecuencia);
+
+                a_hilo_rep.hilo_reproduccion_inicializar(p_delay, p_es_primera_nota, nueva_duracion);
             }
             else
             {
