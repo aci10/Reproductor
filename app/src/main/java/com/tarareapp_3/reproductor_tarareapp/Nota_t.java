@@ -1150,7 +1150,12 @@ public class Nota_t
 
     public boolean nota_compara_nombre_octava(String p_nombre, int p_octava)
     {
-        return (a_nombre.equals(p_nombre) && p_octava == a_octava);
+        boolean es_nota = false;
+
+        if (p_nombre != null && p_octava > 0)
+            es_nota = (a_nombre.equals(p_nombre) && p_octava == a_octava);
+
+        return es_nota;
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -1180,12 +1185,16 @@ public class Nota_t
                     Log.e("inicializa hilo de nota", "nueva duracion: " + nueva_duracion);
                 }
                 else
+                {
+                    System.out.println("nota_inicializar_hilo: " + p_bit_inicio_rep + " " + a_bit_inicial);
                     nueva_duracion = -1;
+                }
 
-                if (a_hilo_rep == null)
+                if (a_hilo_rep == null && nueva_duracion > 0.)
                     a_hilo_rep = new Hilo_Reproduccion_t(this, nueva_duracion, a_frecuencia);
 
-                a_hilo_rep.hilo_reproduccion_inicializar(p_delay, p_es_primera_nota, nueva_duracion);
+                if (a_hilo_rep != null)
+                    a_hilo_rep.hilo_reproduccion_inicializar(p_delay, p_es_primera_nota, nueva_duracion);
             }
             else
             {

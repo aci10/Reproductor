@@ -181,22 +181,30 @@ public class Partitura_t
             System.out.println("compas_inicial " + compas_inicial);
             System.out.println("bit_inicial " + bit_inicial);
 
-            int indice_compas_reproduccion = 0;
-
-            for (int i = compas_inicial; i < av_compases.size(); i++)
+            if (compas_inicial < av_compases.size())
             {
-                if (i > compas_inicial)
+                int indice_compas_reproduccion = 0;
+
+                for (int i = compas_inicial; i < av_compases.size(); i++)
                 {
-                    es_primer_compas = false;
-                    bit_inicial = 0;
+                    if (i > compas_inicial)
+                    {
+                        es_primer_compas = false;
+                        bit_inicial = 0;
+                    }
+
+                    if (av_compases.get(i) != null)
+                        av_compases.get(i).compas_inicializar_notas(indice_compas_reproduccion, bit_inicial, es_primer_compas);
+                    else
+                        Log.e("partitura_rep_compases", "av_compas[i] es NULL");
+
+                    indice_compas_reproduccion++;
                 }
-
-                if (av_compases.get(i) != null)
-                    av_compases.get(i).compas_inicializar_notas(indice_compas_reproduccion, bit_inicial, es_primer_compas);
-                else
-                    Log.e("partitura_rep_compases", "av_compas[i] es NULL");
-
-                indice_compas_reproduccion++;
+            }
+            else
+            {
+                a_cronometro.crono_reiniciar();
+                i_reproducir_partitura();
             }
         }
     }
