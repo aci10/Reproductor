@@ -222,14 +222,6 @@ public class Hilo_Reproduccion_t {
         i_calcula_variables();
     }
 
-    // ---------------------------------------------------------------------------------------------
-
-    public void hilo_reproduccion_set_frecuencia_tono(double p_f_tono)
-    {
-        a_f_tono = p_f_tono;
-        i_calcula_variables();
-    }
-
     public void hilo_reproduccion_inicializar(final long p_delay, final boolean p_inicia_crono, double p_duracion)
     {
         if (p_duracion < 0)
