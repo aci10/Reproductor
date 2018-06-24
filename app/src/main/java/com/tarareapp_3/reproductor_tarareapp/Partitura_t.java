@@ -1,5 +1,6 @@
 package com.tarareapp_3.reproductor_tarareapp;
 
+import android.content.Context;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
@@ -18,11 +19,11 @@ public class Partitura_t
     private int a_num_bits_en_compas;
     private double a_precision;
     private String a_escala;
-    private String a_formato;
 
     private Nota_t a_ultima_nota;
 
     private Crono_t a_cronometro;
+    private MusicXML_Writer_t a_exportador_mxml;
 
     private ArrayList<Compas_t> av_compases;
 
@@ -51,6 +52,8 @@ public class Partitura_t
 
         a_cronometro = new Crono_t(a_duracion_bit);
 
+        a_exportador_mxml = null;
+
         a_ultima_nota = null;
 
         System.out.println("Numero bits en compas: " + a_num_bits_en_compas);
@@ -71,7 +74,6 @@ public class Partitura_t
         a_unidad_pulso_compas = 4;
         a_precision = 0.25;
         a_escala = "Sol";
-        a_formato = "diagrama_pianola";
 
         i_inicializa_variables_bits_compases();
 
@@ -89,7 +91,6 @@ public class Partitura_t
         a_bpm = p_bpm;
         a_pulsos_compas = p_pulsos_compas;
         a_unidad_pulso_compas = p_unidad_pulso_compas;
-        a_formato = "diagrama_pianola";
         a_escala = "Sol";
 
         if(p_precision != null)
@@ -391,6 +392,18 @@ public class Partitura_t
             {
                 av_compases.get(i).compas_detener_reproduccion();
             }
+        }
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
+    public void partitura_exportar_mxml(Context p_ctx)
+    {
+        if (p_ctx != null)
+        {
+            a_exportador_mxml = new MusicXML_Writer_t(p_ctx);
+
+            a_exportador_mxml.mxmlw_inicializar_escritor(a_id_partitura, "anonimo", "01-01-2018");
         }
     }
 
