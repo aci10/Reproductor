@@ -1245,6 +1245,36 @@ public class Nota_t
 
     // ---------------------------------------------------------------------------------------------
 
+    public void nota_exportar_mxml(MusicXML_Writer_t p_exportador_mxml)
+    {
+        if (p_exportador_mxml != null)
+        {
+            double duracion = a_num_bits * a_compas.compas_get_partitura().partitura_get_duracion_bit();
+
+            int estado_ligadura;
+
+            if (a_nota_padre != null)
+            {
+                if (a_nota_ligada != null)
+                    estado_ligadura = 0;
+                else
+                    estado_ligadura = -1;
+
+            }
+            else
+            {
+                if (a_nota_ligada != null)
+                    estado_ligadura = 1;
+                else
+                    estado_ligadura = 0;
+            }
+
+            p_exportador_mxml.mxmlw_escribe_nota(a_nombre, a_octava, duracion, estado_ligadura);
+        }
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
     public void nota_muestra_vista()
     {
         System.out.println("Nombre: " + a_nombre + a_octava);

@@ -201,6 +201,23 @@ public class Compas_t
 
     // ---------------------------------------------------------------------------------------------
 
+    // En principio no se tendrán en cuenta los acordes.
+    public void compas_exportar_mxml(MusicXML_Writer_t p_exportador_mxml)
+    {
+        if (p_exportador_mxml != null && av_notas != null)
+        {
+            for (int i = 0; i < av_notas.length; i++)
+            {
+                for (int j = 0; j < av_notas[i].size(); j++)
+                {
+                    av_notas[i].get(j).nota_exportar_mxml(p_exportador_mxml);
+                }
+            }
+        }
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
     public void compas_muestra_vista()
     {
         if (av_notas != null)

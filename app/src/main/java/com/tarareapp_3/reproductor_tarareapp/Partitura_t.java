@@ -13,7 +13,7 @@ public class Partitura_t
     private String a_id_partitura;
 
     private int a_pulsos_compas;
-    private double a_unidad_pulso_compas;
+    private int a_unidad_pulso_compas;
     private int a_bpm;
     private double a_duracion_bit;
     private int a_num_bits_en_compas;
@@ -29,11 +29,16 @@ public class Partitura_t
 
     // ---------------------------------------------------------------------------------------------
 
-    private void i_inicializa_variables_bits_compases()
+    private void i_inicializa_variables_bits_compases(int p_bpm, int p_pulsos_compas, int p_unidad_pulso_compas)
     {
         double valor_unidad_negra;
         double valor_pulso;
         double tamano_compas;
+
+        a_bpm = p_bpm;
+        a_pulsos_compas = p_pulsos_compas;
+        a_unidad_pulso_compas = p_unidad_pulso_compas;
+        a_escala = "G";
 
         valor_unidad_negra = a_bpm/60;
         a_duracion_bit = valor_unidad_negra * a_precision;
@@ -45,16 +50,18 @@ public class Partitura_t
 
         tamano_compas = valor_pulso * a_pulsos_compas;
 
-        if (a_precision != 0)
+        if (a_num_bits_en_compas <= 0)
             a_num_bits_en_compas = (int) Math.floor(tamano_compas / a_precision);
         else
-            a_num_bits_en_compas = (int) Math.floor(tamano_compas / 0.25);
+            a_precision = tamano_compas / a_num_bits_en_compas;
 
         a_cronometro = new Crono_t(a_duracion_bit);
 
         a_exportador_mxml = null;
 
         a_ultima_nota = null;
+
+        av_compases = new ArrayList<Compas_t>();
 
         System.out.println("Numero bits en compas: " + a_num_bits_en_compas);
         System.out.println("Unidad pulso compas: " + a_unidad_pulso_compas);
@@ -67,32 +74,12 @@ public class Partitura_t
 
     // ---------------------------------------------------------------------------------------------
 
-    public Partitura_t()
-    {
-        a_bpm = 60;
-        a_pulsos_compas = 4;
-        a_unidad_pulso_compas = 4;
-        a_precision = 0.25;
-        a_escala = "Sol";
-
-        i_inicializa_variables_bits_compases();
-
-        av_compases = new ArrayList<Compas_t>();
-    }
-
-    // ---------------------------------------------------------------------------------------------
-
     public Partitura_t(
-            int p_bpm,
-            int p_pulsos_compas,
-            int p_unidad_pulso_compas,
-            String p_precision)
+                        int p_bpm,
+                        int p_pulsos_compas,
+                        int p_unidad_pulso_compas,
+                        String p_precision)
     {
-        a_bpm = p_bpm;
-        a_pulsos_compas = p_pulsos_compas;
-        a_unidad_pulso_compas = p_unidad_pulso_compas;
-        a_escala = "Sol";
-
         if(p_precision != null)
         {
             switch (p_precision)
@@ -131,9 +118,28 @@ public class Partitura_t
             }
         }else{a_precision = 0.25;}
 
-        i_inicializa_variables_bits_compases();
+        a_num_bits_en_compas = 0;
 
-        av_compases = new ArrayList<Compas_t>();
+        i_inicializa_variables_bits_compases(p_bpm, p_pulsos_compas, p_unidad_pulso_compas);
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
+    public Partitura_t(
+                        int p_bpm,
+                        int p_pulsos_compas,
+                        int p_unidad_pulso_compas,
+                        int p_bits_compas)
+    {
+        if (p_bits_compas > 0)
+            a_num_bits_en_compas = p_bits_compas;
+        else
+        {
+            a_num_bits_en_compas = 0;
+            a_precision = 0.25;
+        }
+
+        i_inicializa_variables_bits_compases(p_bpm, p_pulsos_compas, p_unidad_pulso_compas);
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -404,6 +410,25 @@ public class Partitura_t
             a_exportador_mxml = new MusicXML_Writer_t(p_ctx);
 
             a_exportador_mxml.mxmlw_inicializar_escritor(a_id_partitura, "anonimo", "01-01-2018");
+
+            a_exportador_mxml.mxmlw_escribe_inicio_partitura(
+                        a_num_bits_en_compas,
+                        0,
+                        a_pulsos_compas, a_unidad_pulso_compas,
+                        a_escala, 4,
+                        1);
+
+            if (av_compases != null && !av_compases.isEmpty())
+            {
+                for (int i = 0; i < av_compases.size(); i++)
+                {
+                    a_exportador_mxml.mxmlw_escribe_inicio_compas(i + 1);
+
+                    av_compases.get(i).compas_exportar_mxml(a_exportador_mxml);
+
+                    a_exportador_mxml.mxmlw_escribe_cierre_compas();
+                }
+            }
         }
     }
 

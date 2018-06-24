@@ -1,5 +1,6 @@
 package com.tarareapp_3.reproductor_tarareapp;
 
+import android.content.Context;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
@@ -94,6 +95,13 @@ public class MainActivity extends AppCompatActivity {
     public void pausar_reproduccion(View view)
     {
         a_partitura.partitura_detener_reproduccion(true);
+    }
+
+    public void exportar_mxml(View view)
+    {
+        Context ctx = getApplicationContext();
+
+        a_partitura.partitura_exportar_mxml(ctx);
     }
 
     private void i_crea_juego_de_tronos()

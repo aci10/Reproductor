@@ -169,4 +169,11 @@ tools:context="com.tarareapp_3.reproductor_tarareapp.MainActivity">
     android:text="Detener"
     android:onClick="detener_reproduccion"/>
 
+<Button
+    android:id="@+id/button_export"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="Exportar a MusicXML"
+    android:onClick="exportar_mxml"/>
+
 </LinearLayout>
