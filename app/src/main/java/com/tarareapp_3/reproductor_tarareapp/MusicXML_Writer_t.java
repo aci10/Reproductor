@@ -61,7 +61,7 @@ public class MusicXML_Writer_t
     {
         try
         {
-            if (p_nombre_fichero != null)
+            if (p_nombre_fichero != null && p_nombre_fichero.length() > 0)
             {
                 a_escritor = new OutputStreamWriter(a_ctx.openFileOutput(p_nombre_fichero + ".musicxml", a_ctx.MODE_PRIVATE));
 
@@ -125,9 +125,22 @@ public class MusicXML_Writer_t
         {
             a_texto_xml += "</part> \n" +
                             "</score-partwise>";
+            if (a_escritor != null)
+            {
+                try
+                {
+                    System.out.println(a_texto_xml);
+                    a_escritor.write(a_texto_xml);
+                    a_escritor.close();
+                }
+                catch (Exception e)
+                {
+                    Log.e("Cierre partitura", "error escritura");
+                }
+            }
         }
         else
-            Log.e("Escribe cierre compas", "escritura no inicializada.");
+            Log.e("Escribe cierre partitura", "escritura no inicializada.");
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -176,7 +189,7 @@ public class MusicXML_Writer_t
                         "</note> \n";
         }
         else
-            Log.e("Escribe cierre compas", "escritura no inicializada.");
+            Log.e("Escribe escribe nota", "escritura no inicializada.");
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -191,6 +204,6 @@ public class MusicXML_Writer_t
                             "<note> \n";
         }
         else
-            Log.e("Escribe cierre compas", "escritura no inicializada.");
+            Log.e("Escribe escribe silencio", "escritura no inicializada.");
     }
 }

@@ -22,7 +22,12 @@ public class MainActivity extends AppCompatActivity {
 
         System.out.println("MOSTRAR MENSAJE");
 
-        a_partitura = new Partitura_t(60, 6, 8, "semicorchea");
+        a_partitura = new Partitura_t(
+                        "Intro_got",
+                        60,
+                        6,
+                        8,
+                        "semicorchea");
 
         i_crea_juego_de_tronos();
 

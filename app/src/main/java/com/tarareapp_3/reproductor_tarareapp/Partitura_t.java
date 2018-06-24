@@ -29,11 +29,13 @@ public class Partitura_t
 
     // ---------------------------------------------------------------------------------------------
 
-    private void i_inicializa_variables_bits_compases(int p_bpm, int p_pulsos_compas, double p_unidad_pulso_compas)
+    private void i_inicializa_variables_bits_compases(String p_nombre, int p_bpm, int p_pulsos_compas, double p_unidad_pulso_compas)
     {
         double valor_unidad_negra;
         double valor_pulso;
         double tamano_compas;
+
+        a_id_partitura = p_nombre;
 
         a_bpm = p_bpm;
         a_pulsos_compas = p_pulsos_compas;
@@ -75,6 +77,7 @@ public class Partitura_t
     // ---------------------------------------------------------------------------------------------
 
     public Partitura_t(
+                        String p_nombre,
                         int p_bpm,
                         int p_pulsos_compas,
                         int p_unidad_pulso_compas,
@@ -120,12 +123,13 @@ public class Partitura_t
 
         a_num_bits_en_compas = 0;
 
-        i_inicializa_variables_bits_compases(p_bpm, p_pulsos_compas, p_unidad_pulso_compas);
+        i_inicializa_variables_bits_compases(p_nombre, p_bpm, p_pulsos_compas, p_unidad_pulso_compas);
     }
 
     // ---------------------------------------------------------------------------------------------
 
     public Partitura_t(
+                        String p_nombre,
                         int p_bpm,
                         int p_pulsos_compas,
                         int p_unidad_pulso_compas,
@@ -139,7 +143,7 @@ public class Partitura_t
             a_precision = 0.25;
         }
 
-        i_inicializa_variables_bits_compases(p_bpm, p_pulsos_compas, p_unidad_pulso_compas);
+        i_inicializa_variables_bits_compases(p_nombre, p_bpm, p_pulsos_compas, p_unidad_pulso_compas);
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -429,6 +433,8 @@ public class Partitura_t
                     a_exportador_mxml.mxmlw_escribe_cierre_compas();
                 }
             }
+
+            a_exportador_mxml.mxmlw_escribe_cierre_partitura();
         }
     }
 
