@@ -13,7 +13,7 @@ public class Partitura_t
     private String a_id_partitura;
 
     private int a_pulsos_compas;
-    private int a_unidad_pulso_compas;
+    private double a_unidad_pulso_compas;
     private int a_bpm;
     private double a_duracion_bit;
     private int a_num_bits_en_compas;
@@ -29,7 +29,7 @@ public class Partitura_t
 
     // ---------------------------------------------------------------------------------------------
 
-    private void i_inicializa_variables_bits_compases(int p_bpm, int p_pulsos_compas, int p_unidad_pulso_compas)
+    private void i_inicializa_variables_bits_compases(int p_bpm, int p_pulsos_compas, double p_unidad_pulso_compas)
     {
         double valor_unidad_negra;
         double valor_pulso;
@@ -43,7 +43,7 @@ public class Partitura_t
         valor_unidad_negra = a_bpm/60;
         a_duracion_bit = valor_unidad_negra * a_precision;
 
-        if (a_unidad_pulso_compas != 0)
+        if (a_unidad_pulso_compas > 0)
             valor_pulso = 4 / a_unidad_pulso_compas;
         else
             valor_pulso = 1;
@@ -414,7 +414,7 @@ public class Partitura_t
             a_exportador_mxml.mxmlw_escribe_inicio_partitura(
                         a_num_bits_en_compas,
                         0,
-                        a_pulsos_compas, a_unidad_pulso_compas,
+                        a_pulsos_compas, (int) a_unidad_pulso_compas,
                         a_escala, 4,
                         1);
 
