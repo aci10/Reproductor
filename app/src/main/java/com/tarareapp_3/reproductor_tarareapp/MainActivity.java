@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
         System.out.println("MOSTRAR MENSAJE");
 
         a_partitura = new Partitura_t(
-                        "Intro_got",
+                        "IntroGOT",
                         60,
                         6,
                         8,

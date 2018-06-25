@@ -63,7 +63,11 @@ public class MusicXML_Writer_t
         {
             if (p_nombre_fichero != null && p_nombre_fichero.length() > 0)
             {
-                a_escritor = new OutputStreamWriter(a_ctx.openFileOutput(p_nombre_fichero + ".musicxml", a_ctx.MODE_PRIVATE));
+                for (String tmp : a_ctx.fileList()) {
+                    System.out.println(tmp);
+                }
+
+                a_escritor = new OutputStreamWriter(a_ctx.openFileOutput(p_nombre_fichero + ".musicxml", Context.MODE_PRIVATE));
 
                 i_escribe_cabecera(p_nombre_fichero, p_autor, p_fecha);
             }
@@ -132,6 +136,10 @@ public class MusicXML_Writer_t
                     System.out.println(a_texto_xml);
                     a_escritor.write(a_texto_xml);
                     a_escritor.close();
+
+                    for (String tmp : a_ctx.fileList()) {
+                        System.out.println(tmp);
+                    }
                 }
                 catch (Exception e)
                 {
