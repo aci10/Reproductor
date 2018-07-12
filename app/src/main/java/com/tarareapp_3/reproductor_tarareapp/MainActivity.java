@@ -2,9 +2,11 @@ package com.tarareapp_3.reproductor_tarareapp;
 
 import android.content.Context;
 import android.os.Build;
+import android.os.StrictMode;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -19,8 +21,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        System.out.println("MOSTRAR MENSAJE");
 
         a_partitura = new Partitura_t(
                         "IntroGOT",
@@ -108,6 +108,13 @@ public class MainActivity extends AppCompatActivity {
 
         a_partitura.partitura_exportar_mxml(ctx);
     }
+
+    /*public void abrir_mxml(View view)
+    {
+        Context ctx = getApplicationContext();
+
+        a_partitura.partitura_abrir_mxml(ctx);
+    }*/
 
     private void i_crea_juego_de_tronos()
     {

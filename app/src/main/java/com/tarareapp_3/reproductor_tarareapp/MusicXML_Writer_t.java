@@ -3,7 +3,6 @@ package com.tarareapp_3.reproductor_tarareapp;
 import android.content.Context;
 import android.util.Log;
 
-import java.io.IOException;
 import java.io.OutputStreamWriter;
 
 public class MusicXML_Writer_t
@@ -156,9 +155,7 @@ public class MusicXML_Writer_t
     public void mxmlw_escribe_inicio_compas(int p_numero_compas)
     {
         if (a_texto_xml != null && a_texto_xml.length() > 0)
-        {
-            a_texto_xml += "\t\t<measure number=\" " + p_numero_compas + " \"> \n";
-        }
+            a_texto_xml += "\t\t<measure number=\"" + p_numero_compas + "\"> \n";
         else
             Log.e("Escribe inicio compas", "escritura no inicializada.");
     }
@@ -168,9 +165,7 @@ public class MusicXML_Writer_t
     public void mxmlw_escribe_cierre_compas()
     {
         if (a_texto_xml != null && a_texto_xml.length() > 0)
-        {
             a_texto_xml += "\t\t</measure>\n";
-        }
         else
             Log.e("Escribe cierre compas", "escritura no inicializada.");
     }

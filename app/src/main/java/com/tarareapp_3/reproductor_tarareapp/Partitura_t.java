@@ -43,7 +43,6 @@ public class Partitura_t
         a_escala = "G";
 
         valor_unidad_negra = a_bpm/60;
-        a_duracion_bit = valor_unidad_negra * a_precision;
 
         if (a_unidad_pulso_compas > 0)
             valor_pulso = 4 / a_unidad_pulso_compas;
@@ -52,10 +51,14 @@ public class Partitura_t
 
         tamano_compas = valor_pulso * a_pulsos_compas;
 
-        if (a_num_bits_en_compas <= 0)
-            a_num_bits_en_compas = (int) Math.floor(tamano_compas / a_precision);
-        else
+        if (a_num_bits_en_compas <= 0) {
+            a_duracion_bit = valor_unidad_negra * a_precision;
+            a_num_bits_en_compas = (int) Math.floor(tamano_compas / a_duracion_bit);
+        }
+        else {
             a_precision = tamano_compas / a_num_bits_en_compas;
+            a_duracion_bit = valor_unidad_negra * a_precision;
+        }
 
         a_cronometro = new Crono_t(a_duracion_bit);
 
