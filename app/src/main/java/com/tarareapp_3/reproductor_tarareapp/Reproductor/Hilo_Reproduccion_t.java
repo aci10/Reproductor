@@ -1,4 +1,4 @@
-package com.tarareapp_3.reproductor_tarareapp;
+package com.tarareapp_3.reproductor_tarareapp.Reproductor;
 
 import android.media.AudioAttributes;
 import android.media.AudioFormat;
@@ -8,6 +8,8 @@ import android.media.AudioTrack;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
+
+import com.tarareapp_3.reproductor_tarareapp.Reproductor.Nota_t;
 
 import java.util.Timer;
 import java.util.TimerTask;

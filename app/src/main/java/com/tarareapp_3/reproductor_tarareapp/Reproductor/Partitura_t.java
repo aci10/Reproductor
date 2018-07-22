@@ -1,4 +1,4 @@
-package com.tarareapp_3.reproductor_tarareapp;
+package com.tarareapp_3.reproductor_tarareapp.Reproductor;
 
 import android.content.Context;
 import android.os.Build;

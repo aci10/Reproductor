@@ -1,7 +1,9 @@
-package com.tarareapp_3.reproductor_tarareapp;
+package com.tarareapp_3.reproductor_tarareapp.Reproductor;
 
 import android.content.Context;
 import android.util.Log;
+
+import com.tarareapp_3.reproductor_tarareapp.Reproductor.Partitura_t;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -28,10 +30,7 @@ public class Lector_MXML_t
         Partitura_t partitura = null;
 
         if (a_lector != null && p_partitura != null)
-        {
             partitura = p_partitura;
-
-        }
 
         return partitura;
     }
