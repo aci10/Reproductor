@@ -61,34 +61,9 @@ public class MainActivity extends AppCompatActivity {
 
     // ---------------------------------------------------------------------------------------------
 
-    private int i_getValidSampleRates() {
-
-        int sample_rate = 0;
-
-        for (int rate : new int[] {22050, 44100, 16000, 11025, 8000}) {  // add the rates you wish to check against
-            int bufferSize = AudioRecord.getMinBufferSize(rate, android.media.AudioFormat.CHANNEL_IN_MONO, android.media.AudioFormat.ENCODING_PCM_16BIT);
-            if (bufferSize > 0) {
-                // buffer size is valid, Sample rate supported
-                Log.e("check sample rate", "rate: " + rate);
-                Log.e("check sample rate", "BufferSize: " + bufferSize);
-
-                sample_rate = rate;
-                break;
-            }
-        }
-
-        return sample_rate;
-    }
-
-    // ---------------------------------------------------------------------------------------------
-
-    /*public void pruebaTarsosDSP(View vista)
+    public void pruebaTarsosDSP(View vista)
     {
-        int sample_rate;
-
-        sample_rate = i_getValidSampleRates();
-
-        AudioDispatcher dispatcher = AudioDispatcherFactory.fromDefaultMicrophone(sample_rate,1024,0);
+        AudioDispatcher dispatcher = AudioDispatcherFactory.fromDefaultMicrophone(22050,1024,0);
         PitchDetectionHandler pdh = new PitchDetectionHandler() {
             @Override
             public void handlePitch(PitchDetectionResult result, AudioEvent e)
@@ -111,6 +86,6 @@ public class MainActivity extends AppCompatActivity {
         dispatcher.addAudioProcessor(p);
 
         new Thread(dispatcher,"Audio Dispatcher").start();
-    }*/
+    }
 }
 

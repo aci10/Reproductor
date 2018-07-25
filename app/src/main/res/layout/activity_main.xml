@@ -12,14 +12,12 @@
         android:id="@+id/test_rep"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="pruebaTarsosDSP"
         android:text="Testeo de reproductor" />
 
     <Button
         android:id="@+id/test_dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="pruebaTarsosDSP"
         android:text="Testeo diagrama pianola" />
 
     <Button
@@ -27,5 +25,21 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Deteccion pitch" />
+
+    <Button
+        android:id="@+id/tarsos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Prueba Tarsos"
+        android:onClick="pruebaTarsosDSP"/>
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Frecuencia" />
 
 </LinearLayout>
