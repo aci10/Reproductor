@@ -4,6 +4,8 @@ import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
 
+import com.tarareapp_3.reproductor_tarareapp.CanvasTapp.Nota_Canvas_t;
+
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class Nota_t
 {
@@ -1040,6 +1042,8 @@ public class Nota_t
         i_inicializa_variables_constructor(p_compas, p_bit_inicial, p_num_bits, p_nota_padre);
     }
 
+
+
     // ---------------------------------------------------------------------------------------------
 
     private boolean i_en_reproduccion()
@@ -1286,6 +1290,30 @@ public class Nota_t
 
         if (a_nota_ligada != null)
             System.out.println("Notas_ligada: " + a_nota_ligada.nota_get_duracion());
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
+    public Nota_Canvas_t nota_crear_canvas_nota(float p_left, float p_top, float p_bottom, float tamanyo_rejilla)
+    {
+        Nota_Canvas_t nota = null;
+
+        if (a_nota_padre == null)
+        {
+            int num_rejillas;
+            float right;
+
+            num_rejillas = a_num_bits;
+
+            if (a_nota_ligada != null)
+                num_rejillas = a_nota_ligada.i_get_num_bit_final(num_rejillas);
+
+            right = num_rejillas * tamanyo_rejilla + p_left;
+
+            nota = new Nota_Canvas_t(p_left, p_top, right, p_bottom);
+        }
+
+        return nota;
     }
 }
 

@@ -4,6 +4,9 @@ import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
 
+import com.tarareapp_3.reproductor_tarareapp.CanvasTapp.Compas_Canvas_t;
+import com.tarareapp_3.reproductor_tarareapp.CanvasTapp.Nota_Canvas_t;
+
 import java.util.ArrayList;
 
 @RequiresApi(api = Build.VERSION_CODES.O)
@@ -238,6 +241,33 @@ public class Compas_t
             }
         }else
             Log.e("compas_muestra_vista", "av_notas es NULL");
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
+    public Compas_Canvas_t compas_crea_para_canvas(
+                        float p_indicador,
+                        float [] p_x0, float [] p_yf,
+                        int p_num_rejillas, float p_tamanyo_rejilla)
+    {
+        Compas_Canvas_t compas_c;
+
+        float [] x0;
+
+        x0 = new float [2];
+
+        x0[0] = p_x0[0] * (p_indicador + 1);
+        x0[1] = p_x0[1];
+
+        compas_c = new Compas_Canvas_t(this, x0, p_yf, p_num_rejillas);
+
+        for (int i = 0; i < av_notas.length; i++)
+        {
+            if (av_notas[i].isEmpty())
+                compas_c.cmp_canvas_set_nota(av_notas[i].get(0), i, p_tamanyo_rejilla);
+        }
+
+        return compas_c;
     }
 }
 

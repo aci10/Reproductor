@@ -2,14 +2,21 @@ package com.tarareapp_3.reproductor_tarareapp.CanvasTapp;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 
 import com.tarareapp_3.reproductor_tarareapp.MainActivity;
 import com.tarareapp_3.reproductor_tarareapp.R;
+import com.tarareapp_3.reproductor_tarareapp.Reproductor.Partitura_t;
 
+@RequiresApi(api = Build.VERSION_CODES.O)
 public class Dp_activity extends Activity{
+
+    RelativeLayout a_layout;
 
     // ---------------------------------------------------------------------------------------------
 
@@ -19,7 +26,20 @@ public class Dp_activity extends Activity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.diagrama_pianola);
 
-        crea_boton_enlace(R.id.prev, MainActivity.class);;
+        crea_boton_enlace(R.id.prev, MainActivity.class);
+
+        a_layout = (RelativeLayout)findViewById(R.id.dp_canvas);
+
+        Partitura_t partitura = new Partitura_t(
+                "IntroGOT",
+                60,
+                6,
+                8,
+                "semicorchea");
+
+        i_crea_juego_de_tronos(partitura);
+
+        a_layout.addView(new Diagrama_Pianola_t(this, partitura));
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -35,5 +55,106 @@ public class Dp_activity extends Activity{
                 startActivity(myIntent);
             }
         });
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
+    private void i_crea_juego_de_tronos(Partitura_t a_partitura)
+    {
+        a_partitura.partitura_append_nota_a_compas(0, 0, 2, "A", 4);
+        a_partitura.partitura_append_nota_a_compas(0, 2, 2, "D", 4);
+
+        a_partitura.partitura_append_nota_a_compas(0, 4, 1, "F", 4);
+        a_partitura.partitura_append_nota_a_compas(0, 5, 1, "G", 4);
+
+        a_partitura.partitura_append_nota_a_compas(0, 6, 2, "A", 4);
+        a_partitura.partitura_append_nota_a_compas(0, 8, 2, "D", 4);
+
+        a_partitura.partitura_append_nota_a_compas(0, 10, 1, "F", 4);
+        a_partitura.partitura_append_nota_a_compas(0, 11, 1, "G", 4);
+
+        //******************************************************************************************
+
+        a_partitura.partitura_append_nota_a_compas(1, 0, 2, "A", 4);
+        a_partitura.partitura_append_nota_a_compas(1, 2, 2, "D", 4);
+
+        a_partitura.partitura_append_nota_a_compas(1, 4, 1, "F", 4);
+        a_partitura.partitura_append_nota_a_compas(1, 5, 1, "G", 4);
+
+        a_partitura.partitura_append_nota_a_compas(1, 6, 2, "A", 4);
+        a_partitura.partitura_append_nota_a_compas(1, 8, 2, "D", 4);
+
+        a_partitura.partitura_append_nota_a_compas(1, 10, 1, "F", 4);
+        a_partitura.partitura_append_nota_a_compas(1, 11, 1, "G", 4);
+
+        //******************************************************************************************
+
+        a_partitura.partitura_append_nota_a_compas(2, 0, 2, "A", 4);
+        a_partitura.partitura_append_nota_a_compas(2, 2, 2, "D", 4);
+
+        a_partitura.partitura_append_nota_a_compas(2, 4, 1, "F#", 4);
+        a_partitura.partitura_append_nota_a_compas(2, 5, 1, "G", 4);
+
+        a_partitura.partitura_append_nota_a_compas(2, 6, 2, "A", 4);
+        a_partitura.partitura_append_nota_a_compas(2, 8, 2, "D", 4);
+
+        a_partitura.partitura_append_nota_a_compas(2, 10, 1, "F#", 4);
+        a_partitura.partitura_append_nota_a_compas(2, 11, 1, "G", 4);
+
+        //******************************************************************************************
+
+        a_partitura.partitura_append_nota_a_compas(3, 0, 2, "A", 4);
+        a_partitura.partitura_append_nota_a_compas(3, 2, 2, "D", 4);
+
+        a_partitura.partitura_append_nota_a_compas(3, 4, 1, "F#", 4);
+        a_partitura.partitura_append_nota_a_compas(3, 5, 1, "G", 4);
+
+        a_partitura.partitura_append_nota_a_compas(3, 6, 2, "A", 4);
+        a_partitura.partitura_append_nota_a_compas(3, 8, 2, "D", 4);
+
+        a_partitura.partitura_append_nota_a_compas(3, 10, 1, "F#", 4);
+        a_partitura.partitura_append_nota_a_compas(3, 11, 1, "G", 4);
+
+        //******************************************************************************************
+
+        a_partitura.partitura_append_nota_a_compas(4, 0, 6, "A", 4);
+        a_partitura.partitura_append_nota_a_compas(4, 6, 6, "D", 4);
+
+        //******************************************************************************************
+
+        a_partitura.partitura_append_nota_a_compas(5, 0, 1, "F", 4);
+        a_partitura.partitura_append_nota_a_compas(5, 1, 1, "G", 4);
+
+        a_partitura.partitura_append_nota_a_compas(5, 2, 4, "A", 4);
+        a_partitura.partitura_append_nota_a_compas(5, 6, 4, "D", 4);
+
+        a_partitura.partitura_append_nota_a_compas(5, 10, 1, "F", 4);
+        a_partitura.partitura_append_nota_a_compas(5, 11, 1, "G", 4);
+
+        //******************************************************************************************
+
+        a_partitura.partitura_append_nota_a_compas(6, 0, 24, "E", 4);
+
+        //******************************************************************************************
+
+        a_partitura.partitura_append_nota_a_compas(8, 0, 6, "G", 4);
+        a_partitura.partitura_append_nota_a_compas(8, 6, 6, "C", 4);
+
+        //******************************************************************************************
+
+        a_partitura.partitura_append_nota_a_compas(9, 0, 1, "F", 4);
+        a_partitura.partitura_append_nota_a_compas(9, 1, 1, "E", 4);
+
+        a_partitura.partitura_append_nota_a_compas(9, 2, 4, "G", 4);
+        a_partitura.partitura_append_nota_a_compas(9, 6, 4, "C", 4);
+
+        a_partitura.partitura_append_nota_a_compas(9, 10, 1, "F", 4);
+        a_partitura.partitura_append_nota_a_compas(9, 11, 1, "E", 4);
+
+        //******************************************************************************************
+
+        a_partitura.partitura_append_nota_a_compas(10, 0, 24, "D", 4);
+
+        a_partitura.partitura_muestra_vista();
     }
 }

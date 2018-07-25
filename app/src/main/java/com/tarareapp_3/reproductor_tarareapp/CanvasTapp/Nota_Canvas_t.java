@@ -4,8 +4,6 @@ import com.tarareapp_3.reproductor_tarareapp.Reproductor.Nota_t;
 
 public class Nota_Canvas_t {
 
-    private Motor_Canvas_t a_motor;
-
     private Nota_t a_nota;
 
     private double [] x0;
@@ -13,7 +11,7 @@ public class Nota_Canvas_t {
 
     // ---------------------------------------------------------------------------------------------
 
-    public Nota_Canvas_t ()
+    public Nota_Canvas_t (float p_left, float p_top, float p_right, float p_bottom)
     {
 
     }

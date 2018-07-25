@@ -5,6 +5,8 @@ import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
 
+import com.tarareapp_3.reproductor_tarareapp.CanvasTapp.Compas_Canvas_t;
+
 import java.util.ArrayList;
 
 @RequiresApi(api = Build.VERSION_CODES.O)
@@ -469,5 +471,37 @@ public class Partitura_t
         {
             Log.e("partitura_muestra_vista", "av_compases es NULL");
         }
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
+    public ArrayList<Compas_Canvas_t> partitura_crea_compases_canvas(float [] p_x0, float [] p_yf, float width_celda_compas)
+    {
+        ArrayList<Compas_Canvas_t> compases = new ArrayList<>();
+
+        if (av_compases != null)
+        {
+            int num_compases;
+            float tamanyo_rejilla;
+
+            if (av_compases.size() > 4)
+                num_compases = av_compases.size();
+            else
+                num_compases = 5;
+
+            tamanyo_rejilla = width_celda_compas / a_num_bits_en_compas;
+
+            for (int i = 0; i < num_compases; i++)
+            {
+                Compas_Canvas_t nuevo_compas = av_compases.get(i).compas_crea_para_canvas(
+                                                                                i,
+                                                                                p_x0, p_yf,
+                                                                                a_num_bits_en_compas,
+                                                                                tamanyo_rejilla);
+                compases.add(nuevo_compas);
+            }
+        }
+
+        return compases;
     }
 }

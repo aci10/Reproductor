@@ -22,11 +22,16 @@
         android:layout_height="wrap_content"
         android:text="Pagina previa"/>
 
-    <RelativeLayout
-        android:id="@+id/dp_canvas"
+    <Button
+        android:id="@+id/btnStart"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:text="Start"/>
 
-    </RelativeLayout>
+    <Button
+        android:id="@+id/btnStop"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Stop"/>
 
 </LinearLayout>
