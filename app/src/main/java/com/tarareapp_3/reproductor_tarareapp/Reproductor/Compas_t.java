@@ -5,6 +5,7 @@ import android.support.annotation.RequiresApi;
 import android.util.Log;
 
 import com.tarareapp_3.reproductor_tarareapp.CanvasTapp.Compas_Canvas_t;
+import com.tarareapp_3.reproductor_tarareapp.CanvasTapp.Diagrama_Pianola_t;
 import com.tarareapp_3.reproductor_tarareapp.CanvasTapp.Nota_Canvas_t;
 
 import java.util.ArrayList;
@@ -54,6 +55,13 @@ public class Compas_t
     public Partitura_t compas_get_partitura()
     {
         return a_partitura;
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
+    public int compas_get_id()
+    {
+        return a_id;
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -246,25 +254,46 @@ public class Compas_t
     // ---------------------------------------------------------------------------------------------
 
     public Compas_Canvas_t compas_crea_para_canvas(
-                        float p_indicador,
+                        Diagrama_Pianola_t p_dp,
+                        int p_indicador,
                         float [] p_x0, float [] p_yf,
-                        int p_num_rejillas, float p_tamanyo_rejilla)
-    {
+                        float p_width_celda_compas,
+                        int p_num_rejillas, float p_tamanyo_rejilla) {
         Compas_Canvas_t compas_c;
+        float left, right;
+        float[] x0;
 
-        float [] x0;
+        if (p_indicador <= 0) {
+            left = p_x0[0];
+            right = p_yf[0];
+        }
+        else
+        {
+            left = p_x0[0] + p_width_celda_compas * p_indicador;
+            right = left + p_width_celda_compas;
+        }
 
-        x0 = new float [2];
+        x0 = new float[2];
+        x0[0] = left;
+        x0[1] = right;
 
-        x0[0] = p_x0[0] * (p_indicador + 1);
-        x0[1] = p_x0[1];
+        if (p_indicador <= 0)
+        {
+            float [] yf;
 
-        compas_c = new Compas_Canvas_t(this, x0, p_yf, p_num_rejillas);
+            yf = new float[2];
+            yf[0] = p_x0[1];
+            yf[1] = p_yf[1];
+
+            compas_c = new Compas_Canvas_t(this, x0, yf, p_num_rejillas, p_indicador);
+        }
+        else
+            compas_c = new Compas_Canvas_t(this, x0, null, p_num_rejillas, p_indicador);
 
         for (int i = 0; i < av_notas.length; i++)
         {
-            if (av_notas[i].isEmpty())
-                compas_c.cmp_canvas_set_nota(av_notas[i].get(0), i, p_tamanyo_rejilla);
+            if (!av_notas[i].isEmpty())
+                compas_c.cmp_canvas_set_nota(av_notas[i].get(0), i, p_dp.dp_get_top_bottom_nota(av_notas[i].get(0)), p_tamanyo_rejilla);
         }
 
         return compas_c;

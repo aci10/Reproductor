@@ -6,6 +6,7 @@ import android.support.annotation.RequiresApi;
 import android.util.Log;
 
 import com.tarareapp_3.reproductor_tarareapp.CanvasTapp.Compas_Canvas_t;
+import com.tarareapp_3.reproductor_tarareapp.CanvasTapp.Diagrama_Pianola_t;
 
 import java.util.ArrayList;
 
@@ -475,7 +476,7 @@ public class Partitura_t
 
     // ---------------------------------------------------------------------------------------------
 
-    public ArrayList<Compas_Canvas_t> partitura_crea_compases_canvas(float [] p_x0, float [] p_yf, float width_celda_compas)
+    public ArrayList<Compas_Canvas_t> partitura_crea_compases_canvas(Diagrama_Pianola_t p_dp, float [] p_x0, float [] p_yf, float p_width_celda_compas)
     {
         ArrayList<Compas_Canvas_t> compases = new ArrayList<>();
 
@@ -484,18 +485,23 @@ public class Partitura_t
             int num_compases;
             float tamanyo_rejilla;
 
-            if (av_compases.size() > 4)
+            if (av_compases.size() > 2)
                 num_compases = av_compases.size();
             else
-                num_compases = 5;
+                num_compases = 3;
 
-            tamanyo_rejilla = width_celda_compas / a_num_bits_en_compas;
+            tamanyo_rejilla = p_width_celda_compas / a_num_bits_en_compas;
 
             for (int i = 0; i < num_compases; i++)
             {
+                if (i >= av_compases.size())
+                    av_compases.add(new Compas_t(i, this));
+
                 Compas_Canvas_t nuevo_compas = av_compases.get(i).compas_crea_para_canvas(
+                                                                                p_dp,
                                                                                 i,
                                                                                 p_x0, p_yf,
+                                                                                p_width_celda_compas,
                                                                                 a_num_bits_en_compas,
                                                                                 tamanyo_rejilla);
                 compases.add(nuevo_compas);

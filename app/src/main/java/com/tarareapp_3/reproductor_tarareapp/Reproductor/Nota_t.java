@@ -1067,6 +1067,13 @@ public class Nota_t
 
     // ---------------------------------------------------------------------------------------------
 
+    public int nota_get_octava()
+    {
+        return a_octava;
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
     public void nota_inicia_crono()
     {
         Log.e("nota inicia crono", "Inicia");
@@ -1158,6 +1165,18 @@ public class Nota_t
 
         if (p_nombre != null && p_octava > 0)
             es_nota = (a_nombre.equals(p_nombre) && p_octava == a_octava);
+
+        return es_nota;
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
+    public boolean nota_compara_nombre_octava(String p_nombre)
+    {
+        boolean es_nota = false;
+
+        if (p_nombre != null)
+            es_nota = (p_nombre.equals(a_nombre + a_octava));
 
         return es_nota;
     }
@@ -1294,7 +1313,7 @@ public class Nota_t
 
     // ---------------------------------------------------------------------------------------------
 
-    public Nota_Canvas_t nota_crear_canvas_nota(float p_left, float p_top, float p_bottom, float tamanyo_rejilla)
+    public Nota_Canvas_t nota_crear_canvas_nota(float p_left, float [] p_pos, float tamanyo_rejilla)
     {
         Nota_Canvas_t nota = null;
 
@@ -1310,7 +1329,7 @@ public class Nota_t
 
             right = num_rejillas * tamanyo_rejilla + p_left;
 
-            nota = new Nota_Canvas_t(p_left, p_top, right, p_bottom);
+            nota = new Nota_Canvas_t(this, p_left, p_pos[0], right, p_pos[1]);
         }
 
         return nota;
