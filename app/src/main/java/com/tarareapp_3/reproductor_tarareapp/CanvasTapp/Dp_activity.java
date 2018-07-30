@@ -16,7 +16,8 @@ import com.tarareapp_3.reproductor_tarareapp.Reproductor.Partitura_t;
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class Dp_activity extends Activity{
 
-    RelativeLayout a_layout;
+    Diagrama_Pianola_t a_diagrama;
+    Partitura_t a_partitura;
 
     // ---------------------------------------------------------------------------------------------
 
@@ -24,20 +25,28 @@ public class Dp_activity extends Activity{
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.diagrama_pianola);
 
-        a_layout = (RelativeLayout)findViewById(R.id.dp_canvas);
-
-        Partitura_t partitura = new Partitura_t(
+        a_partitura = new Partitura_t(
                 "IntroGOT",
                 60,
                 6,
                 8,
                 "semicorchea");
 
-        i_crea_juego_de_tronos(partitura);
+        i_crea_juego_de_tronos(a_partitura);
 
-        a_layout.addView(new Diagrama_Pianola_t(this, partitura));
+        a_diagrama = new Diagrama_Pianola_t(this, a_partitura);
+
+        setContentView(a_diagrama);
+    }
+
+    @Override public void onResume() {
+
+        super.onResume();
+    }
+    @Override public void onPause() {
+
+        super.onPause();
     }
 
     // ---------------------------------------------------------------------------------------------

@@ -208,8 +208,6 @@ public class Audio_Record_t extends Activity {
                     ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
                 };
 
-        int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO);
-
         for (int i = 0; i < permissionsToCheck.length; i++)
         {
             if (permissionsToCheck[i] != PackageManager.PERMISSION_GRANTED)

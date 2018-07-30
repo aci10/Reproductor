@@ -1,13 +1,13 @@
 package com.tarareapp_3.reproductor_tarareapp.CanvasTapp;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
-import android.view.View;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 
 import com.tarareapp_3.reproductor_tarareapp.Reproductor.Nota_t;
 import com.tarareapp_3.reproductor_tarareapp.Reproductor.Partitura_t;
@@ -15,18 +15,17 @@ import com.tarareapp_3.reproductor_tarareapp.Reproductor.Partitura_t;
 import java.util.ArrayList;
 
 @RequiresApi(api = Build.VERSION_CODES.O)
-public class Diagrama_Pianola_t extends View{
+public class Diagrama_Pianola_t extends SurfaceView{
 
     private Partitura_t a_partitura;
+
+    private SurfaceHolder a_holder;
 
     private Canvas a_canvas;
 
     private float a_zoom;
 
     private float [] a_coordenadas_vista;
-
-    private Bitmap a_capa_notas;
-    private Bitmap a_capa_compases;
 
     private i_fila_nota [] av_filas;
     private ArrayList<Compas_Canvas_t> av_compases;
@@ -41,6 +40,8 @@ public class Diagrama_Pianola_t extends View{
     private static float a_filas_right;
 
     private static Paint a_pincel_negro;
+
+    private static String tag = "Preview(): ";
 
     // ---------------------------------------------------------------------------------------------
 
@@ -120,10 +121,8 @@ public class Diagrama_Pianola_t extends View{
 
     // ---------------------------------------------------------------------------------------------
 
-    public Diagrama_Pianola_t (Context p_context, Partitura_t p_partitura)
+    private void i_inicializa_pinceles_y_partitura(Partitura_t p_partitura)
     {
-        super(p_context);
-
         if (p_partitura != null)
         {
             a_partitura = p_partitura;
@@ -176,6 +175,40 @@ public class Diagrama_Pianola_t extends View{
 
     // ---------------------------------------------------------------------------------------------
 
+    public Diagrama_Pianola_t (Context p_context, Partitura_t p_partitura)
+    {
+        super(p_context);
+
+        a_holder = getHolder();
+
+        i_inicializa_pinceles_y_partitura(p_partitura);
+
+        a_holder.addCallback(new SurfaceHolder.Callback() {
+            @Override
+            public void surfaceCreated(SurfaceHolder holder) {
+                a_canvas = holder.lockCanvas(null);
+
+                i_inicializa_datos_diagrama();
+
+                draw(a_canvas);
+
+                holder.unlockCanvasAndPost(a_canvas);
+            }
+
+            @Override
+            public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+
+            }
+
+            @Override
+            public void surfaceDestroyed(SurfaceHolder holder) {
+
+            }
+        });
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
     private void i_dibuja_filas_notas()
     {
         if (av_filas != null)
@@ -203,19 +236,12 @@ public class Diagrama_Pianola_t extends View{
     // ---------------------------------------------------------------------------------------------
 
     @Override
-    protected void onDraw(Canvas canvas)
+    public void draw(Canvas canvas)
     {
-        boolean inicializar = a_canvas == null;
-
-        super.onDraw(canvas);
-
-        a_canvas = canvas;
+        super.draw(canvas);
 
         if (a_canvas != null)
         {
-            if (inicializar)
-                i_inicializa_datos_diagrama();
-
             // a_pincel.setARGB(1, 160, 97, 167);
             // a_pincel.setARGB(1, 126, 76, 132);
             // a_pincel.setARGB(1, 215, 151, 222);
@@ -225,42 +251,6 @@ public class Diagrama_Pianola_t extends View{
             i_dibuja_compases();
 
             i_dibuja_filas_notas();
-
-            /*float desplazamiento = (float) (a_canvas.getWidth() * X100_WIDTH_MEASURE_LS);
-            float desplazamiento_am = (float) (a_canvas.getHeight() * X100_HEIGHT_MEASURE_LS);
-            pincel = new Paint();
-            pincel.setColor(Color.BLUE);
-            a_canvas.drawRect(
-                    desplazamiento_n,
-                    0,
-                    desplazamiento_n + desplazamiento,
-                    (float) (a_canvas.getHeight() * X100_HEIGHT_MEASURE_LS),
-                    pincel);
-
-            pincel = new Paint();
-            pincel.setColor(Color.GREEN);
-            a_canvas.drawRect(
-                    desplazamiento_n + desplazamiento,
-                    0,
-                    desplazamiento_n + desplazamiento * 2,
-                    (float) (a_canvas.getHeight() * X100_HEIGHT_MEASURE_LS),
-                    pincel);
-
-            pincel = new Paint();
-            pincel.setColor(Color.YELLOW);
-            a_canvas.drawRect(
-                    desplazamiento_n + desplazamiento * 2,
-                    0,
-                    desplazamiento_n + desplazamiento * 3,
-                    (float) (a_canvas.getHeight() * X100_HEIGHT_MEASURE_LS),
-                    pincel);
-
-            a_canvas.drawRect(
-                    0,
-                    0,
-                    desplazamiento_n + desplazamiento,
-                    (float) (a_canvas.getHeight() * X100_HEIGHT_MEASURE_LS),
-                    pincel);*/
         }
     }
 
