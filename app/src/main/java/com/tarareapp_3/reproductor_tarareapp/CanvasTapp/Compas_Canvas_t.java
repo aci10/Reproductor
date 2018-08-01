@@ -107,9 +107,11 @@ public class Compas_Canvas_t {
                 a_pincel = new Paint[2];
                 a_pincel[0] = new Paint();
                 a_pincel[0].setColor(Color.GREEN);
+                a_pincel[0].setShadowLayer(4, 5, 5, Color.DKGRAY);
 
                 a_pincel[1] = new Paint();
                 a_pincel[1].setColor(Color.BLUE);
+                a_pincel[1].setShadowLayer(4, 5, 5, Color.DKGRAY);
             }
 
             if (p_tipo_pincel % 2 == 0)
@@ -141,9 +143,11 @@ public class Compas_Canvas_t {
 
                     a_pincel_notas[0] = new Paint();
                     a_pincel_notas[0].setColor(Color.GRAY);
+                    a_pincel_notas[0].setShadowLayer(4, 3, 3, Color.DKGRAY);
 
                     a_pincel_notas[1] = new Paint();
                     a_pincel_notas[1].setColor(Color.RED);
+                    a_pincel_notas[1].setShadowLayer(4, 3, 3, Color.DKGRAY);
                 }
             }
         }
@@ -187,11 +191,11 @@ public class Compas_Canvas_t {
     {
         if (p_canvas != null)
         {
-            p_canvas.drawRect(a_x0[0], a_yf[0], a_x0[1], a_yf[1], a_pincel[a_tipo_pincel]);
-
             i_dibuja_rejillas(p_canvas);
 
             i_dibuja_notas(p_canvas);
+
+            p_canvas.drawRect(a_x0[0], a_yf[0], a_x0[1], a_yf[1], a_pincel[a_tipo_pincel]);
 
             // Dibujamos la linea divisoria superior que marca la fila de esta nota
             p_canvas.drawLine(a_x0[1], a_yf[1], a_x0[1], p_canvas.getHeight(), p_pincel_negro);
