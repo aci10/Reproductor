@@ -258,7 +258,8 @@ public class Compas_t
                         int p_indicador,
                         float [] p_x0, float [] p_yf,
                         float p_width_celda_compas,
-                        int p_num_rejillas, float p_tamanyo_rejilla) {
+                        int p_num_rejillas, float p_tamanyo_rejilla)
+    {
         Compas_Canvas_t compas_c;
         float left, right;
         float[] x0;

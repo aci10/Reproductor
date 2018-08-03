@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.util.Log;
 
 import com.tarareapp_3.reproductor_tarareapp.Reproductor.Compas_t;
 import com.tarareapp_3.reproductor_tarareapp.Reproductor.Nota_t;
@@ -107,11 +108,11 @@ public class Compas_Canvas_t {
                 a_pincel = new Paint[2];
                 a_pincel[0] = new Paint();
                 a_pincel[0].setColor(Color.GREEN);
-                a_pincel[0].setShadowLayer(4, 5, 5, Color.DKGRAY);
+                a_pincel[0].setShadowLayer(4, 0, 5, Color.DKGRAY);
 
                 a_pincel[1] = new Paint();
                 a_pincel[1].setColor(Color.BLUE);
-                a_pincel[1].setShadowLayer(4, 5, 5, Color.DKGRAY);
+                a_pincel[1].setShadowLayer(4, 0, 5, Color.DKGRAY);
             }
 
             if (p_tipo_pincel % 2 == 0)
@@ -155,18 +156,37 @@ public class Compas_Canvas_t {
 
     // ---------------------------------------------------------------------------------------------
 
-    private void i_dibuja_rejillas(Canvas p_canvas)
+    private void i_dibuja_rejillas(Canvas p_canvas, float p_cmp_left, float [] p_x_vista)
     {
         for (int i = 0; p_canvas != null && i < av_rejillas.length; i++)
         {
+            float left, right;
             Paint pincel;
+
+            if (av_rejillas[i][0] < p_x_vista[0])
+            {
+                left = p_cmp_left;
+                right = left + (av_rejillas[i][1] - p_x_vista[0]);
+            }
+            else
+            {
+                if (a_x0[0] > p_x_vista[0])
+                    left = p_cmp_left + (av_rejillas[i][0] - a_x0[0]);
+                else
+                    left = p_cmp_left + (av_rejillas[i][0] - p_x_vista[0]);
+
+                if (av_rejillas[i][1] > p_x_vista[1])
+                    right = p_canvas.getWidth();
+                else
+                    right = left + (av_rejillas[i][1] - av_rejillas[i][0]);
+            }
 
             if (i % 2 == 0)
                 pincel = a_pincel_rejilla[a_tipo_pincel][0];
             else
                 pincel = a_pincel_rejilla[a_tipo_pincel][1];
 
-            p_canvas.drawRect(av_rejillas[i][0], a_yf[1], av_rejillas[i][1], p_canvas.getHeight(), pincel);
+            p_canvas.drawRect(left, a_yf[1], right, p_canvas.getHeight(), pincel);
         }
     }
 
@@ -187,21 +207,38 @@ public class Compas_Canvas_t {
 
     // ---------------------------------------------------------------------------------------------
 
-    public void cmp_dibuja(Canvas p_canvas, Paint p_pincel_negro)
+    public void cmp_dibuja(Canvas p_canvas, float [] p_x_vista, float p_left_0, Paint p_pincel_negro)
     {
         if (p_canvas != null)
         {
-            i_dibuja_rejillas(p_canvas);
+            float left, right;
+
+            if (a_x0[0] < p_x_vista[0])
+            {
+                left = p_left_0;
+                right = left + (a_x0[1] - p_x_vista[0]);
+            }
+            else
+            {
+                left = p_left_0 + (a_x0[0] - p_x_vista[0]);
+
+                if (a_x0[1] > p_x_vista[1])
+                    right = p_canvas.getWidth();
+                else
+                    right = left + (a_x0[1] - a_x0[0]);
+            }
+
+
+            i_dibuja_rejillas(p_canvas, left, p_x_vista);
 
             i_dibuja_notas(p_canvas);
 
-            p_canvas.drawRect(a_x0[0], a_yf[0], a_x0[1], a_yf[1], a_pincel[a_tipo_pincel]);
+            p_canvas.drawLine(right, a_yf[1], right, p_canvas.getHeight(), p_pincel_negro);
 
-            // Dibujamos la linea divisoria superior que marca la fila de esta nota
-            p_canvas.drawLine(a_x0[1], a_yf[1], a_x0[1], p_canvas.getHeight(), p_pincel_negro);
+            p_canvas.drawRect(left, a_yf[0], right, a_yf[1], a_pincel[a_tipo_pincel]);
 
-            // Dibujamos el nombre de la nota
-            p_canvas.drawText("C" + (a_compas.compas_get_id() + 1), a_x0[0] + ((a_x0[1] - a_x0[0]) / 2), a_yf[1] / 2, p_pincel_negro);
+            if ((right - left) >= ((a_x0[1] - a_x0[0]) / 2))
+                p_canvas.drawText("C" + (a_compas.compas_get_id() + 1), left + ((right - left) / 2), a_yf[1] / 2, p_pincel_negro);
         }
     }
 }

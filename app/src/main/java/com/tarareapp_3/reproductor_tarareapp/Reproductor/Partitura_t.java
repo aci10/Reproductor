@@ -249,6 +249,36 @@ public class Partitura_t
 
     // ---------------------------------------------------------------------------------------------
 
+    public Compas_Canvas_t partitura_add_compas_vacio(
+                        Diagrama_Pianola_t p_dp,
+                        int p_indicador,
+                        float [] p_x0, float [] p_yf,
+                        float p_width_celda_compas)
+    {
+        Compas_Canvas_t compas_canvas;
+
+        Compas_t compas = new Compas_t(av_compases.size(), this);
+
+        float tamanyo_rejilla = p_width_celda_compas / a_num_bits_en_compas;
+
+        if (av_compases == null)
+            av_compases = new ArrayList<Compas_t>();
+
+        av_compases.add(compas);
+
+        compas_canvas = compas.compas_crea_para_canvas(
+                                    p_dp,
+                                    p_indicador,
+                                    p_x0, p_yf,
+                                    p_width_celda_compas,
+                                    a_num_bits_en_compas,
+                                    tamanyo_rejilla);
+
+        return compas_canvas;
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
     public void partitura_append_nota_a_compas(
             int p_indice_compas,
             int p_bit_inicial,
