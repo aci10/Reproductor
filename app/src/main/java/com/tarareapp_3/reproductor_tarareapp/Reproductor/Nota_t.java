@@ -4,6 +4,7 @@ import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
 
+import com.tarareapp_3.reproductor_tarareapp.CanvasTapp.Compas_Canvas_t;
 import com.tarareapp_3.reproductor_tarareapp.CanvasTapp.Nota_Canvas_t;
 
 @RequiresApi(api = Build.VERSION_CODES.O)
@@ -1090,6 +1091,20 @@ public class Nota_t
 
     // ---------------------------------------------------------------------------------------------
 
+    public int nota_get_num_bits()
+    {
+        return a_num_bits;
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
+    public int nota_get_bit_inicial()
+    {
+        return a_bit_inicial;
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
     public int nota_get_num_bit_final()
     {
         int num_bit_final;
@@ -1232,6 +1247,13 @@ public class Nota_t
 
     // ---------------------------------------------------------------------------------------------
 
+    public String nota_get_nombre()
+    {
+        return a_nombre + a_octava;
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
     public double nota_get_duracion()
     {
         double duracion;
@@ -1313,7 +1335,7 @@ public class Nota_t
 
     // ---------------------------------------------------------------------------------------------
 
-    public Nota_Canvas_t nota_crear_canvas_nota(float p_left, float [] p_pos, float tamanyo_rejilla)
+    public Nota_Canvas_t nota_crear_canvas_nota(Compas_Canvas_t p_compas, float p_left, float [] p_pos, float tamanyo_rejilla)
     {
         Nota_Canvas_t nota = null;
 
@@ -1329,7 +1351,7 @@ public class Nota_t
 
             right = num_rejillas * tamanyo_rejilla + p_left;
 
-            nota = new Nota_Canvas_t(this, p_left, p_pos[0], right, p_pos[1]);
+            nota = new Nota_Canvas_t(this, p_compas, p_left, p_pos[0], right, p_pos[1]);
         }
 
         return nota;

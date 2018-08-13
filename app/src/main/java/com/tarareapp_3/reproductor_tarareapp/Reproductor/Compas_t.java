@@ -66,6 +66,18 @@ public class Compas_t
 
     // ---------------------------------------------------------------------------------------------
 
+    public boolean compas_comparar(Compas_t p_compas)
+    {
+        boolean son_iguales = false;
+
+        if (p_compas != null && a_id == p_compas.compas_get_id())
+            son_iguales = true;
+
+        return son_iguales;
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
     public void compas_append_nota(
             int p_bit_inicial,
             int p_num_bits,
@@ -123,7 +135,7 @@ public class Compas_t
 
     // ---------------------------------------------------------------------------------------------
 
-    public void compas_borra_nota(int p_bit, int p_frecuencia)
+    public void compas_borra_nota(int p_bit, double p_frecuencia)
     {
         if(av_notas != null && p_bit >= 0 && p_bit < av_notas.length &&
                 av_notas[p_bit] != null && !av_notas[p_bit].isEmpty())
@@ -132,7 +144,7 @@ public class Compas_t
             {
                 if (av_notas[p_bit].get(i).nota_get_frecuencia() == p_frecuencia)
                 {
-                    av_notas[p_bit].remove(p_frecuencia);
+                    av_notas[p_bit].remove(i);
                     break;
                 }
             }

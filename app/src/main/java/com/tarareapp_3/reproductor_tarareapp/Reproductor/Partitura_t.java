@@ -369,16 +369,6 @@ public class Partitura_t
 
     // ---------------------------------------------------------------------------------------------
 
-    public void partitura_borra_nota_de_compas(int p_indice_compas, int p_bit_nota, int p_frecuencia)
-    {
-        if (p_indice_compas > 0)
-            p_indice_compas -= 1;
-
-        av_compases.get(p_indice_compas ).compas_borra_nota(p_bit_nota, p_frecuencia);
-    }
-
-    // ---------------------------------------------------------------------------------------------
-
     public void partitura_inicia_crono()
     {
         if (a_cronometro != null)

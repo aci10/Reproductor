@@ -20,6 +20,8 @@ public class Compas_Canvas_t {
     private float [] a_x0;
     private static float [] a_yf = null;
 
+    private float [] a_pos_en_canvas;
+
     private int a_tipo_pincel;
     private static Paint [] a_pincel = null;
     private static Paint [][] a_pincel_rejilla = null;
@@ -33,6 +35,8 @@ public class Compas_Canvas_t {
     private void i_crea_rejillas_compas(int p_num_rejillas)
     {
         float ancho;
+
+        a_pos_en_canvas = null;
 
         if (a_pincel_rejilla == null)
         {
@@ -128,11 +132,18 @@ public class Compas_Canvas_t {
 
     // ---------------------------------------------------------------------------------------------
 
+    public int cmp_canvas_get_id()
+    {
+        return a_compas.compas_get_id();
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
     public void cmp_canvas_set_nota(Nota_t p_nota, int p_num_rejilla, float [] p_pos, float p_tamanyo_rejilla)
     {
         if (av_notas != null && p_nota != null && p_num_rejilla >= 0 && p_pos != null)
         {
-            Nota_Canvas_t nota = p_nota.nota_crear_canvas_nota(av_rejillas[p_num_rejilla][0], p_pos, p_tamanyo_rejilla);
+            Nota_Canvas_t nota = p_nota.nota_crear_canvas_nota(this, av_rejillas[p_num_rejilla][0], p_pos, p_tamanyo_rejilla);
 
             if (nota != null)
             {
@@ -152,6 +163,68 @@ public class Compas_Canvas_t {
                 }
             }
         }
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
+    public void cmp_canvas_set_nota(Nota_Canvas_t p_nota)
+    {
+        if (p_nota != null)
+            av_notas.add(p_nota);
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
+    public void cmp_canvas_remove_nota(Nota_Canvas_t p_nota)
+    {
+        if (p_nota != null)
+        {
+            for (int i = 0; i < av_notas.size(); i++)
+            {
+                if (av_notas.get(i).nt_compara_notas(p_nota))
+                    av_notas.remove(i);
+            }
+        }
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
+    public void cmp_canvas_remove_nota(int p_bit, double p_frecuencia)
+    {
+        a_compas.compas_borra_nota(p_bit, p_frecuencia);
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
+    public Nota_Canvas_t cmp_get_nota_pos(float p_x, float p_y)
+    {
+        Nota_Canvas_t nota = null;
+
+        for (int i = 0; nota == null && i < av_notas.size(); i++)
+        {
+            nota = av_notas.get(i).nt_canvas_hay_colision(p_x, p_y);
+        }
+
+        return nota;
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
+    private Compas_t cmp_get_compas()
+    {
+        return a_compas;
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
+    public boolean cmp_compara_compases(Compas_Canvas_t p_compas)
+    {
+        boolean son_iguales = false;
+
+        if (p_compas != null)
+            son_iguales = a_compas.compas_comparar(p_compas.cmp_get_compas());
+
+        return son_iguales;
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -192,22 +265,28 @@ public class Compas_Canvas_t {
 
     // ---------------------------------------------------------------------------------------------
 
-    private void i_dibuja_notas(Canvas p_canvas)
+    public boolean  cmp_dibuja_nota_desplazada(Nota_Canvas_t p_nota, float p_x, float p_top, String p_nombre_fila, int p_octava_fila)
     {
-        if (av_notas != null)
-        {
-            for (int i = 0; i < av_notas.size(); i++)
-            {
-                Paint pincel = a_pincel_notas[a_tipo_pincel];
+        boolean nota_dibujada = false;
 
-                av_notas.get(i).nt_canvas_dibuja(p_canvas, pincel);
+        if (p_nota != null && p_x >= a_x0[0] && p_x <= a_x0[1])
+        {
+            for (int i = 0; i < av_rejillas.length; i++)
+            {
+                if (p_x >= av_rejillas[i][0] && p_x <= av_rejillas[i][1])
+                {
+                    nota_dibujada = true;
+                    p_nota.nt_canvas_desplaza(this, av_rejillas[i][0], p_top, i, p_nombre_fila, p_octava_fila);
+                }
             }
         }
+
+        return nota_dibujada;
     }
 
     // ---------------------------------------------------------------------------------------------
 
-    public void cmp_dibuja(Canvas p_canvas, float [] p_x_vista, float p_left_0, Paint p_pincel_negro)
+    public void cmp_dibuja(Canvas p_canvas, float [] p_x_vista, float [] p_y_vista, float [] p_vista_0, Paint p_pincel_negro)
     {
         if (p_canvas != null)
         {
@@ -215,12 +294,12 @@ public class Compas_Canvas_t {
 
             if (a_x0[0] < p_x_vista[0])
             {
-                left = p_left_0;
+                left = p_vista_0[0];
                 right = left + (a_x0[1] - p_x_vista[0]);
             }
             else
             {
-                left = p_left_0 + (a_x0[0] - p_x_vista[0]);
+                left = p_vista_0[0] + (a_x0[0] - p_x_vista[0]);
 
                 if (a_x0[1] > p_x_vista[1])
                     right = p_canvas.getWidth();
@@ -228,10 +307,13 @@ public class Compas_Canvas_t {
                     right = left + (a_x0[1] - a_x0[0]);
             }
 
+            if (a_pos_en_canvas == null)
+                a_pos_en_canvas = new float [2];
+
+            a_pos_en_canvas[0] = left;
+            a_pos_en_canvas[1] = right;
 
             i_dibuja_rejillas(p_canvas, left, p_x_vista);
-
-            i_dibuja_notas(p_canvas);
 
             p_canvas.drawLine(right, a_yf[1], right, p_canvas.getHeight(), p_pincel_negro);
 
@@ -239,6 +321,21 @@ public class Compas_Canvas_t {
 
             if ((right - left) >= ((a_x0[1] - a_x0[0]) / 2))
                 p_canvas.drawText("C" + (a_compas.compas_get_id() + 1), left + ((right - left) / 2), a_yf[1] / 2, p_pincel_negro);
+        }
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
+    public void cmp_dibuja_notas(Canvas p_canvas, float [] p_x_vista, float [] p_y_vista, float [] p_vista_0)
+    {
+        if (p_canvas != null && a_pos_en_canvas != null && av_notas != null)
+        {
+            for (int i = 0; i < av_notas.size(); i++)
+            {
+                Paint pincel = a_pincel_notas[a_tipo_pincel];
+
+                av_notas.get(i).nt_canvas_dibuja(p_canvas, a_pos_en_canvas[0], a_x0[0], p_x_vista, p_y_vista, p_vista_0, pincel);
+            }
         }
     }
 }
