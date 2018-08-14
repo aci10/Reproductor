@@ -229,6 +229,20 @@ public class Compas_Canvas_t {
 
     // ---------------------------------------------------------------------------------------------
 
+    public boolean cmp_busca_colision_notas(Nota_Canvas_t p_nota)
+    {
+        boolean hay_colision = false;
+
+        for (int i = 0; !hay_colision && i < av_notas.size(); i++)
+        {
+            hay_colision = av_notas.get(i).nt_canvas_hay_colision_notas(p_nota);
+        }
+
+        return hay_colision;
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
     private void i_dibuja_rejillas(Canvas p_canvas, float p_cmp_left, float [] p_x_vista)
     {
         for (int i = 0; p_canvas != null && i < av_rejillas.length; i++)

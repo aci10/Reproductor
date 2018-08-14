@@ -1119,6 +1119,20 @@ public class Nota_t
 
     // ---------------------------------------------------------------------------------------------
 
+    public int nota_get_total_bits()
+    {
+        int num_bit_final;
+
+        num_bit_final = a_num_bits;
+
+        if (a_nota_ligada != null)
+            num_bit_final = a_nota_ligada.i_get_num_bit_final(num_bit_final);
+
+        return num_bit_final;
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
     public void nota_set_hijo(Nota_t p_hijo)
     {
         a_nota_ligada = p_hijo;
@@ -1178,7 +1192,7 @@ public class Nota_t
     {
         boolean es_nota = false;
 
-        if (p_nombre != null && p_octava > 0)
+        if (p_nombre != null && p_octava > 0 && a_nombre != null && a_octava > 0)
             es_nota = (a_nombre.equals(p_nombre) && p_octava == a_octava);
 
         return es_nota;
@@ -1275,7 +1289,7 @@ public class Nota_t
 
     public void nota_recalcula_duracion()
     {
-        if (a_compas != null)
+        if (a_compas != null && a_hilo_rep != null)
         {
             double duracion;
 
@@ -1285,6 +1299,32 @@ public class Nota_t
                 duracion += a_nota_ligada.nota_get_duracion();
 
             a_hilo_rep.hilo_reproduccion_set_duracion(duracion);
+        }
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
+    private void i_remove_padre()
+    {
+        a_nota_padre = null;
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
+    public void nota_borrar()
+    {
+        if (a_nota_padre != null)
+            a_nota_padre.nota_borrar();
+        else
+        {
+            a_compas.compas_borra_nota(a_bit_inicial, a_frecuencia);
+
+            if (a_nota_ligada != null)
+            {
+                a_nota_ligada.i_remove_padre();
+                a_nota_ligada.nota_borrar();
+                a_nota_ligada = null;
+            }
         }
     }
 

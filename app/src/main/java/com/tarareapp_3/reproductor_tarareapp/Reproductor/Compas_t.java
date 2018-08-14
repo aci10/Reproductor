@@ -85,16 +85,14 @@ public class Compas_t
             String p_nombre,
             int p_octava)
     {
-        boolean no_encontrado;
-
         if (av_notas != null && p_bit_inicial >= 0 && p_bit_inicial < av_notas.length)
         {
             Nota_t nota = new Nota_t(
-                    this,
-                    p_bit_inicial,
-                    p_num_bits,
-                    p_nota_padre,
-                    p_nombre, p_octava);
+                        this,
+                        p_bit_inicial,
+                        p_num_bits,
+                        p_nota_padre,
+                        p_nombre, p_octava);
 
             av_notas[p_bit_inicial].add(nota);
         }
@@ -118,7 +116,7 @@ public class Compas_t
 
         if(av_notas != null && p_bit >= 0 && p_bit < av_notas.length &&
                 av_notas[p_bit] != null && !av_notas[p_bit].isEmpty())
-
+        {
             for (int i = 0; i < av_notas[p_bit].size(); i++)
             {
                 if (av_notas[p_bit].get(i).nota_compara_nombre_octava(p_nombre, p_octava))
@@ -127,6 +125,7 @@ public class Compas_t
                     break;
                 }
             }
+        }
         else
             Log.e("compas_borra_nota", "Fallo en borrado de nota");
 
@@ -305,8 +304,11 @@ public class Compas_t
 
         for (int i = 0; i < av_notas.length; i++)
         {
-            if (!av_notas[i].isEmpty())
-                compas_c.cmp_canvas_set_nota(av_notas[i].get(0), i, p_dp.dp_get_top_bottom_nota(av_notas[i].get(0)), p_tamanyo_rejilla);
+            for (int j = 0; j < av_notas[i].size(); j++)
+            {
+                if (av_notas[i].get(j) != null)
+                    compas_c.cmp_canvas_set_nota(av_notas[i].get(j), i, p_dp.dp_get_top_bottom_nota(av_notas[i].get(j)), p_tamanyo_rejilla);
+            }
         }
 
         return compas_c;

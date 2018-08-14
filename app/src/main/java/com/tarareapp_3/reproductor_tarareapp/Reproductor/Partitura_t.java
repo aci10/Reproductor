@@ -279,15 +279,15 @@ public class Partitura_t
 
     // ---------------------------------------------------------------------------------------------
 
-    public void partitura_append_nota_a_compas(
+    public Nota_t partitura_append_nota_a_compas(
             int p_indice_compas,
             int p_bit_inicial,
             int p_num_bits,
             String p_nombre,
             int p_octava)
     {
-        int compases_extra, bits_restantes, tamanyo_en_ultimo_compas, bits_nota, indice_nota;
         Nota_t nota_padre, nota_raiz;
+        int compases_extra, bits_restantes, tamanyo_en_ultimo_compas, bits_nota, indice_nota;
 
         bits_restantes = p_num_bits - (a_num_bits_en_compas - p_bit_inicial);
 
@@ -365,6 +365,8 @@ public class Partitura_t
 
         if (nota_raiz != null)
             nota_raiz.nota_recalcula_duracion();
+
+        return nota_raiz;
     }
 
     // ---------------------------------------------------------------------------------------------

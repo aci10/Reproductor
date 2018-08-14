@@ -602,31 +602,45 @@ public class Diagrama_Pianola_t extends SurfaceView{
 
             case MotionEvent.ACTION_UP:
 
-                if (a_en_edicion)
+                synchronized (getHolder())
                 {
-                    a_nota_seleccionada.nt_canvas_editar_nota_reproductor(a_partitura);
-                    a_nota_seleccionada = null;
-                    a_modificar = true;
-                }
-                else
-                {
-                    /*long t0, action_time;
-                    float moved_x, moved_y, speed_x, speed_y;
+                    if (a_en_edicion)
+                    {
+                        if (a_nota_seleccionada != null)
+                        {
+                            int i = i_calcula_primer_compas_visible();
+                            int compas_max;
 
-                    t0 = System.currentTimeMillis();
-                    action_time = t0 - a_lastClick;
+                            if (av_compases.size() < i + 4)
+                                compas_max = av_compases.size();
+                            else
+                                compas_max = i + 4;
 
-                    moved_x = a_coordenadas_onToucheMove_0[0] - x;
+                            a_nota_seleccionada.nt_canvas_editar_nota_reproductor(av_compases, i, compas_max, a_partitura);
+                            a_nota_seleccionada = null;
+                            a_modificar = true;
+                        }
+                    }
+                    else
+                    {
+                        /*long t0, action_time;
+                        float moved_x, moved_y, speed_x, speed_y;
 
-                    moved_y = a_coordenadas_onToucheMove_0[1] - y;
+                        t0 = System.currentTimeMillis();
+                        action_time = t0 - a_lastClick;
 
-                    speed_x = moved_x / action_time;
-                    speed_y = moved_y / action_time;
+                        moved_x = a_coordenadas_onToucheMove_0[0] - x;
 
-                    a_coordenadas_vista_f0_onToucheMove[0] = a_coordenadas_vista_f[0];
-                    a_coordenadas_vista_f0_onToucheMove[1] = a_coordenadas_vista_f[1];
+                        moved_y = a_coordenadas_onToucheMove_0[1] - y;
 
-                    a_motor.motor_desacelerar(speed_x, speed_y, t0);*/
+                        speed_x = moved_x / action_time;
+                        speed_y = moved_y / action_time;
+
+                        a_coordenadas_vista_f0_onToucheMove[0] = a_coordenadas_vista_f[0];
+                        a_coordenadas_vista_f0_onToucheMove[1] = a_coordenadas_vista_f[1];
+
+                        a_motor.motor_desacelerar(speed_x, speed_y, t0);*/
+                    }
                 }
                 break;
         }

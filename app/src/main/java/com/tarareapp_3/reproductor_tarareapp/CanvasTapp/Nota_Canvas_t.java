@@ -8,6 +8,8 @@ import android.support.annotation.RequiresApi;
 import com.tarareapp_3.reproductor_tarareapp.Reproductor.Nota_t;
 import com.tarareapp_3.reproductor_tarareapp.Reproductor.Partitura_t;
 
+import java.util.ArrayList;
+
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class Nota_Canvas_t {
 
@@ -44,7 +46,7 @@ public class Nota_Canvas_t {
             a_compas_0 = p_compas;
 
             a_rejilla_inicial = a_nota.nota_get_bit_inicial();
-            a_num_bits = a_nota.nota_get_num_bits();
+            a_num_bits =  a_nota.nota_get_total_bits();
             a_nombre = a_nota.nota_get_nombre();
             a_octava = a_nota.nota_get_octava();
 
@@ -96,6 +98,26 @@ public class Nota_Canvas_t {
 
     // ---------------------------------------------------------------------------------------------
 
+    public boolean nt_canvas_hay_colision_notas(Nota_Canvas_t p_nota)
+    {
+        boolean hay_colision = false;
+
+        if (p_nota != null && p_nota.a_id != a_id)
+        {
+            if (p_nota.a_pos_en_vista[1] >= a_pos_en_vista[1] && p_nota.a_pos_en_vista[1] < a_pos_en_vista[3])
+            {
+                if ((p_nota.a_pos_en_vista[0] >= a_pos_en_vista[0] && p_nota.a_pos_en_vista[0] < a_pos_en_vista[2])
+                        || (p_nota.a_pos_en_vista[2] > a_pos_en_vista[0] && p_nota.a_pos_en_vista[2] <= a_pos_en_vista[2]))
+                {
+                    hay_colision = true;
+                }
+            }
+        }
+        return hay_colision;
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
     public String nt_canvas_valores()
     {
         return a_nota.nota_get_nombre() + " | " + a_nota.nota_get_duracion();
@@ -128,11 +150,41 @@ public class Nota_Canvas_t {
 
     // ---------------------------------------------------------------------------------------------
 
-    public void nt_canvas_editar_nota_reproductor(Partitura_t p_partitura)
+    public void nt_canvas_editar_nota_reproductor(ArrayList<Compas_Canvas_t> p_compases, int p_indice, int p_num_compases, Partitura_t p_partitura)
     {
-        a_compas_0.cmp_canvas_remove_nota(a_nota.nota_get_bit_inicial(), a_nota.nota_get_frecuencia());
+        boolean hay_colision = true;
 
-        p_partitura.partitura_append_nota_a_compas(a_compas.cmp_canvas_get_id(), a_rejilla_inicial, a_num_bits, a_nombre, a_octava);
+        for (; p_compases != null && p_indice < p_num_compases; p_indice++)
+        {
+            hay_colision = p_compases.get(p_indice).cmp_busca_colision_notas(this);
+
+            if (hay_colision)
+                break;
+        }
+
+        if (!hay_colision)
+        {
+            a_compas_0.cmp_canvas_remove_nota(a_nota.nota_get_bit_inicial(), a_nota.nota_get_frecuencia());
+
+            Nota_t nota = p_partitura.partitura_append_nota_a_compas(a_compas.cmp_canvas_get_id(), a_rejilla_inicial, a_num_bits, a_nombre, a_octava);
+
+            a_compas_0 = a_compas;
+            a_nota = nota;
+        }
+        else
+        {
+            a_x0[0] = a_pos0_desplazamiento[0];
+            a_x0[1] = a_pos0_desplazamiento[1];
+            a_yf[0] = a_pos0_desplazamiento[2];
+            a_yf[1] = a_pos0_desplazamiento[3];
+
+            a_compas = a_compas_0;
+
+            a_rejilla_inicial = a_nota.nota_get_bit_inicial();
+            a_num_bits =  a_nota.nota_get_total_bits();
+            a_nombre = a_nota.nota_get_nombre();
+            a_octava = a_nota.nota_get_octava();
+        }
     }
 
     // ---------------------------------------------------------------------------------------------
