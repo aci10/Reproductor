@@ -191,7 +191,7 @@ public class Compas_Canvas_t {
 
     public void cmp_canvas_remove_nota(int p_bit, double p_frecuencia)
     {
-        a_compas.compas_borra_nota(p_bit, p_frecuencia);
+        a_compas.compas_borra_nota(p_bit, p_frecuencia, false);
     }
 
     // ---------------------------------------------------------------------------------------------

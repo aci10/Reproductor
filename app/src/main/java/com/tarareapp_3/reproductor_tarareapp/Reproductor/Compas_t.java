@@ -134,19 +134,23 @@ public class Compas_t
 
     // ---------------------------------------------------------------------------------------------
 
-    public void compas_borra_nota(int p_bit, double p_frecuencia)
+    public void compas_borra_nota(int p_bit, double p_frecuencia, boolean remove)
     {
-        if(av_notas != null && p_bit >= 0 && p_bit < av_notas.length &&
-                av_notas[p_bit] != null && !av_notas[p_bit].isEmpty())
-
+        if(av_notas != null && p_bit >= 0 && p_bit < av_notas.length && av_notas[p_bit] != null)
+        {
             for (int i = 0; i < av_notas[p_bit].size(); i++)
             {
                 if (av_notas[p_bit].get(i).nota_get_frecuencia() == p_frecuencia)
                 {
-                    av_notas[p_bit].remove(i);
+                    if (remove)
+                        av_notas[p_bit].remove(i);
+                    else
+                        av_notas[p_bit].get(i).nota_borrar();
+
                     break;
                 }
             }
+        }
         else
             Log.e("compas_borra_nota", "Fallo en borrado de nota");
     }

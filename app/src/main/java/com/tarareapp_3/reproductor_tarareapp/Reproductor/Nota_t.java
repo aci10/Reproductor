@@ -1317,7 +1317,7 @@ public class Nota_t
             a_nota_padre.nota_borrar();
         else
         {
-            a_compas.compas_borra_nota(a_bit_inicial, a_frecuencia);
+            a_compas.compas_borra_nota(a_bit_inicial, a_frecuencia, true);
 
             if (a_nota_ligada != null)
             {
