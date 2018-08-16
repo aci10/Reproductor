@@ -86,7 +86,7 @@ public class Motor_t extends Thread{
                     a_desacelerando_y = false;
             }
 
-            a_dp.dp_move_view(desplazamiento_x, desplazamiento_y);
+            // a_dp.dp_move_view(desplazamiento_x, desplazamiento_y);
         }
     }
 

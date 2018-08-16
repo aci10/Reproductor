@@ -252,7 +252,7 @@ public class Partitura_t
     public Compas_Canvas_t partitura_add_compas_vacio(
                         Diagrama_Pianola_t p_dp,
                         int p_indicador,
-                        float [] p_x0, float [] p_yf,
+                        float [] coordenadas,
                         float p_width_celda_compas)
     {
         Compas_Canvas_t compas_canvas;
@@ -269,7 +269,7 @@ public class Partitura_t
         compas_canvas = compas.compas_crea_para_canvas(
                                     p_dp,
                                     p_indicador,
-                                    p_x0, p_yf,
+                                    coordenadas,
                                     p_width_celda_compas,
                                     a_num_bits_en_compas,
                                     tamanyo_rejilla);
@@ -498,7 +498,7 @@ public class Partitura_t
 
     // ---------------------------------------------------------------------------------------------
 
-    public ArrayList<Compas_Canvas_t> partitura_crea_compases_canvas(Diagrama_Pianola_t p_dp, float [] p_x0, float [] p_yf, float p_width_celda_compas)
+    public ArrayList<Compas_Canvas_t> partitura_crea_compases_canvas(Diagrama_Pianola_t p_dp, float [] coordenadas, float p_width_celda_compas)
     {
         ArrayList<Compas_Canvas_t> compases = new ArrayList<>();
 
@@ -522,7 +522,7 @@ public class Partitura_t
                 Compas_Canvas_t nuevo_compas = av_compases.get(i).compas_crea_para_canvas(
                                                                                 p_dp,
                                                                                 i,
-                                                                                p_x0, p_yf,
+                                                                                coordenadas,
                                                                                 p_width_celda_compas,
                                                                                 a_num_bits_en_compas,
                                                                                 tamanyo_rejilla);

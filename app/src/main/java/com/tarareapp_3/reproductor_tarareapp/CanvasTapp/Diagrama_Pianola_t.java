@@ -2,11 +2,8 @@ package com.tarareapp_3.reproductor_tarareapp.CanvasTapp;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -20,44 +17,19 @@ import java.util.ArrayList;
 public class Diagrama_Pianola_t extends SurfaceView{
 
     private Partitura_t a_partitura;
-
     private SurfaceHolder a_holder;
     private Motor_t a_motor;
-
-    private Canvas a_canvas;
-
-    private float a_zoom;
-    private long a_lastClick;
-
-    private static float [] a_coordenadas_vista_0 = null;
-    private float [] a_coordenadas_vista_f;
-    private float [] a_coordenadas_onToucheMove_0;
-    private float [] a_coordenadas_vista_f0_onToucheMove;
-
-    private float [] a_y_vista;
-    private float [] a_x_vista;
-
-    private i_fila_nota [] av_filas;
+    private Vista_Canvas_t a_vista;
+    private Fila_Canvas_t [] av_filas;
     private ArrayList<Compas_Canvas_t> av_compases;
 
-    private final static double X100_WIDTH_NOTE_LS = 0.1;
-    private final static double X100_HEIGHT_NOTE_LS = 0.15;
+    private long a_lastClick;
 
-    private final static double X100_WIDTH_MEASURE_LS = 0.3;
-    private final static double X100_HEIGHT_MEASURE_LS = 0.1;
-
-    private static Paint [] a_pinceles_filas;
-    private static float a_filas_right;
-
-    private static Paint a_pincel_negro;
-
-    private boolean a_modificar = false;
     private boolean a_en_edicion = true;
 
-    private float a_height_canvas;
-    private float a_width_canvas;
+    private Action_Canvas_t a_action_picked;
 
-    private Nota_Canvas_t a_nota_seleccionada;
+    private boolean a_modificar;
 
     // ---------------------------------------------------------------------------------------------
 
@@ -67,7 +39,8 @@ public class Diagrama_Pianola_t extends SurfaceView{
         {
             float top, bottom;
 
-            if (indicador <= 0) {
+            if (indicador <= 0)
+            {
                 top = p_top_0;
                 bottom = p_bottom_0;
             }
@@ -77,7 +50,7 @@ public class Diagrama_Pianola_t extends SurfaceView{
                 bottom = top + p_height_fila;
             }
 
-            av_filas[indicador] = new i_fila_nota(indicador, top, bottom, nombre, octava);
+            av_filas[indicador] = new Fila_Canvas_t(indicador, top, bottom, nombre, octava);
 
             indicador++;
         }
@@ -87,18 +60,17 @@ public class Diagrama_Pianola_t extends SurfaceView{
 
     // ---------------------------------------------------------------------------------------------
 
-    private void i_crea_filas_notas(float p_altura_lienzo, float p_ancho_lienzo)
+    public void dp_crea_filas_notas(float p_altura_lienzo, float p_ancho_lienzo)
     {
         int indicador;
         float top_0, bottom_0, alto_fila;
 
-        av_filas = new i_fila_nota[85];
-        a_filas_right = (float) (p_ancho_lienzo * X100_WIDTH_NOTE_LS);
+        av_filas = new Fila_Canvas_t[85];
 
-        top_0 = (float) (p_altura_lienzo * X100_HEIGHT_MEASURE_LS);
-        bottom_0 = (float) (top_0 + p_altura_lienzo * X100_HEIGHT_NOTE_LS);
+        top_0 = a_vista.vista_get_height_compas();
 
-        alto_fila = (float) (p_altura_lienzo * X100_HEIGHT_NOTE_LS);
+        alto_fila = a_vista.vista_get_height_fila();
+        bottom_0 = top_0 + alto_fila;
 
         indicador = 0;
 
@@ -135,50 +107,17 @@ public class Diagrama_Pianola_t extends SurfaceView{
 
     // ---------------------------------------------------------------------------------------------
 
-    private void i_inicializa_pinceles_y_partitura(Partitura_t p_partitura)
-    {
-        if (p_partitura != null)
-        {
-            a_partitura = p_partitura;
-            a_zoom = 1;
-
-            a_pinceles_filas = new Paint [2];
-
-            a_pinceles_filas[0] = new Paint();
-            a_pinceles_filas[0].setColor(Color.WHITE);
-            a_pinceles_filas[0].setShadowLayer(4, 5, 0, Color.DKGRAY);
-
-            a_pinceles_filas[1] = new Paint();
-            a_pinceles_filas[1].setColor(Color.GRAY);
-            a_pinceles_filas[1].setShadowLayer(4, 5, 0, Color.DKGRAY);
-
-            a_pincel_negro = new Paint();
-            a_pincel_negro.setColor(Color.BLACK);
-            a_pincel_negro.setTextSize(30);
-            a_pincel_negro.setStrokeWidth(2);
-
-            a_y_vista = new float [2];
-            a_x_vista = new  float [2];
-
-            a_coordenadas_onToucheMove_0 = new float[2];
-            a_coordenadas_onToucheMove_0[0] = 0;
-            a_coordenadas_onToucheMove_0[1] = 0;
-
-            a_coordenadas_vista_f0_onToucheMove = new float[2];
-        }
-    }
-
-    // ---------------------------------------------------------------------------------------------
-
     public Diagrama_Pianola_t (Context p_context, Partitura_t p_partitura)
     {
         super(p_context);
+
+        a_partitura = p_partitura;
 
         a_motor = new Motor_t(this);
 
         a_holder = getHolder();
 
-        i_inicializa_pinceles_y_partitura(p_partitura);
+        a_vista = new Vista_Canvas_t(this);
 
         a_holder.addCallback(new SurfaceHolder.Callback()
         {
@@ -219,39 +158,13 @@ public class Diagrama_Pianola_t extends SurfaceView{
 
     public void dp_inicializa_datos_diagrama(Canvas p_canvas)
     {
-        float [] x0, yf;
-        float width_celda_compas;
+        float [] coordenadas, x0, yf;
 
         if (a_modificar)
         {
-            a_canvas = p_canvas;
+            coordenadas = a_vista.vista_inicializar_datos(p_canvas);
 
-            a_height_canvas = p_canvas.getHeight();
-            a_width_canvas = p_canvas.getWidth();
-
-            a_filas_right = (float) (a_width_canvas * X100_WIDTH_NOTE_LS) * a_zoom;
-
-            width_celda_compas = (float) (a_width_canvas * X100_WIDTH_MEASURE_LS) * a_zoom;
-
-            x0 = new float[2];
-            x0[0] = a_filas_right;
-            x0[1] = 0;
-
-            yf = new float[2];
-            yf[0] = a_filas_right + width_celda_compas;
-            yf[1] = (float) (a_height_canvas * X100_HEIGHT_MEASURE_LS);
-
-            a_coordenadas_vista_0 = new float[2];
-            a_coordenadas_vista_0[0] = a_filas_right;
-            a_coordenadas_vista_0[1] = yf[1];
-
-            a_coordenadas_vista_f = new float[2];
-            a_coordenadas_vista_f[0] = a_filas_right;;
-            a_coordenadas_vista_f[1] = yf[1] + (float) (a_height_canvas * X100_HEIGHT_NOTE_LS * 12 * 3);
-
-            i_crea_filas_notas(a_height_canvas, a_width_canvas);
-
-            av_compases = a_partitura.partitura_crea_compases_canvas(this, x0, yf, width_celda_compas);
+            av_compases = a_partitura.partitura_crea_compases_canvas(this, coordenadas, a_vista.vista_get_width_compas());
 
             a_partitura.partitura_muestra_vista();
 
@@ -263,10 +176,7 @@ public class Diagrama_Pianola_t extends SurfaceView{
 
     public float [] dp_get_top_bottom_nota(Nota_t p_nota)
     {
-        float [] pos = new float[2];
-
-        pos[0] = 0;
-        pos[1] = 0;
+        float [] pos = null;
 
         if (p_nota != null)
         {
@@ -274,12 +184,10 @@ public class Diagrama_Pianola_t extends SurfaceView{
 
             for (int i = i_inicial; i < (i_inicial + 12); i++)
             {
-                if (p_nota.nota_compara_nombre_octava(av_filas[i].a_nombre + av_filas[i].a_octava))
-                {
-                    pos[0] = av_filas[i].a_pos[0];
-                    pos[1] = av_filas[i].a_pos[1];
+                pos = av_filas[i].fila_get_pos(p_nota);
+
+                if (pos != null)
                     break;
-                }
             }
         }
 
@@ -303,25 +211,9 @@ public class Diagrama_Pianola_t extends SurfaceView{
 
             for (; i < nota_max; i++)
             {
-                av_filas[i].fila_dibuja(a_y_vista);
+                a_vista.vista_dibuja_fila(av_filas[i]);
             }
         }
-    }
-
-    // ---------------------------------------------------------------------------------------------
-
-    private int i_calcula_primer_compas_visible()
-    {
-        float width_compas = (float) (a_width_canvas * X100_WIDTH_MEASURE_LS);
-        float desplazamiento_vista_en_x = (a_coordenadas_vista_f[0] - a_coordenadas_vista_0[0]);
-
-        int compases_desplazados = (int) (desplazamiento_vista_en_x / width_compas);
-        float resto_pixeles = desplazamiento_vista_en_x % width_compas;
-
-        a_x_vista[0] = a_coordenadas_vista_0[0] + (compases_desplazados * width_compas) + resto_pixeles;
-        a_x_vista[1] = a_width_canvas + (compases_desplazados * width_compas) + resto_pixeles;
-
-        return compases_desplazados;
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -330,20 +222,17 @@ public class Diagrama_Pianola_t extends SurfaceView{
     {
         if (p_compas_max >= av_compases.size())
         {
-            float width_celda_compas = (float) (a_width_canvas * X100_WIDTH_MEASURE_LS) * a_zoom;
+            float [] coordenadas;
+            coordenadas = new float[4];
+            coordenadas[0] = a_vista.vista_get_width_fila();
+            coordenadas[1] = 0;
 
-            float [] x0, yf;
-            x0 = new float[2];
-            x0[0] = a_filas_right;
-            x0[1] = 0;
-
-            yf = new float[2];
-            yf[0] = a_filas_right + width_celda_compas;
-            yf[1] = (float) (a_height_canvas * X100_HEIGHT_MEASURE_LS);
+            coordenadas[2] = a_vista.vista_get_width_fila() + a_vista.vista_get_width_compas();
+            coordenadas[3] = a_vista.vista_get_height_compas();
 
             for (int j = av_compases.size(); j < p_compas_max; j++)
             {
-                av_compases.add(a_partitura.partitura_add_compas_vacio(this, j, x0, yf, width_celda_compas));
+                av_compases.add(a_partitura.partitura_add_compas_vacio(this, j, coordenadas, a_vista.vista_get_width_compas()));
             }
         }
     }
@@ -354,37 +243,21 @@ public class Diagrama_Pianola_t extends SurfaceView{
     {
         if (av_compases != null)
         {
-            int i = i_calcula_primer_compas_visible();
-            int compas_max = i + 4, j = i;
+            int [] rango_compases = dp_calcula_rango_compases_vista();
+            int j = rango_compases[0];
 
-            i_redimensiona_vector_compases(compas_max);
+            i_redimensiona_vector_compases(rango_compases[1]);
 
-            for (; i < compas_max; i++)
+            for (; rango_compases[0] < rango_compases[1]; rango_compases[0]++)
             {
-                av_compases.get(i).cmp_dibuja(a_canvas, a_x_vista, a_y_vista, a_coordenadas_vista_0, a_pincel_negro);
+                a_vista.vista_dibuja_compas(av_compases.get(rango_compases[0]));
             }
 
-            for (; j < compas_max; j++)
+            for (; j < rango_compases[1]; j++)
             {
-                av_compases.get(j).cmp_dibuja_notas(a_canvas, a_x_vista, a_y_vista, a_coordenadas_vista_0);
+                a_vista.vista_dibuja_nota(av_compases.get(j));
             }
         }
-    }
-
-    // ---------------------------------------------------------------------------------------------
-
-    private int i_calcula_y_vista()
-    {
-        float height_fila = (float) (a_height_canvas * X100_HEIGHT_NOTE_LS);
-        float desplazamiento_vista_en_y = (a_coordenadas_vista_f[1] - a_coordenadas_vista_0[1]);
-
-        int notas_desplazadas = (int) (desplazamiento_vista_en_y / height_fila);
-        float resto_pixeles = desplazamiento_vista_en_y % height_fila;
-
-        a_y_vista[0] = a_coordenadas_vista_0[1] + (notas_desplazadas * height_fila) + resto_pixeles;
-        a_y_vista[1] = a_height_canvas + (notas_desplazadas * height_fila) + resto_pixeles;
-
-        return notas_desplazadas;
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -394,82 +267,24 @@ public class Diagrama_Pianola_t extends SurfaceView{
     {
         super.draw(canvas);
 
-        if (a_canvas != null)
-        {
-            int notas_desplazadas;
+        int notas_desplazadas;
 
-            a_canvas.drawColor(Color.RED);
+        notas_desplazadas = a_vista.vista_calcula_y_view();
 
-            notas_desplazadas = i_calcula_y_vista();
+        i_dibuja_compases();
 
-            i_dibuja_compases();
-
-            i_dibuja_filas_notas(notas_desplazadas);
-        }
+        i_dibuja_filas_notas(notas_desplazadas);
     }
 
     // ---------------------------------------------------------------------------------------------
 
-    public void dp_move_view(float p_x, float p_y)
-    {
-        float desplazamiento_x, desplazamiento_y;
-
-        desplazamiento_x = a_coordenadas_vista_f0_onToucheMove[0] + p_x * -1;
-
-        if (desplazamiento_x >= a_coordenadas_vista_0[0])
-            a_coordenadas_vista_f[0] = desplazamiento_x;
-
-        desplazamiento_y = a_coordenadas_vista_f0_onToucheMove[1] + p_y * -1;
-
-        if (desplazamiento_y >= a_coordenadas_vista_0[1])
-        {
-            if (av_filas[av_filas.length - 1].a_pos[1]
-                    > a_coordenadas_vista_f[1] + desplazamiento_y + a_height_canvas - a_coordenadas_vista_0[1])
-            {
-                a_coordenadas_vista_f[1] = desplazamiento_y;
-            }
-        }
-    }
-
-    // ---------------------------------------------------------------------------------------------
-
-    private void i_move_view(float p_x, float p_y)
-    {
-        float desplazamiento_x, desplazamiento_y;
-
-        desplazamiento_x = a_coordenadas_vista_f0_onToucheMove[0] + (p_x - a_coordenadas_onToucheMove_0[0]) *-1;
-
-        if (desplazamiento_x >= a_coordenadas_vista_0[0])
-            a_coordenadas_vista_f[0] = desplazamiento_x;
-        else
-            Log.e("move view: ", "fuera de canvas x: " + desplazamiento_x);
-
-        desplazamiento_y = a_coordenadas_vista_f0_onToucheMove[1] + (p_y - a_coordenadas_onToucheMove_0[1]) *-1;
-
-        if (desplazamiento_y >= a_coordenadas_vista_0[1])
-        {
-            if (av_filas[av_filas.length - 1].a_pos[1] - (a_height_canvas - (a_height_canvas * X100_HEIGHT_MEASURE_LS))
-                    > desplazamiento_y)
-            {
-                a_coordenadas_vista_f[1] = desplazamiento_y;
-            }
-            else {
-                Log.e("move view: ", "fuera de canvas y_1: " + desplazamiento_y);
-            }
-        }
-        else
-            Log.e("move view: ", "fuera de canvas y: " + desplazamiento_y);
-    }
-
-    // ---------------------------------------------------------------------------------------------
-
-    private Nota_Canvas_t i_hay_colision_con_nota(float p_x, float p_y)
+    public Nota_Canvas_t dp_hay_colision_con_nota(float p_x, float p_y)
     {
         Nota_Canvas_t nota = null;
 
         if (av_compases != null)
         {
-            int i = i_calcula_primer_compas_visible();
+            int i = a_vista.vista_calcula_primer_compas_visible();
             int compas_max;
 
             if (av_compases.size() < i + 4)
@@ -488,67 +303,83 @@ public class Diagrama_Pianola_t extends SurfaceView{
 
     // ---------------------------------------------------------------------------------------------
 
-    private float i_obten_top_fila_marcada(float p_y)
+    public int [] dp_calcula_rango_compases_vista()
     {
-        int i = i_calcula_y_vista();
-        int nota_max;
-        float top = -1;
+        int [] rango_compases = null;
 
-        if (i + 7 > av_filas.length)
-            nota_max = av_filas.length;
-        else
-            nota_max = i + 7;
-
-        for (; top < 0 && i < nota_max; i++)
-        {
-            if (av_filas[i].a_pos_en_vista != null && av_filas[i].a_pos_en_vista[0] <= p_y && av_filas[i].a_pos_en_vista[1] >= p_y)
-                top = av_filas[i].a_pos[0];
-        }
-
-        return top;
-    }
-
-    // ---------------------------------------------------------------------------------------------
-
-    private void i_edita_nota(Nota_Canvas_t p_nota, float p_x, float p_y)
-    {
         if (av_compases != null)
         {
-            int i = i_calcula_primer_compas_visible();
-            int j = i_calcula_y_vista();
-            int compas_max, nota_max;
-            boolean nota_dibujada = false;
-            float top = -1;
+            rango_compases = new int [2];
+
+            int i = a_vista.vista_calcula_primer_compas_visible();
+            int compas_max;
 
             if (av_compases.size() < i + 4)
                 compas_max = av_compases.size();
             else
                 compas_max = i + 4;
 
-            if (j + 7 > av_filas.length)
+            rango_compases[0] = i;
+            rango_compases[1] = compas_max;
+        }
+
+        return rango_compases;
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
+    private int [] i_calcula_rango_filas_vista()
+    {
+        int [] rango_filas = null;
+
+        if (av_compases != null)
+        {
+            rango_filas = new int [2];
+
+            int i = a_vista.vista_calcula_y_view();
+            int nota_max;
+
+            if (i + 7 > av_filas.length)
                 nota_max = av_filas.length;
             else
-                nota_max = j + 7;
+                nota_max = i + 7;
 
-            String nombre_fila = null;
-            int octava_fila = 0;
+            rango_filas[0] = i;
+            rango_filas[1] = nota_max;
+        }
 
-            for (; top < 0 && j < nota_max; j++)
+        return rango_filas;
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
+    public Fila_Canvas_t dp_get_fila_marcada(float p_y)
+    {
+        Fila_Canvas_t fila = null;
+        int [] rango_filas = i_calcula_rango_filas_vista();
+
+        for (; rango_filas[0] < rango_filas[1]; rango_filas[0]++)
+        {
+            float [] pos_en_vista = av_filas[rango_filas[0]].fila_get_pos_en_vista();
+            if (pos_en_vista != null && pos_en_vista[0] <= p_y && pos_en_vista[1] >= p_y)
             {
-                if (av_filas[j].a_pos_en_vista != null && av_filas[j].a_pos_en_vista[0] <= p_y && av_filas[j].a_pos_en_vista[1] >= p_y)
-                {
-                    top = av_filas[j].a_pos[0];
-                    nombre_fila = av_filas[j].a_nombre;
-                    octava_fila = av_filas[j].a_octava;
-                }
+                fila = av_filas[rango_filas[0]];
             }
+        }
 
-            top = i_obten_top_fila_marcada(p_y);
+        return fila;
+    }
 
-            for (; top > 0 && !nota_dibujada && i < compas_max; i++)
-            {
-                nota_dibujada = av_compases.get(i).cmp_dibuja_nota_desplazada(p_nota, p_x, top, nombre_fila, octava_fila);
-            }
+    // ---------------------------------------------------------------------------------------------
+
+    public void dp_dibuja_nota_desplazada(Nota_Canvas_t p_nota, float p_x, float p_top, String p_nombre_fila, int p_octava_fila)
+    {
+        boolean nota_dibujada = false;
+        int [] rango_compases = dp_calcula_rango_compases_vista();
+
+        for (; p_top > 0 && !nota_dibujada && rango_compases[0] < rango_compases[1]; rango_compases[0]++)
+        {
+            nota_dibujada = av_compases.get(rango_compases[0]).cmp_dibuja_nota_desplazada(p_nota, p_x, p_top, p_nombre_fila, p_octava_fila);
         }
     }
 
@@ -568,22 +399,13 @@ public class Diagrama_Pianola_t extends SurfaceView{
 
                 if (a_en_edicion)
                 {
-                    a_nota_seleccionada = i_hay_colision_con_nota(x, y);
-
-                    if (a_nota_seleccionada != null) {
-                        Log.e("Nota accedida: ", a_nota_seleccionada.nt_canvas_valores());
-                    }
-                    else
-                        Log.e("Nota accedida: ", "false");
+                    a_action_picked = new Action_Canvas_t(this, x, y);
                 }
                 else
                 {
                     a_lastClick = System.currentTimeMillis();
-                    a_coordenadas_onToucheMove_0[0] = x;
-                    a_coordenadas_onToucheMove_0[1] = y;
 
-                    a_coordenadas_vista_f0_onToucheMove[0] = a_coordenadas_vista_f[0];
-                    a_coordenadas_vista_f0_onToucheMove[1] = a_coordenadas_vista_f[1];
+                    a_vista.vista_inicializa_coordenadas_touch(x, y);
 
                     a_motor.motor_parar_desaceleracion();
                 }
@@ -593,10 +415,10 @@ public class Diagrama_Pianola_t extends SurfaceView{
 
                 synchronized (getHolder())
                 {
-                    if (a_en_edicion && a_nota_seleccionada != null)
-                        i_edita_nota(a_nota_seleccionada, x, y);
+                    if (a_en_edicion)
+                        a_action_picked.ac_action_move(x, y);
                     else if (!a_en_edicion)
-                        i_move_view(x, y);
+                        a_vista.vista_mover(av_filas, x, y);
                 }
                 break;
 
@@ -606,20 +428,10 @@ public class Diagrama_Pianola_t extends SurfaceView{
                 {
                     if (a_en_edicion)
                     {
-                        if (a_nota_seleccionada != null)
-                        {
-                            int i = i_calcula_primer_compas_visible();
-                            int compas_max;
+                        a_action_picked.ac_action_up(av_compases, a_partitura);
 
-                            if (av_compases.size() < i + 4)
-                                compas_max = av_compases.size();
-                            else
-                                compas_max = i + 4;
-
-                            a_nota_seleccionada.nt_canvas_editar_nota_reproductor(av_compases, i, compas_max, a_partitura);
-                            a_nota_seleccionada = null;
-                            a_modificar = true;
-                        }
+                        a_action_picked = null;
+                        a_modificar = true;
                     }
                     else
                     {
@@ -646,86 +458,5 @@ public class Diagrama_Pianola_t extends SurfaceView{
         }
 
         return true;
-    }
-
-    // ---------------------------------------------------------------------------------------------
-    // ------------------------------------- CLASE FILA NOTAS --------------------------------------
-
-    private class i_fila_nota
-    {
-        private Paint a_pincel;
-        private float [] a_pos;
-        private float [] a_pos_en_vista;
-        private String a_nombre;
-        private int a_octava;
-
-        // -----------------------------------------------------------------------------------------
-
-        private i_fila_nota(int p_pincel, float p_top, float p_bottom, String p_nombre, int p_octava)
-        {
-            if (p_pincel % 2 == 0)
-                a_pincel = a_pinceles_filas[0];
-            else
-            {
-                a_pincel = a_pinceles_filas[1];
-            }
-
-            a_pos = new float [2];
-            a_pos[0] = p_top;
-            a_pos[1] = p_bottom;
-
-            a_pos_en_vista = null;
-
-            if (p_nombre != null) {
-                a_nombre = p_nombre;
-                a_octava = p_octava;
-            }
-            else {
-                a_nombre = "ND";
-                a_octava = 0;
-            }
-        }
-
-        // -----------------------------------------------------------------------------------------
-
-        private void fila_dibuja(float [] p_y_vista)
-        {
-            if (a_canvas != null && p_y_vista != null)
-            {
-                float top, bottom;
-
-                if (a_pos[0] < p_y_vista[0])
-                {
-                    top = a_coordenadas_vista_0[1];
-                    bottom = top + (a_pos[1] - p_y_vista[0]);
-                }
-                else
-                {
-                    top = a_coordenadas_vista_0[1] + (a_pos[0] - p_y_vista[0]);
-
-                    if (a_pos[1] > p_y_vista[1])
-                        bottom = a_height_canvas;
-                    else
-                        bottom = top + (a_pos[1] - a_pos[0]);
-                }
-
-                // Dibujamos el recuadro en donde se especifica la nota de esta fila
-                a_canvas.drawRect(0, top, a_filas_right, bottom, a_pincel);
-
-                if (a_pos_en_vista == null)
-                    a_pos_en_vista = new float [2];
-
-                a_pos_en_vista[0] = top;
-                a_pos_en_vista[1] = bottom;
-
-                // Dibujamos la linea divisoria superior que marca la fila de esta nota
-                if (a_pos[1] <= p_y_vista[1])
-                    a_canvas.drawLine(a_filas_right, bottom, a_width_canvas, bottom, a_pincel_negro);
-
-                // Dibujamos el nombre de la nota
-                if ((bottom - top) >= ((a_pos[1] - a_pos[0]) / 2))
-                    a_canvas.drawText(a_nombre + a_octava, a_filas_right / 4, bottom + ((top - bottom) / 2), a_pincel_negro);
-            }
-        }
     }
 }

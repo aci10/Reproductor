@@ -271,7 +271,7 @@ public class Compas_t
     public Compas_Canvas_t compas_crea_para_canvas(
                         Diagrama_Pianola_t p_dp,
                         int p_indicador,
-                        float [] p_x0, float [] p_yf,
+                        float [] p_coordenadas,
                         float p_width_celda_compas,
                         int p_num_rejillas, float p_tamanyo_rejilla)
     {
@@ -280,12 +280,12 @@ public class Compas_t
         float[] x0;
 
         if (p_indicador <= 0) {
-            left = p_x0[0];
-            right = p_yf[0];
+            left = p_coordenadas[0];
+            right = p_coordenadas[2];
         }
         else
         {
-            left = p_x0[0] + p_width_celda_compas * p_indicador;
+            left = p_coordenadas[0] + p_width_celda_compas * p_indicador;
             right = left + p_width_celda_compas;
         }
 
@@ -298,8 +298,8 @@ public class Compas_t
             float [] yf;
 
             yf = new float[2];
-            yf[0] = p_x0[1];
-            yf[1] = p_yf[1];
+            yf[0] = p_coordenadas[1];
+            yf[1] = p_coordenadas[3];
 
             compas_c = new Compas_Canvas_t(this, x0, yf, p_num_rejillas, p_indicador);
         }
