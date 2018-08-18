@@ -164,7 +164,7 @@ public class Partitura_t
 
             for(int i = 0; i < diferencia; i++)
             {
-                av_compases.add(new Compas_t(av_compases.size() + i,this));
+                av_compases.add(new Compas_t(this));
             }
 
         }else if(p_indice_compas < 0)
@@ -249,6 +249,13 @@ public class Partitura_t
 
     // ---------------------------------------------------------------------------------------------
 
+    public float partitura_get_tamanyo_rejilla(float p_width_celda_compas)
+    {
+        return p_width_celda_compas / a_num_bits_en_compas;
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
     public Compas_Canvas_t partitura_add_compas_vacio(
                         Diagrama_Pianola_t p_dp,
                         int p_indicador,
@@ -257,7 +264,7 @@ public class Partitura_t
     {
         Compas_Canvas_t compas_canvas;
 
-        Compas_t compas = new Compas_t(av_compases.size(), this);
+        Compas_t compas = new Compas_t(this);
 
         float tamanyo_rejilla = p_width_celda_compas / a_num_bits_en_compas;
 
@@ -517,7 +524,7 @@ public class Partitura_t
             for (int i = 0; i < num_compases; i++)
             {
                 if (i >= av_compases.size())
-                    av_compases.add(new Compas_t(i, this));
+                    av_compases.add(new Compas_t(this));
 
                 Compas_Canvas_t nuevo_compas = av_compases.get(i).compas_crea_para_canvas(
                                                                                 p_dp,

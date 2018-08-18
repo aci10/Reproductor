@@ -26,6 +26,7 @@ public class Nota_t
     private boolean a_en_reproduccion;
 
     private Compas_t a_compas;
+    private Nota_Canvas_t a_nota_canvas;
 
     // ---------------------------------------------------------------------------------------------
 
@@ -78,6 +79,8 @@ public class Nota_t
         a_nota_padre = p_nota_padre;
 
         a_es_ultima = false;
+
+        a_nota_canvas = null;
 
         double duracion = i_calcula_duracion(a_num_bits);
 
@@ -1075,6 +1078,13 @@ public class Nota_t
 
     // ---------------------------------------------------------------------------------------------
 
+    public boolean nota_es_hija()
+    {
+        return a_nota_padre != null;
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
     public void nota_inicia_crono()
     {
         Log.e("nota inicia crono", "Inicia");
@@ -1263,7 +1273,7 @@ public class Nota_t
 
     public String nota_get_nombre()
     {
-        return a_nombre + a_octava;
+        return a_nombre;
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -1375,6 +1385,20 @@ public class Nota_t
 
     // ---------------------------------------------------------------------------------------------
 
+    public Nota_Canvas_t nota_get_nt_canvas_padre()
+    {
+        Nota_Canvas_t nota_canvas = null;
+
+        if (a_nota_padre != null)
+            nota_canvas = a_nota_padre.nota_get_nt_canvas_padre();
+        else
+            nota_canvas = a_nota_canvas;
+
+        return nota_canvas;
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
     public Nota_Canvas_t nota_crear_canvas_nota(Compas_Canvas_t p_compas, float p_left, float [] p_pos, float tamanyo_rejilla)
     {
         Nota_Canvas_t nota = null;
@@ -1392,6 +1416,8 @@ public class Nota_t
             right = num_rejillas * tamanyo_rejilla + p_left;
 
             nota = new Nota_Canvas_t(this, p_compas, p_left, p_pos[0], right, p_pos[1]);
+
+            a_nota_canvas = nota;
         }
 
         return nota;

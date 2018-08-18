@@ -23,8 +23,6 @@ public class Diagrama_Pianola_t extends SurfaceView{
     private Fila_Canvas_t [] av_filas;
     private ArrayList<Compas_Canvas_t> av_compases;
 
-    private long a_lastClick;
-
     private boolean a_en_edicion = true;
 
     private Action_Canvas_t a_action_picked;
@@ -122,16 +120,15 @@ public class Diagrama_Pianola_t extends SurfaceView{
         a_holder.addCallback(new SurfaceHolder.Callback()
         {
             @Override
-            public void surfaceCreated(SurfaceHolder holder) {
+            public void surfaceCreated(SurfaceHolder holder)
+            {
                 a_modificar = true;
                 a_motor.setRunning(true);
                 a_motor.start();
             }
 
             @Override
-            public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-
-            }
+            public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) { }
 
             @Override
             public void surfaceDestroyed(SurfaceHolder holder)
@@ -181,6 +178,9 @@ public class Diagrama_Pianola_t extends SurfaceView{
         if (p_nota != null)
         {
             int i_inicial = (p_nota.nota_get_octava() * 12) - 12;
+
+            if (i_inicial < 0)
+                i_inicial = 0;
 
             for (int i = i_inicial; i < (i_inicial + 12); i++)
             {
@@ -243,7 +243,7 @@ public class Diagrama_Pianola_t extends SurfaceView{
     {
         if (av_compases != null)
         {
-            int [] rango_compases = dp_calcula_rango_compases_vista();
+            int [] rango_compases = dp_calcula_rango_compases_vista(true);
             int j = rango_compases[0];
 
             i_redimensiona_vector_compases(rango_compases[1]);
@@ -253,27 +253,16 @@ public class Diagrama_Pianola_t extends SurfaceView{
                 a_vista.vista_dibuja_compas(av_compases.get(rango_compases[0]));
             }
 
+            boolean es_primer_compas = true;
+
             for (; j < rango_compases[1]; j++)
             {
-                a_vista.vista_dibuja_nota(av_compases.get(j));
+                if (j > rango_compases[0])
+                    es_primer_compas = false;
+
+                a_vista.vista_dibuja_nota(av_compases.get(j), es_primer_compas);
             }
         }
-    }
-
-    // ---------------------------------------------------------------------------------------------
-
-    @Override
-    public void draw(Canvas canvas)
-    {
-        super.draw(canvas);
-
-        int notas_desplazadas;
-
-        notas_desplazadas = a_vista.vista_calcula_y_view();
-
-        i_dibuja_compases();
-
-        i_dibuja_filas_notas(notas_desplazadas);
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -285,6 +274,7 @@ public class Diagrama_Pianola_t extends SurfaceView{
         if (av_compases != null)
         {
             int i = a_vista.vista_calcula_primer_compas_visible();
+            float tamanyo_rejilla = a_partitura.partitura_get_tamanyo_rejilla(a_vista.vista_get_width_compas());
             int compas_max;
 
             if (av_compases.size() < i + 4)
@@ -294,7 +284,7 @@ public class Diagrama_Pianola_t extends SurfaceView{
 
             for (; nota == null && i < compas_max; i++)
             {
-                nota = av_compases.get(i).cmp_get_nota_pos(p_x, p_y);
+                nota = av_compases.get(i).cmp_get_nota_pos(p_x, p_y, tamanyo_rejilla);
             }
         }
 
@@ -303,7 +293,14 @@ public class Diagrama_Pianola_t extends SurfaceView{
 
     // ---------------------------------------------------------------------------------------------
 
-    public int [] dp_calcula_rango_compases_vista()
+    public Fila_Canvas_t dp_get_ultima_fila() {
+        return av_filas[av_filas.length - 1];
+    }
+
+
+    // ---------------------------------------------------------------------------------------------
+
+    public int [] dp_calcula_rango_compases_vista(boolean p_redimensionar)
     {
         int [] rango_compases = null;
 
@@ -314,7 +311,7 @@ public class Diagrama_Pianola_t extends SurfaceView{
             int i = a_vista.vista_calcula_primer_compas_visible();
             int compas_max;
 
-            if (av_compases.size() < i + 4)
+            if (av_compases.size() < i + 4 && !p_redimensionar)
                 compas_max = av_compases.size();
             else
                 compas_max = i + 4;
@@ -361,6 +358,7 @@ public class Diagrama_Pianola_t extends SurfaceView{
         for (; rango_filas[0] < rango_filas[1]; rango_filas[0]++)
         {
             float [] pos_en_vista = av_filas[rango_filas[0]].fila_get_pos_en_vista();
+
             if (pos_en_vista != null && pos_en_vista[0] <= p_y && pos_en_vista[1] >= p_y)
             {
                 fila = av_filas[rango_filas[0]];
@@ -372,15 +370,55 @@ public class Diagrama_Pianola_t extends SurfaceView{
 
     // ---------------------------------------------------------------------------------------------
 
+    public Compas_Canvas_t dp_get_compas_marcado(float p_x)
+    {
+        Compas_Canvas_t compas = null;
+        int [] rango_compases = dp_calcula_rango_compases_vista(false);
+
+        for (; rango_compases[0] < rango_compases[1]; rango_compases[0]++)
+        {
+            float [] pos_en_vista = av_compases.get(rango_compases[0]).cmp_get_pos_en_canvas();
+
+            if (pos_en_vista != null && pos_en_vista[0] <= p_x && pos_en_vista[1] >= p_x)
+            {
+                compas = av_compases.get(rango_compases[0]);
+            }
+        }
+
+        return compas;
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
     public void dp_dibuja_nota_desplazada(Nota_Canvas_t p_nota, float p_x, float p_top, String p_nombre_fila, int p_octava_fila)
     {
         boolean nota_dibujada = false;
-        int [] rango_compases = dp_calcula_rango_compases_vista();
+        int [] rango_compases = dp_calcula_rango_compases_vista(false);
+        float x = a_vista.vista_calcula_posicion_x(p_x);
 
         for (; p_top > 0 && !nota_dibujada && rango_compases[0] < rango_compases[1]; rango_compases[0]++)
         {
-            nota_dibujada = av_compases.get(rango_compases[0]).cmp_dibuja_nota_desplazada(p_nota, p_x, p_top, p_nombre_fila, p_octava_fila);
+            nota_dibujada = av_compases.get(rango_compases[0]).cmp_dibuja_nota_desplazada(p_nota, x, p_top, p_nombre_fila, p_octava_fila);
         }
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
+    @Override
+    public void draw(Canvas canvas)
+    {
+        super.draw(canvas);
+
+        int notas_desplazadas;
+
+        if (a_action_picked != null)
+            a_action_picked.ac_aplicar_scroll_vista();
+
+        notas_desplazadas = a_vista.vista_calcula_y_view();
+
+        i_dibuja_compases();
+
+        i_dibuja_filas_notas(notas_desplazadas);
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -399,14 +437,12 @@ public class Diagrama_Pianola_t extends SurfaceView{
 
                 if (a_en_edicion)
                 {
-                    a_action_picked = new Action_Canvas_t(this, x, y);
+                    if (a_action_picked == null)
+                        a_action_picked = new Action_Canvas_t(this, a_vista, x, y);
                 }
                 else
                 {
-                    a_lastClick = System.currentTimeMillis();
-
                     a_vista.vista_inicializa_coordenadas_touch(x, y);
-
                     a_motor.motor_parar_desaceleracion();
                 }
                 break;
@@ -416,7 +452,7 @@ public class Diagrama_Pianola_t extends SurfaceView{
                 synchronized (getHolder())
                 {
                     if (a_en_edicion)
-                        a_action_picked.ac_action_move(x, y);
+                        a_action_picked.ac_action_move(x, y, a_partitura);
                     else if (!a_en_edicion)
                         a_vista.vista_mover(av_filas, x, y);
                 }
@@ -430,8 +466,11 @@ public class Diagrama_Pianola_t extends SurfaceView{
                     {
                         a_action_picked.ac_action_up(av_compases, a_partitura);
 
-                        a_action_picked = null;
-                        a_modificar = true;
+                        if (!a_action_picked.ac_es_delete())
+                        {
+                            a_action_picked = null;
+                            a_modificar = true;
+                        }
                     }
                     else
                     {

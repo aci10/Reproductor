@@ -65,8 +65,6 @@ public class Dp_activity extends Activity{
 
     private void i_crea_juego_de_tronos(Partitura_t a_partitura)
     {
-        a_partitura.partitura_append_nota_a_compas(0, 0, 2, "C", 4);
-        a_partitura.partitura_append_nota_a_compas(0, 5, 2, "C", 4);
         a_partitura.partitura_append_nota_a_compas(0, 0, 24, "C#", 4);
     }
 }

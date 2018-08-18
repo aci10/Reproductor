@@ -7,6 +7,8 @@ import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
 
+import java.util.ArrayList;
+
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class Vista_Canvas_t {
 
@@ -41,6 +43,10 @@ public class Vista_Canvas_t {
 
     private static Paint a_pincel_negro;
 
+    private long a_last_scroll;
+
+    private boolean a_tamanyos_inicializar;
+
     // ---------------------------------------------------------------------------------------------
 
     public Vista_Canvas_t (Diagrama_Pianola_t p_dp)
@@ -55,6 +61,10 @@ public class Vista_Canvas_t {
         a_coordenadas_onToucheMove_0[1] = 0;
 
         a_coordenadas_vista_f0_onToucheMove = new float[2];
+
+        a_last_scroll = 0;
+
+        a_tamanyos_inicializar = true;
 
         if (a_pincel_negro == null)
         {
@@ -102,6 +112,51 @@ public class Vista_Canvas_t {
 
     // ---------------------------------------------------------------------------------------------
 
+    public float [] vista_get_coordenadas_touch_0()
+    {
+        return a_coordenadas_onToucheMove_0;
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
+    private void i_inicializa_tamanyos()
+    {
+        if (a_tamanyos_inicializar)
+        {
+            a_height_canvas = a_canvas.getHeight();
+            a_width_canvas = a_canvas.getWidth();
+
+            a_width_fila = (float) (a_width_canvas * X100_WIDTH_NOTE_LS) * a_zoom;
+            a_height_fila = (float) (a_height_canvas * X100_HEIGHT_NOTE_LS) * a_zoom;
+
+            a_width_compas = (float) (a_width_canvas * X100_WIDTH_MEASURE_LS) * a_zoom;
+            a_height_compas = (float) (a_height_canvas * X100_HEIGHT_MEASURE_LS) * a_zoom;
+
+        }
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
+    private void i_inicializa_vista(float [] p_coordenadas)
+    {
+        if (a_tamanyos_inicializar)
+        {
+            a_coordenadas_vista_0 = new float[2];
+            a_coordenadas_vista_0[0] = a_width_fila;
+            a_coordenadas_vista_0[1] = p_coordenadas[3];
+
+            a_coordenadas_vista_f = new float[2];
+            a_coordenadas_vista_f[0] = a_width_fila;;
+            a_coordenadas_vista_f[1] = p_coordenadas[3] + (float) (a_height_canvas * X100_HEIGHT_NOTE_LS * 12 * 3);
+
+            a_dp.dp_crea_filas_notas(a_height_canvas, a_width_canvas);
+
+            a_tamanyos_inicializar = false;
+        }
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
     public float [] vista_inicializar_datos(Canvas p_canvas)
     {
         float [] coordenadas;
@@ -110,14 +165,7 @@ public class Vista_Canvas_t {
 
         a_canvas.drawColor(Color.WHITE);
 
-        a_height_canvas = p_canvas.getHeight();
-        a_width_canvas = p_canvas.getWidth();
-
-        a_width_fila = (float) (a_width_canvas * X100_WIDTH_NOTE_LS) * a_zoom;
-        a_height_fila = (float) (a_height_canvas * X100_HEIGHT_NOTE_LS) * a_zoom;
-
-        a_width_compas = (float) (a_width_canvas * X100_WIDTH_MEASURE_LS) * a_zoom;
-        a_height_compas = (float) (a_height_canvas * X100_HEIGHT_MEASURE_LS) * a_zoom;
+        i_inicializa_tamanyos();
 
         coordenadas = new float[4];
         coordenadas[0] = a_width_fila;
@@ -126,15 +174,7 @@ public class Vista_Canvas_t {
         coordenadas[2] = a_width_fila + a_width_compas;
         coordenadas[3] = (float) (a_height_canvas * X100_HEIGHT_MEASURE_LS);
 
-        a_coordenadas_vista_0 = new float[2];
-        a_coordenadas_vista_0[0] = a_width_fila;
-        a_coordenadas_vista_0[1] = coordenadas[3];
-
-        a_coordenadas_vista_f = new float[2];
-        a_coordenadas_vista_f[0] = a_width_fila;;
-        a_coordenadas_vista_f[1] = coordenadas[3] + (float) (a_height_canvas * X100_HEIGHT_NOTE_LS * 12 * 3);
-
-        a_dp.dp_crea_filas_notas(a_height_canvas, a_width_canvas);
+        i_inicializa_vista(coordenadas);
 
         return coordenadas;
     }
@@ -171,6 +211,15 @@ public class Vista_Canvas_t {
 
     // ---------------------------------------------------------------------------------------------
 
+    public float vista_calcula_posicion_x(float p_x)
+    {
+        float desplazamiento_vista_en_x = (a_coordenadas_vista_f[0] - a_coordenadas_vista_0[0]);
+
+        return desplazamiento_vista_en_x + p_x;
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
     public void vista_mover(Fila_Canvas_t [] p_filas, float p_x, float p_y)
     {
         float desplazamiento_x, desplazamiento_y;
@@ -197,6 +246,51 @@ public class Vista_Canvas_t {
         }
         else
             Log.e("move view: ", "fuera de canvas y: " + desplazamiento_y);
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
+    public void vista_aplicar_scroll(float [] p_pos_nota_en_vista)
+    {
+        float desplazamiento;
+        long current_time = System.currentTimeMillis();
+
+        if (p_pos_nota_en_vista != null && current_time >= a_last_scroll + 2000)
+        {
+            a_last_scroll = current_time;
+
+            if (p_pos_nota_en_vista[0] <= a_coordenadas_vista_0[0])
+            {
+                desplazamiento = a_width_compas;
+
+                if (a_coordenadas_vista_f[0] - desplazamiento >= a_coordenadas_vista_0[0])
+                    a_coordenadas_vista_f[0] -= desplazamiento;
+                else
+                    a_coordenadas_vista_f[0] = a_coordenadas_vista_0[0];
+            }
+            else if (p_pos_nota_en_vista[1] <= a_coordenadas_vista_0[1])
+            {
+                desplazamiento = a_height_fila;
+
+                if (a_coordenadas_vista_f[1] - desplazamiento >= a_coordenadas_vista_0[1])
+                    a_coordenadas_vista_f[1] -= desplazamiento;
+                else
+                    a_coordenadas_vista_f[1] = a_coordenadas_vista_0[1];
+            }
+            else if (p_pos_nota_en_vista[2] >= a_width_canvas)
+            {
+                desplazamiento = a_width_compas;
+                a_coordenadas_vista_f[0] += desplazamiento;
+            }
+            else if (p_pos_nota_en_vista[3] >= a_height_canvas)
+            {
+                desplazamiento = a_height_fila;
+                Fila_Canvas_t ultima_fila = a_dp.dp_get_ultima_fila();
+
+                if (ultima_fila != null && a_coordenadas_vista_f[1] + desplazamiento <= ultima_fila.fila_get_pos()[1] - (a_height_canvas - a_height_compas))
+                    a_coordenadas_vista_f[1] += desplazamiento;
+            }
+        }
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -237,9 +331,9 @@ public class Vista_Canvas_t {
 
     // ---------------------------------------------------------------------------------------------
 
-    public void vista_dibuja_nota(Compas_Canvas_t p_compas)
+    public void vista_dibuja_nota(Compas_Canvas_t p_compas, boolean p_es_primer_compas)
     {
         if (p_compas != null)
-            p_compas.cmp_dibuja_notas(a_canvas, a_x_vista, a_y_vista, a_coordenadas_vista_0);
+            p_compas.cmp_dibuja_notas(a_canvas, a_x_vista, a_y_vista, a_coordenadas_vista_0, p_es_primer_compas);
     }
 }

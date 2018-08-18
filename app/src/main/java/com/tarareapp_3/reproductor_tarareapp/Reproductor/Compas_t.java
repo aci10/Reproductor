@@ -13,6 +13,7 @@ import java.util.ArrayList;
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class Compas_t
 {
+    private static int a_ids = 0;
     private int a_id;
     private Partitura_t a_partitura;
 
@@ -20,12 +21,10 @@ public class Compas_t
 
     // ---------------------------------------------------------------------------------------------
 
-    public Compas_t(int p_id, Partitura_t p_partitura)
+    public Compas_t(Partitura_t p_partitura)
     {
-        if (p_id > 0)
-            a_id = p_id;
-        else
-            a_id = 0;
+        a_id = a_ids;
+        a_ids++;
 
         if(p_partitura != null)
             a_partitura = p_partitura;
