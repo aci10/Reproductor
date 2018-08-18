@@ -135,35 +135,38 @@ public class Nota_Canvas_t {
     {
         ae_collition_detected = type_collition_t.COLLITION_UNDEFINED;
 
-        float tamanyo_nota = a_pos_en_vista[2] - a_pos_en_vista[0];
-
-        if (p_y >= a_pos_en_vista[1] && p_y <= a_pos_en_vista[3])
+        if (a_pos_en_vista != null)
         {
-            if (tamanyo_nota <= tamanyo_rejilla * 2)
+            float tamanyo_nota = a_pos_en_vista[2] - a_pos_en_vista[0];
+
+            if (p_y >= a_pos_en_vista[1] && p_y <= a_pos_en_vista[3])
             {
-                if (p_x <= a_pos_en_vista[2] + tamanyo_rejilla && p_x > a_pos_en_vista[2] - (tamanyo_rejilla / 2))
+                if (tamanyo_nota <= tamanyo_rejilla * 2)
                 {
-                    ae_collition_detected = type_collition_t.COLLITION_RIGHT;
+                    if (p_x <= a_pos_en_vista[2] + tamanyo_rejilla && p_x > a_pos_en_vista[2] - (tamanyo_rejilla / 2))
+                    {
+                        ae_collition_detected = type_collition_t.COLLITION_RIGHT;
+                    }
+                    else if (p_x >= a_pos_en_vista[0] - tamanyo_rejilla && p_x <= a_pos_en_vista[0] + (tamanyo_rejilla / 2))
+                    {
+                        ae_collition_detected = type_collition_t.COLLITION_LEFT;
+                    }
+                    else if (p_x >= a_pos_en_vista[0] && p_x <= a_pos_en_vista[2])
+                        ae_collition_detected = type_collition_t.COLLITION_CENTER;
                 }
-                else if (p_x >= a_pos_en_vista[0] - tamanyo_rejilla && p_x <= a_pos_en_vista[0] + (tamanyo_rejilla / 2))
+                else
                 {
-                    ae_collition_detected = type_collition_t.COLLITION_LEFT;
+                    if (p_x <= a_pos_en_vista[2] + tamanyo_rejilla && p_x > a_pos_en_vista[2] - tamanyo_nota * 0.2 )
+                    {
+                        ae_collition_detected = type_collition_t.COLLITION_RIGHT;
+                    }
+                    else if (p_x >= a_pos_en_vista[0] - tamanyo_rejilla && p_x <= a_pos_en_vista[0] + tamanyo_nota * 0.2)
+                    {
+                        ae_collition_detected = type_collition_t.COLLITION_LEFT;
+                    }
+                    else if (p_x >= a_pos_en_vista[0] && p_x <= a_pos_en_vista[2])
+                        ae_collition_detected = type_collition_t.COLLITION_CENTER;
                 }
-                else if (p_x >= a_pos_en_vista[0] && p_x <= a_pos_en_vista[2])
-                    ae_collition_detected = type_collition_t.COLLITION_CENTER;
-            }
-            else
-            {
-                if (p_x <= a_pos_en_vista[2] + tamanyo_rejilla && p_x > a_pos_en_vista[2] - tamanyo_nota * 0.2 )
-                {
-                    ae_collition_detected = type_collition_t.COLLITION_RIGHT;
-                }
-                else if (p_x >= a_pos_en_vista[0] - tamanyo_rejilla && p_x <= a_pos_en_vista[0] + tamanyo_nota * 0.2)
-                {
-                    ae_collition_detected = type_collition_t.COLLITION_LEFT;
-                }
-                else if (p_x >= a_pos_en_vista[0] && p_x <= a_pos_en_vista[2])
-                    ae_collition_detected = type_collition_t.COLLITION_CENTER;
             }
         }
     }

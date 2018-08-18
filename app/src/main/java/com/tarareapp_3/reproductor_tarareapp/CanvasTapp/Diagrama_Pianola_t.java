@@ -362,6 +362,7 @@ public class Diagrama_Pianola_t extends SurfaceView{
             if (pos_en_vista != null && pos_en_vista[0] <= p_y && pos_en_vista[1] >= p_y)
             {
                 fila = av_filas[rango_filas[0]];
+                break;
             }
         }
 
@@ -377,7 +378,7 @@ public class Diagrama_Pianola_t extends SurfaceView{
 
         for (; rango_compases[0] < rango_compases[1]; rango_compases[0]++)
         {
-            float [] pos_en_vista = av_compases.get(rango_compases[0]).cmp_get_pos_en_canvas();
+            float [] pos_en_vista = av_compases.get(rango_compases[0]).cmp_get_pos();
 
             if (pos_en_vista != null && pos_en_vista[0] <= p_x && pos_en_vista[1] >= p_x)
             {

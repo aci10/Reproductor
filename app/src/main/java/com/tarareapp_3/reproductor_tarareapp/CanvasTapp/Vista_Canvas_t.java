@@ -250,25 +250,26 @@ public class Vista_Canvas_t {
 
     // ---------------------------------------------------------------------------------------------
 
-    public void vista_aplicar_scroll(float [] p_pos_nota_en_vista)
+    public void vista_aplicar_scroll(float [] p_pos_nota_en_vista, Nota_Canvas_t.type_collition_t p_collition_type)
     {
         float desplazamiento;
         long current_time = System.currentTimeMillis();
 
-        if (p_pos_nota_en_vista != null && current_time >= a_last_scroll + 2000)
+        if (p_pos_nota_en_vista != null && current_time >= a_last_scroll + 250)
         {
             a_last_scroll = current_time;
 
-            if (p_pos_nota_en_vista[0] <= a_coordenadas_vista_0[0])
+            if (p_collition_type != Nota_Canvas_t.type_collition_t.COLLITION_RIGHT
+                    && p_pos_nota_en_vista[0] <= a_coordenadas_vista_0[0] + (a_width_compas / 10))
             {
-                desplazamiento = a_width_compas;
+                desplazamiento = (a_width_compas / 3);
 
                 if (a_coordenadas_vista_f[0] - desplazamiento >= a_coordenadas_vista_0[0])
                     a_coordenadas_vista_f[0] -= desplazamiento;
                 else
                     a_coordenadas_vista_f[0] = a_coordenadas_vista_0[0];
             }
-            else if (p_pos_nota_en_vista[1] <= a_coordenadas_vista_0[1])
+            else if (p_pos_nota_en_vista[1] <= a_coordenadas_vista_0[1] + (a_height_fila / 3))
             {
                 desplazamiento = a_height_fila;
 
@@ -277,12 +278,13 @@ public class Vista_Canvas_t {
                 else
                     a_coordenadas_vista_f[1] = a_coordenadas_vista_0[1];
             }
-            else if (p_pos_nota_en_vista[2] >= a_width_canvas)
+            else if (p_collition_type != Nota_Canvas_t.type_collition_t.COLLITION_LEFT
+                        && p_pos_nota_en_vista[2] >= a_width_canvas - (a_width_compas / 10))
             {
-                desplazamiento = a_width_compas;
+                desplazamiento = (a_width_compas / 3);
                 a_coordenadas_vista_f[0] += desplazamiento;
             }
-            else if (p_pos_nota_en_vista[3] >= a_height_canvas)
+            else if (p_pos_nota_en_vista[3] >= a_height_canvas - (a_height_fila / 3))
             {
                 desplazamiento = a_height_fila;
                 Fila_Canvas_t ultima_fila = a_dp.dp_get_ultima_fila();
@@ -326,7 +328,7 @@ public class Vista_Canvas_t {
     public void vista_dibuja_compas(Compas_Canvas_t p_compas)
     {
         if (p_compas != null)
-            p_compas.cmp_dibuja(a_canvas, a_x_vista, a_y_vista, a_coordenadas_vista_0, a_pincel_negro);
+            p_compas.cmp_dibuja(a_canvas, a_x_vista, a_coordenadas_vista_0, a_pincel_negro);
     }
 
     // ---------------------------------------------------------------------------------------------

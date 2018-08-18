@@ -102,11 +102,12 @@ public class Action_Canvas_t {
     {
         if (a_nota != null)
         {
-            Compas_Canvas_t compas = a_dp.dp_get_compas_marcado(p_x);
-            float tamanyo_rejilla = p_partitura.partitura_get_tamanyo_rejilla(a_vista.vista_get_width_compas());
             float x, x0;
 
             x = a_vista.vista_calcula_posicion_x(p_x);
+
+            Compas_Canvas_t compas = a_dp.dp_get_compas_marcado(x);
+            float tamanyo_rejilla = p_partitura.partitura_get_tamanyo_rejilla(a_vista.vista_get_width_compas());
 
             switch (a_nota.nt_canvas_get_collition_detected())
             {
@@ -134,7 +135,10 @@ public class Action_Canvas_t {
     private void i_create_note(float p_x, float p_y, Partitura_t p_partitura)
     {
         float [] coordenadas_touch_0 = a_vista.vista_get_coordenadas_touch_0();
-        Compas_Canvas_t compas = a_dp.dp_get_compas_marcado(p_x);
+        float x = a_vista.vista_calcula_posicion_x(p_x);
+
+        Compas_Canvas_t compas = a_dp.dp_get_compas_marcado(x);
+
         float tamanyo_rejilla = p_partitura.partitura_get_tamanyo_rejilla(a_vista.vista_get_width_compas());
         int bit_inicial;
 
@@ -144,7 +148,7 @@ public class Action_Canvas_t {
 
             if (compas != null && fila != null && coordenadas_touch_0 != null)
             {
-                bit_inicial = compas.cmp_get_num_rejilla_marcada(coordenadas_touch_0[0]);
+                bit_inicial = compas.cmp_get_num_rejilla_marcada(a_vista.vista_calcula_posicion_x(coordenadas_touch_0[0]));
 
                 if (bit_inicial >= 0)
                 {
@@ -173,7 +177,6 @@ public class Action_Canvas_t {
 
         if (a_nota != null)
         {
-            float x = a_vista.vista_calcula_posicion_x(p_x);
             float x0 = a_vista.vista_calcula_posicion_x(coordenadas_touch_0[0]);
 
             a_nota.nt_rezice(compas, null, x, x0, tamanyo_rejilla);
@@ -185,7 +188,7 @@ public class Action_Canvas_t {
     public void ac_aplicar_scroll_vista()
     {
         if (a_vista != null && a_nota != null)
-            a_vista.vista_aplicar_scroll(a_nota.nt_canvas_get_pos_en_vista());
+            a_vista.vista_aplicar_scroll(a_nota.nt_canvas_get_pos_en_vista(), a_nota.nt_canvas_get_collition_detected());
     }
 
     // ---------------------------------------------------------------------------------------------

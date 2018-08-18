@@ -148,9 +148,9 @@ public class Compas_Canvas_t {
 
     // ---------------------------------------------------------------------------------------------
 
-    public float [] cmp_get_pos_en_canvas()
+    public float [] cmp_get_pos()
     {
-        return a_pos_en_canvas;
+        return a_x0;
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -159,7 +159,7 @@ public class Compas_Canvas_t {
     {
         int rejilla = -1;
 
-        if (p_x >= a_pos_en_canvas[0] && p_x <= a_pos_en_canvas[1])
+        if (p_x >= a_x0[0] && p_x <= a_x0[1])
         {
             for (int i = 0; i < av_rejillas.length; i++)
             {
@@ -180,7 +180,7 @@ public class Compas_Canvas_t {
     {
         float [] pos = null;
 
-        if (p_x >= a_pos_en_canvas[0] && p_x <= a_pos_en_canvas[1])
+        if (p_x >= a_x0[0] && p_x <= a_x0[1])
         {
             for (int i = 0; i < av_rejillas.length; i++)
             {
@@ -276,6 +276,14 @@ public class Compas_Canvas_t {
             nota = av_notas.get(i).nt_canvas_hay_colision(p_x, p_y, p_tamanyo_rejilla);
         }
 
+        if (nota == null)
+        {
+            for (int i = 0; nota == null && i < av_notas_ligadas.size(); i++)
+            {
+                nota = av_notas_ligadas.get(i).nt_canvas_hay_colision(p_x, p_y, p_tamanyo_rejilla);
+            }
+        }
+
         return nota;
     }
 
@@ -354,7 +362,7 @@ public class Compas_Canvas_t {
     {
         boolean nota_dibujada = false;
 
-        if (p_nota != null && p_x >= a_pos_en_canvas[0] && p_x <= a_pos_en_canvas[1])
+        if (p_nota != null && p_x >= a_x0[0] && p_x <= a_x0[1])
         {
             for (int i = 0; i < av_rejillas.length; i++)
             {
@@ -371,7 +379,7 @@ public class Compas_Canvas_t {
 
     // ---------------------------------------------------------------------------------------------
 
-    public void cmp_dibuja(Canvas p_canvas, float [] p_x_vista, float [] p_y_vista, float [] p_vista_0, Paint p_pincel_negro)
+    public void cmp_dibuja(Canvas p_canvas, float [] p_x_vista, float [] p_vista_0, Paint p_pincel_negro)
     {
         if (p_canvas != null)
         {
@@ -411,6 +419,34 @@ public class Compas_Canvas_t {
 
     // ---------------------------------------------------------------------------------------------
 
+    private void i_calcula_posicion_en_canvas(Canvas p_canvas, float [] p_x_vista, float [] p_y_vista, float [] p_vista_0)
+    {
+        float left, right;
+
+        if (a_x0[0] < p_x_vista[0])
+        {
+            left = p_vista_0[0];
+            right = left + (a_x0[1] - p_x_vista[0]);
+        }
+        else
+        {
+            left = p_vista_0[0] + (a_x0[0] - p_x_vista[0]);
+
+            if (a_x0[1] > p_x_vista[1])
+                right = p_canvas.getWidth();
+            else
+                right = left + (a_x0[1] - a_x0[0]);
+        }
+
+        if (a_pos_en_canvas == null)
+            a_pos_en_canvas = new float [2];
+
+        a_pos_en_canvas[0] = left;
+        a_pos_en_canvas[1] = right;
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
     public void cmp_dibuja_notas(Canvas p_canvas, float [] p_x_vista, float [] p_y_vista, float [] p_vista_0, boolean p_es_primer_compas)
     {
         if (p_canvas != null && a_pos_en_canvas != null && av_notas != null)
@@ -433,13 +469,19 @@ public class Compas_Canvas_t {
                         compas_ligadura = av_notas_ligadas.get(i).nt_canvas_get_compas();
                         pincel = a_pincel_notas[compas_ligadura.cmp_get_tipo_pincel()];
 
-                        av_notas_ligadas.get(i).nt_canvas_dibuja(
-                                                            p_canvas,
-                                                            compas_ligadura.a_pos_en_canvas[0],
-                                                            compas_ligadura.a_x0[0],
-                                                            p_x_vista, p_y_vista,
-                                                            p_vista_0,
-                                                            pincel);
+                        if (compas_ligadura.a_pos_en_canvas == null)
+                            compas_ligadura.i_calcula_posicion_en_canvas(p_canvas, p_x_vista, p_y_vista, p_vista_0);
+
+                        if (compas_ligadura != null && pincel != null && compas_ligadura.a_pos_en_canvas != null)
+                        {
+                            av_notas_ligadas.get(i).nt_canvas_dibuja(
+                                        p_canvas,
+                                        compas_ligadura.a_pos_en_canvas[0],
+                                        compas_ligadura.a_x0[0],
+                                        p_x_vista, p_y_vista,
+                                        p_vista_0,
+                                        pincel);
+                        }
                     }
                 }
             }
