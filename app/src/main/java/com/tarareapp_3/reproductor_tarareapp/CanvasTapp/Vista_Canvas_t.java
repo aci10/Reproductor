@@ -7,8 +7,6 @@ import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
 
-import java.util.ArrayList;
-
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class Vista_Canvas_t {
 
@@ -28,6 +26,8 @@ public class Vista_Canvas_t {
 
     private float a_height_canvas;
     private float a_width_canvas;
+
+    private final static double X100_HEIGHT_TOOL_BAR_LS = 0.2;
 
     private final static double X100_WIDTH_NOTE_LS = 0.1;
     private final static double X100_HEIGHT_NOTE_LS = 0.15;
@@ -73,6 +73,13 @@ public class Vista_Canvas_t {
             a_pincel_negro.setTextSize(30);
             a_pincel_negro.setStrokeWidth(2);
         }
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
+    public float vista_get_height_canvas()
+    {
+        return a_height_canvas;
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -308,6 +315,49 @@ public class Vista_Canvas_t {
 
     // ---------------------------------------------------------------------------------------------
 
+    public float [] vista_init_pos_bar()
+    {
+        float [] pos_bar = new float [4];
+
+        pos_bar[0] = 0;
+        pos_bar[1] = (float)(a_height_canvas - (a_height_canvas * X100_HEIGHT_TOOL_BAR_LS));
+        pos_bar[2] = a_width_canvas;
+        pos_bar[3] = a_height_canvas;
+
+        return pos_bar;
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
+    public float [] vista_init_pos_arrow(float bottom)
+    {
+        float [] pos_arrow = new float [3];
+
+        float circle_radius = a_width_fila / 2;
+
+        pos_arrow[0] = a_width_canvas - 20 - circle_radius;
+        pos_arrow[1] = bottom - circle_radius;
+        pos_arrow[2] = circle_radius;
+
+        return pos_arrow;
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
+    public float [] vista_init_pos_first_tool(float top)
+    {
+        float [] pos_bar = new float [4];
+
+        pos_bar[0] = a_width_canvas - a_width_fila * 2;
+        pos_bar[1] = top;
+        pos_bar[2] = a_width_canvas;
+        pos_bar[3] = a_height_canvas;
+
+        return pos_bar;
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
     public void vista_dibuja_fila(Fila_Canvas_t p_fila)
     {
         if (p_fila != null)
@@ -337,5 +387,13 @@ public class Vista_Canvas_t {
     {
         if (p_compas != null)
             p_compas.cmp_dibuja_notas(a_canvas, a_x_vista, a_y_vista, a_coordenadas_vista_0, p_es_primer_compas);
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
+    public void vista_dibuja_tool_bar(Barra_Herramientas_t p_tool_bar)
+    {
+        if (p_tool_bar != null)
+            p_tool_bar.bh_draw(a_canvas, a_pincel_negro);
     }
 }

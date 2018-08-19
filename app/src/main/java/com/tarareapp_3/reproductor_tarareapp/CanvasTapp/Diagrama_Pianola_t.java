@@ -20,6 +20,8 @@ public class Diagrama_Pianola_t extends SurfaceView{
     private SurfaceHolder a_holder;
     private Motor_t a_motor;
     private Vista_Canvas_t a_vista;
+    private Barra_Herramientas_t a_tool_bar;
+
     private Fila_Canvas_t [] av_filas;
     private ArrayList<Compas_Canvas_t> av_compases;
 
@@ -117,6 +119,8 @@ public class Diagrama_Pianola_t extends SurfaceView{
 
         a_vista = new Vista_Canvas_t(this);
 
+        a_tool_bar = null;
+
         a_holder.addCallback(new SurfaceHolder.Callback()
         {
             @Override
@@ -150,7 +154,6 @@ public class Diagrama_Pianola_t extends SurfaceView{
         });
     }
 
-
     // ---------------------------------------------------------------------------------------------
 
     public void dp_inicializa_datos_diagrama(Canvas p_canvas)
@@ -163,10 +166,20 @@ public class Diagrama_Pianola_t extends SurfaceView{
 
             av_compases = a_partitura.partitura_crea_compases_canvas(this, coordenadas, a_vista.vista_get_width_compas());
 
+            if (a_tool_bar == null)
+                a_tool_bar = new Barra_Herramientas_t(this, a_vista);
+
             a_partitura.partitura_muestra_vista();
 
             a_modificar = false;
         }
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
+    public void dp_change_mode()
+    {
+        a_en_edicion = !a_en_edicion;
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -420,6 +433,8 @@ public class Diagrama_Pianola_t extends SurfaceView{
         i_dibuja_compases();
 
         i_dibuja_filas_notas(notas_desplazadas);
+
+        a_vista.vista_dibuja_tool_bar(a_tool_bar);
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -436,15 +451,18 @@ public class Diagrama_Pianola_t extends SurfaceView{
         {
             case MotionEvent.ACTION_DOWN:
 
-                if (a_en_edicion)
+                if (a_tool_bar != null && !a_tool_bar.bh_execute_action_if_collition(x, y))
                 {
-                    if (a_action_picked == null)
-                        a_action_picked = new Action_Canvas_t(this, a_vista, x, y);
-                }
-                else
-                {
-                    a_vista.vista_inicializa_coordenadas_touch(x, y);
-                    a_motor.motor_parar_desaceleracion();
+                    if (a_en_edicion)
+                    {
+                        if (a_action_picked == null)
+                            a_action_picked = new Action_Canvas_t(this, a_vista, x, y);
+                    }
+                    else
+                    {
+                        a_vista.vista_inicializa_coordenadas_touch(x, y);
+                        a_motor.motor_parar_desaceleracion();
+                    }
                 }
                 break;
 
@@ -452,7 +470,7 @@ public class Diagrama_Pianola_t extends SurfaceView{
 
                 synchronized (getHolder())
                 {
-                    if (a_en_edicion)
+                    if (a_en_edicion && a_action_picked != null)
                         a_action_picked.ac_action_move(x, y, a_partitura);
                     else if (!a_en_edicion)
                         a_vista.vista_mover(av_filas, x, y);
@@ -463,7 +481,7 @@ public class Diagrama_Pianola_t extends SurfaceView{
 
                 synchronized (getHolder())
                 {
-                    if (a_en_edicion)
+                    if (a_en_edicion && a_action_picked != null)
                     {
                         a_action_picked.ac_action_up(av_compases, a_partitura);
 
