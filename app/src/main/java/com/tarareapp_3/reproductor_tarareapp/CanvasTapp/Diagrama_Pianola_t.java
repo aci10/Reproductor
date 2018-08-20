@@ -31,6 +31,8 @@ public class Diagrama_Pianola_t extends SurfaceView{
 
     private boolean a_modificar;
 
+    private Context a_context;
+
     // ---------------------------------------------------------------------------------------------
 
     private int i_crea_fila_nota(String nombre, int octava, int indicador, float p_top_0, float p_bottom_0, float p_height_fila)
@@ -111,6 +113,8 @@ public class Diagrama_Pianola_t extends SurfaceView{
     {
         super(p_context);
 
+        a_context = p_context;
+
         a_partitura = p_partitura;
 
         a_motor = new Motor_t(this);
@@ -180,6 +184,34 @@ public class Diagrama_Pianola_t extends SurfaceView{
     public void dp_change_mode()
     {
         a_en_edicion = !a_en_edicion;
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
+    public void dp_play_score()
+    {
+        if (a_partitura != null)
+        {
+            a_partitura.partitura_reproducir_notas_compases();
+        }
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
+    public void dp_stop_score(boolean pause)
+    {
+        if (a_partitura != null)
+            a_partitura.partitura_detener_reproduccion(pause);
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
+    public void dp_export_score()
+    {
+        if (a_partitura != null && a_context != null)
+        {
+            a_partitura.partitura_exportar_mxml(a_context);
+        }
     }
 
     // ---------------------------------------------------------------------------------------------

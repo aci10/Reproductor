@@ -102,17 +102,31 @@ public class Tools_Bar_t {
             switch (ae_type_tool)
             {
                 case TOOL_PLAY:
+
+                    p_dp.dp_play_score();
+                    ae_type_tool = type_tool_t.TOOL_STOP;
                     break;
+
                 case TOOL_STOP:
+
+                    p_dp.dp_stop_score(false);
+                    ae_type_tool = type_tool_t.TOOL_PLAY;
                     break;
+
                 case TOOL_PAUSE:
+
+                    p_dp.dp_stop_score(true);
+                    ae_type_tool = type_tool_t.TOOL_PLAY;
                     break;
+
                 case TOOL_EDIT_MODE:
 
                     p_dp.dp_change_mode();
                     break;
 
                 case TOOL_EXPORT:
+
+                    p_dp.dp_export_score();
                     break;
             }
         }
