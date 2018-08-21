@@ -36,7 +36,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".Grabadora.Audio_Record_t" >
+        <activity android:name=".Grabadora.Recorder_t" >
             <intent-filter>
                 <action android:name="android.intent.action.DEFAULT" />
             </intent-filter>

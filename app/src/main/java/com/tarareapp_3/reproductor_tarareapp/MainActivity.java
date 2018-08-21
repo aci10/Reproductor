@@ -1,20 +1,15 @@
 package com.tarareapp_3.reproductor_tarareapp;
 
 import android.content.Intent;
-import android.media.AudioFormat;
-import android.media.AudioManager;
-import android.media.AudioRecord;
-import android.media.AudioTrack;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.tarareapp_3.reproductor_tarareapp.Grabadora.Audio_Record_t;
+import com.tarareapp_3.reproductor_tarareapp.Grabadora.Recorder_t;
 import com.tarareapp_3.reproductor_tarareapp.Reproductor.rep_activity;
 import com.tarareapp_3.reproductor_tarareapp.CanvasTapp.Dp_activity;
 
@@ -41,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
 
         crea_boton_enlace(R.id.test_rep, rep_activity.class);
         crea_boton_enlace(R.id.test_dp, Dp_activity.class);
-        crea_boton_enlace(R.id.rep_detc_pitch, Audio_Record_t.class);
+        crea_boton_enlace(R.id.rep_detc_pitch, Recorder_t.class);
     }
 
     // ---------------------------------------------------------------------------------------------
