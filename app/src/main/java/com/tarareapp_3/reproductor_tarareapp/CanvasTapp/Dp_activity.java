@@ -4,11 +4,15 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.annotation.RequiresApi;
 import android.view.View;
 import android.widget.Button;
 
+import com.tarareapp_3.reproductor_tarareapp.Grabadora.Data_Note_t;
 import com.tarareapp_3.reproductor_tarareapp.Reproductor.Partitura_t;
+
+import java.util.ArrayList;
 
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class Dp_activity extends Activity{
@@ -23,14 +27,25 @@ public class Dp_activity extends Activity{
     {
         super.onCreate(savedInstanceState);
 
-        a_partitura = new Partitura_t(
-                "IntroGOT",
-                60,
-                6,
-                8,
-                "semicorchea");
+        Intent intent = getIntent();
 
-        i_crea_juego_de_tronos(a_partitura);
+        String nombre = intent.getExtras().getString("nombre");
+        int bpm = intent.getExtras().getInt("bpm");
+        int pulsos_compas = intent.getExtras().getInt("pulsos_compas");
+        int valor_pulso = intent.getExtras().getInt("valor_pulso");
+        int num_bits = intent.getExtras().getInt("num_bits");
+
+        a_partitura = new Partitura_t(
+                nombre,
+                bpm,
+                pulsos_compas,
+                valor_pulso,
+                num_bits);
+
+        Bundle args = intent.getBundleExtra("notas");
+        ArrayList<Data_Note_t> notes = (ArrayList<Data_Note_t>) args.getSerializable("ARRAYLIST");
+
+        i_add_notes_to_score(notes);
 
         a_diagrama = new Diagrama_Pianola_t(this, a_partitura);
 
@@ -46,25 +61,24 @@ public class Dp_activity extends Activity{
         super.onPause();
     }
 
-    // ---------------------------------------------------------------------------------------------
-
-    private void crea_boton_enlace(int p_id_vista, final Class<?> cls)
+    private void i_add_notes_to_score(ArrayList<Data_Note_t> p_notes)
     {
-        Button next = (Button) findViewById(p_id_vista);
-        next.setOnClickListener(new View.OnClickListener()
+        if (p_notes != null)
         {
-            public void onClick(View view)
+            for (int i = 0; i < p_notes.size(); i++)
             {
-                Intent myIntent = new Intent(Dp_activity.this, cls);
-                startActivity(myIntent);
+                Data_Note_t nota = p_notes.get(i);
+
+                if (nota != null)
+                {
+                    a_partitura.partitura_append_nota_a_compas(
+                                    nota.dn_get_id_compas(),
+                                    nota.dn_get_bit_inicial(),
+                                    nota.dn_get_num_bits(),
+                                    nota.dn_get_nombre(),
+                                    nota.dn_get_octava());
+                }
             }
-        });
-    }
-
-    // ---------------------------------------------------------------------------------------------
-
-    private void i_crea_juego_de_tronos(Partitura_t a_partitura)
-    {
-        a_partitura.partitura_append_nota_a_compas(0, 0, 24, "C#", 4);
+        }
     }
 }

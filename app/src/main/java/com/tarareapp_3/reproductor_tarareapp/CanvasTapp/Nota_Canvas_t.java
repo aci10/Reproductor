@@ -207,7 +207,7 @@ public class Nota_Canvas_t {
 
         if (p_nota != null && p_nota.a_id != a_id)
         {
-            if (p_nota.a_pos_en_vista[1] == a_pos_en_vista[1])
+            if (p_nota.a_pos_en_vista != null && a_pos_en_vista != null && p_nota.a_pos_en_vista[1] == a_pos_en_vista[1])
             {
                 if ((p_nota.a_pos_en_vista[0] >= a_pos_en_vista[0] && p_nota.a_pos_en_vista[0] < a_pos_en_vista[2])
                         || (p_nota.a_pos_en_vista[2] > a_pos_en_vista[0] && p_nota.a_pos_en_vista[2] <= a_pos_en_vista[2]))

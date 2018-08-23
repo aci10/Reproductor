@@ -38,11 +38,26 @@ public class Partitura_t
         double valor_pulso;
         double tamano_compas;
 
+        if (p_nombre == null || p_nombre.equals(""))
+            p_nombre = "NoNa";
+
         a_id_partitura = p_nombre;
 
-        a_bpm = p_bpm;
-        a_pulsos_compas = p_pulsos_compas;
-        a_unidad_pulso_compas = p_unidad_pulso_compas;
+        if (p_bpm > 0)
+            a_bpm = p_bpm;
+        else
+            a_bpm = 60;
+
+        if (p_pulsos_compas > 0)
+            a_pulsos_compas = p_pulsos_compas;
+        else
+            a_pulsos_compas = 4;
+
+        if (p_unidad_pulso_compas > 0)
+            a_unidad_pulso_compas = p_unidad_pulso_compas;
+        else
+            a_unidad_pulso_compas = 4;
+
         a_escala = "G";
 
         valor_unidad_negra = a_bpm/60;

@@ -530,42 +530,42 @@ public class Nota_t
 
     private void i_calcula_nombre_y_octava()
     {
-        if(a_frecuencia == 32.703)
+        if (a_frecuencia >= 31 && a_frecuencia < 33.6755)
         {
             a_octava = 1;
             a_nombre = "C";
         }
-        else if(a_frecuencia == 65.406)
+        else if (a_frecuencia >= 63.5705 && a_frecuencia < 67.351)
         {
             a_octava = 2;
             a_nombre = "C";
         }
-        else if(a_frecuencia == 130.81)
+        else if (a_frecuencia >= 127.14 && a_frecuencia < 134.7)
         {
             a_octava = 3;
             a_nombre = "C";
         }
-        else if(a_frecuencia == 261.6)
+        else if (a_frecuencia >= 257.27 && a_frecuencia < 269.39)
         {
             a_octava = 4;
             a_nombre = "C";
         }
-        else if(a_frecuencia == 523.25)
+        else if (a_frecuencia >= 508.565 && a_frecuencia < 538.81)
         {
             a_octava = 5;
             a_nombre = "C";
         }
-        else if(a_frecuencia == 1045.5)
+        else if (a_frecuencia >= 1017.7 && a_frecuencia < 1077.26)
         {
             a_octava = 6;
             a_nombre = "C";
         }
-        else if(a_frecuencia == 2093.0)
+        else if (a_frecuencia >= 2034.23 && a_frecuencia < 2155.24)
         {
             a_octava = 7;
             a_nombre = "C";
         }
-        else if(a_frecuencia == 4186.0)
+        else if (a_frecuencia >= 4068.52 && a_frecuencia < 4310.48)
         {
             a_octava = 8;
             a_nombre = "C";
@@ -573,38 +573,38 @@ public class Nota_t
 
         // -----------------------------
 
-        else if(a_frecuencia == 34.648)
+        else if (a_frecuencia >= 33.6755 && a_frecuencia < 35.678)
         {
             a_octava = 1;
             a_nombre = "C#";
 
         }
-        else if(a_frecuencia == 69.296)
+        else if (a_frecuencia >= 67.351 && a_frecuencia < 71.356)
         {
             a_octava = 2;
             a_nombre = "C#";
         }
-        else if(a_frecuencia == 138.59)
+        else if (a_frecuencia >= 134.7 && a_frecuencia < 142.71)
         {
             a_octava = 3;
             a_nombre = "C#";
         }
-        else if(a_frecuencia == 277.18)
+        else if (a_frecuencia >= 269.39 && a_frecuencia < 285.425)
         {
             a_octava = 4;
             a_nombre = "C#";
         }
-        else if(a_frecuencia == 554.37)
+        else if (a_frecuencia >= 538.81 && a_frecuencia < 570.85)
         {
             a_octava = 5;
             a_nombre = "C#";
         }
-        else if(a_frecuencia == 1108.7)
+        else if (a_frecuencia >= 1077.62 && a_frecuencia < 1141.7)
         {
             a_octava = 6;
             a_nombre = "C#";
         }
-        else if(a_frecuencia == 2217.5)
+        else if (a_frecuencia >= 2155.24 && a_frecuencia < 2283.4)
         {
             a_octava = 7;
             a_nombre = "C#";
@@ -612,37 +612,37 @@ public class Nota_t
 
         // -----------------------------
 
-        else if(a_frecuencia == 36.708)
+        else if (a_frecuencia >= 35.678 && a_frecuencia < 37.4995)
         {
             a_octava = 1;
             a_nombre = "D";
         }
-        else if(a_frecuencia == 73.416)
+        else if (a_frecuencia >= 71.356 && a_frecuencia < 75.599)
         {
             a_octava = 2;
             a_nombre = "D";
         }
-        else if(a_frecuencia == 146.83)
+        else if (a_frecuencia >= 142.71 && a_frecuencia < 151.195)
         {
             a_octava = 3;
             a_nombre = "D";
         }
-        else if(a_frecuencia == 293.67)
+        else if(a_frecuencia >= 285.425 && a_frecuencia < 302.4)
         {
             a_octava = 4;
             a_nombre = "D";
         }
-        else if(a_frecuencia == 587.33)
+        else if (a_frecuencia >= 570.85 && a_frecuencia < 604.8)
         {
             a_octava = 5;
             a_nombre = "D";
         }
-        else if(a_frecuencia == 1174.7)
+        else if (a_frecuencia >= 1114.7 && a_frecuencia < 1209.6)
         {
             a_octava = 6;
             a_nombre = "D";
         }
-        else if(a_frecuencia == 2349.3)
+        else if (a_frecuencia >= 2283.4 && a_frecuencia < 2419.2)
         {
             a_octava = 7;
             a_nombre = "D";
@@ -650,74 +650,74 @@ public class Nota_t
 
         // -----------------------------
 
-        else if(a_frecuencia == 38.291)
+        else if (a_frecuencia >= 37.4995 && a_frecuencia < 39.747)
         {
             a_octava = 1;
             a_nombre = "D#";
         }
-        else if(a_frecuencia == 77.782)
+        else if (a_frecuencia >= 75.599 && a_frecuencia < 80.0945)
         {
             a_octava = 2;
             a_nombre = "D#";
         }
-        else if(a_frecuencia == 155.56)
+        else if (a_frecuencia >= 151.195 && a_frecuencia < 160.185)
         {
             a_octava = 3;
             a_nombre = "D#";
         }
-        else if(a_frecuencia == 311.13)
+        else if (a_frecuencia >= 302.4 && a_frecuencia < 320.38)
         {
             a_octava = 4;
             a_nombre = "D#";
         }
-        else if(a_frecuencia == 622.25)
+        else if (a_frecuencia >= 604.8 && a_frecuencia < 640.76)
         {
             a_octava = 5;
             a_nombre = "D#";
         }
-        else if(a_frecuencia == 1244.5)
+        else if (a_frecuencia >= 1209.6 && a_frecuencia < 1281.52)
         {
             a_octava = 6;
             a_nombre = "D#";
         }
-        else if(a_frecuencia == 2489.0) {
+        else if (a_frecuencia >= 2419.2 && a_frecuencia < 2563.04) {
             a_octava = 7;
             a_nombre = "D#";
         }
 
         // -----------------------------
 
-        else if(a_frecuencia == 41.203)
+        else if (a_frecuencia >= 39.747 && a_frecuencia < 42.4285)
         {
             a_octava = 1;
             a_nombre = "E";
         }
-        else if(a_frecuencia == 82.407)
+        else if (a_frecuencia >= 80.0945 && a_frecuencia < 84.857)
         {
             a_octava = 2;
             a_nombre = "E";
         }
-        else if(a_frecuencia == 64.81)
+        else if (a_frecuencia >= 160.185 && a_frecuencia < 169.71)
         {
             a_octava = 3;
             a_nombre = "E";
         }
-        else if(a_frecuencia == 329.63)
+        else if (a_frecuencia >= 320.38 && a_frecuencia < 339.43)
         {
             a_octava = 4;
             a_nombre = "E";
         }
-        else if(a_frecuencia == 659.26)
+        else if (a_frecuencia >= 640.76 && a_frecuencia < 678.86)
         {
             a_octava = 5;
             a_nombre = "E";
         }
-        else if(a_frecuencia == 1318.5)
+        else if (a_frecuencia >= 1281.52 && a_frecuencia < 1357.72)
         {
             a_octava = 6;
             a_nombre = "E";
         }
-        else if(a_frecuencia == 2637.0)
+        else if (a_frecuencia >= 2563.04 && a_frecuencia < 2715.44)
         {
             a_octava = 7;
             a_nombre = "E";
@@ -725,37 +725,37 @@ public class Nota_t
 
         // -----------------------------
 
-        else if(a_frecuencia == 43.654)
+        else if (a_frecuencia >= 42.4285 && a_frecuencia < 44.9515)
         {
             a_octava = 1;
             a_nombre = "F";
         }
-        else if(a_frecuencia == 87.307)
+        else if (a_frecuencia >= 84.857 && a_frecuencia < 89.983)
         {
             a_octava = 2;
             a_nombre = "F";
         }
-        else if(a_frecuencia == 174.61)
+        else if (a_frecuencia >= 169.71 && a_frecuencia < 179.805)
         {
             a_octava = 3;
             a_nombre = "F";
         }
-        else if(a_frecuencia == 349.23)
+        else if (a_frecuencia >= 339.43 && a_frecuencia < 359.51)
         {
             a_octava = 4;
             a_nombre = "F";
         }
-        else if(a_frecuencia == 659.26)
+        else if (a_frecuencia >= 678.86 && a_frecuencia < 719.02)
         {
             a_octava = 5;
             a_nombre = "F";
         }
-        else if(a_frecuencia == 1396.9)
+        else if (a_frecuencia == 1357.72 && a_frecuencia < 1438.04)
         {
             a_octava = 6;
             a_nombre = "F";
         }
-        else if(a_frecuencia == 2793.8)
+        else if (a_frecuencia >= 2715.44 && a_frecuencia < 2876.08)
         {
             a_octava = 7;
             a_nombre = "F";
@@ -763,111 +763,111 @@ public class Nota_t
 
         // -----------------------------
 
-        else if(a_frecuencia == 46.249)
+        else if (a_frecuencia >= 44.9515 && a_frecuencia < 47.624)
         {
             a_octava = 1;
             a_nombre = "F#";
         }
-        else if(a_frecuencia == 92.499)
+        else if (a_frecuencia >= 89.983 && a_frecuencia < 95.249)
         {
             a_octava = 2;
             a_nombre = "F#";
         }
-        else if(a_frecuencia == 185.0)
+        else if (a_frecuencia >= 179.805 && a_frecuencia < 190.5)
         {
             a_octava = 3;
             a_nombre = "F#";
         }
-        else if(a_frecuencia == 369.99)
+        else if (a_frecuencia >= 359.51 && a_frecuencia < 380.995)
         {
             a_octava = 4;
             a_nombre = "F#";
         }
-        else if(a_frecuencia == 739.99)
+        else if (a_frecuencia >= 719.02 && a_frecuencia < 761.99)
         {
             a_octava = 5;
             a_nombre = "F#";
         }
-        else if(a_frecuencia == 1480.0)
+        else if (a_frecuencia >= 1438.04 && a_frecuencia < 1523.98)
         {
             a_octava = 6;
             a_nombre = "F#";
         }
-        else if(a_frecuencia == 2960.0)
+        else if(a_frecuencia >= 2876.08 && a_frecuencia < 3047.96)
         {
             a_octava = 7;
             a_nombre = "F#";
         }
         // -----------------------------
 
-        else if(a_frecuencia == 48.999)
+        else if (a_frecuencia >= 47.624 && a_frecuencia < 50.456)
         {
             a_octava = 1;
             a_nombre = "G";
         }
-        else if(a_frecuencia == 97.999)
+        else if (a_frecuencia >= 95.249 && a_frecuencia < 100.9145)
         {
             a_octava = 2;
             a_nombre = "G";
         }
-        else if(a_frecuencia == 196.0)
+        else if (a_frecuencia >= 190.5 && a_frecuencia < 201.825)
         {
             a_octava = 3;
             a_nombre = "G";
         }
-        else if(a_frecuencia == 392)
+        else if (a_frecuencia >= 380.995 && a_frecuencia < 403.65)
         {
             a_octava = 4;
             a_nombre = "G";
         }
-        else if(a_frecuencia == 783.99)
+        else if (a_frecuencia >= 761.99 && a_frecuencia < 807.3)
         {
             a_octava = 5;
             a_nombre = "G";
         }
-        else if(a_frecuencia == 1568.0)
+        else if (a_frecuencia >= 1523.98 && a_frecuencia < 1614.6)
         {
             a_octava = 6;
             a_nombre = "G";
         }
-        else if(a_frecuencia == 3136.0) {
+        else if (a_frecuencia >= 3047.96 && a_frecuencia < 3229.2) {
             a_octava = 7;
             a_nombre = "G";
         }
 
         // -----------------------------
 
-        else if(a_frecuencia == 51.913)
+        else if (a_frecuencia >= 50.456 && a_frecuencia < 53.4565)
         {
             a_octava = 1;
             a_nombre = "G#";
         }
-        else if(a_frecuencia == 103.83)
+        else if (a_frecuencia >= 100.9145 && a_frecuencia < 106.915)
         {
             a_octava = 2;
             a_nombre = "G#";
         }
-        else if(a_frecuencia == 207.65)
+        else if (a_frecuencia >= 201.825 && a_frecuencia < 213.5)
         {
             a_octava = 3;
             a_nombre = "G#";
         }
-        else if(a_frecuencia == 415.30)
+        else if(a_frecuencia >= 403.65 && a_frecuencia < 427.65)
         {
             a_octava = 4;
             a_nombre = "G#";
         }
-        else if(a_frecuencia == 830.61)
+        else if(a_frecuencia >= 807.3 && a_frecuencia < 855.3)
         {
             a_octava = 5;
             a_nombre = "G#";
         }
-        else if(a_frecuencia == 1661.2)
+        else if(a_frecuencia >= 1614.6 && a_frecuencia < 1710.6)
         {
             a_octava = 6;
             a_nombre = "G#";
         }
-        else if(a_frecuencia == 3322.4)
+        else if(a_frecuencia >= 3229.2 && a_frecuencia < 3421.2)
         {
             a_octava = 7;
             a_nombre = "G#";
@@ -875,42 +875,37 @@ public class Nota_t
 
         // -----------------------------
 
-        else if(a_frecuencia == 27.5)
-        {
-            a_octava = 0;
-            a_nombre = "A";
-        }
-        else if(a_frecuencia == 55.0)
+        else if (a_frecuencia >= 53.4565 && a_frecuencia < 56.635)
         {
             a_octava = 1;
             a_nombre = "A";
         }
-        else if(a_frecuencia == 110.0)
+        else if (a_frecuencia >= 106.915 && a_frecuencia < 113.27)
         {
             a_octava = 2;
             a_nombre = "A";
         }
-        else if(a_frecuencia == 220.0)
+        else if (a_frecuencia >= 213.5 && a_frecuencia < 226.54)
         {
             a_octava = 3;
             a_nombre = "A";
         }
-        else if(a_frecuencia == 440.0)
+        else if (a_frecuencia >= 427.65 && a_frecuencia < 453.08)
         {
             a_octava = 4;
             a_nombre = "A";
         }
-        else if(a_frecuencia == 880.0)
+        else if (a_frecuencia >= 855.3 && a_frecuencia < 906.16)
         {
             a_octava = 5;
             a_nombre = "A";
         }
-        else if(a_frecuencia == 1760.0)
+        else if (a_frecuencia >= 1710.6 && a_frecuencia < 1812.32)
         {
             a_octava = 6;
             a_nombre = "A";
         }
-        else if(a_frecuencia == 3520.0)
+        else if (a_frecuencia >= 3421.2 && a_frecuencia < 3624.64)
         {
             a_octava = 7;
             a_nombre = "A";
@@ -918,42 +913,37 @@ public class Nota_t
 
         // -----------------------------
 
-        else if(a_frecuencia == 29.135)
-        {
-            a_octava = 0;
-            a_nombre = "A#";
-        }
-        else if(a_frecuencia == 58.270)
+        else if(a_frecuencia >= 56.635 && a_frecuencia < 60.0025)
         {
             a_octava = 1;
             a_nombre = "A#";
         }
-        else if(a_frecuencia == 116.54)
+        else if(a_frecuencia >= 113.27 && a_frecuencia < 120.005)
         {
             a_octava = 2;
             a_nombre = "A#";
         }
-        else if(a_frecuencia == 233.08)
+        else if(a_frecuencia >= 226.54 && a_frecuencia < 240.01)
         {
             a_octava = 3;
             a_nombre = "A#";
         }
-        else if(a_frecuencia == 466.16)
+        else if(a_frecuencia >= 453.08 && a_frecuencia < 480.02)
         {
             a_octava = 4;
             a_nombre = "A#";
         }
-        else if(a_frecuencia == 932.33)
+        else if(a_frecuencia >= 906.16 && a_frecuencia < 960.04)
         {
             a_octava = 5;
             a_nombre = "A#";
         }
-        else if(a_frecuencia == 1864.7)
+        else if(a_frecuencia >= 1812.32 && a_frecuencia < 1920.08)
         {
             a_octava = 6;
             a_nombre = "A#";
         }
-        else if(a_frecuencia == 3729.3)
+        else if(a_frecuencia >= 3624.64 && a_frecuencia < 3840.16)
         {
             a_octava = 7;
             a_nombre = "A#";
@@ -961,42 +951,37 @@ public class Nota_t
 
         // -----------------------------
 
-        else if(a_frecuencia == 30.868)
-        {
-            a_octava = 0;
-            a_nombre = "B";
-        }
-        else if(a_frecuencia == 61.735)
+        else if (a_frecuencia >= 60.0025 && a_frecuencia < 63.5705)
         {
             a_octava = 1;
             a_nombre = "B";
         }
-        else if(a_frecuencia == 123.47)
+        else if (a_frecuencia >= 120.005 && a_frecuencia < 123.14)
         {
             a_octava = 2;
             a_nombre = "B";
         }
-        else if(a_frecuencia == 246.94)
+        else if (a_frecuencia >= 240.01 && a_frecuencia < 257.27)
         {
             a_octava = 3;
             a_nombre = "B";
         }
-        else if(a_frecuencia == 493.88)
+        else if (a_frecuencia >= 480.02 && a_frecuencia < 508.565)
         {
             a_octava = 4;
             a_nombre = "B";
         }
-        else if(a_frecuencia == 987.77)
+        else if (a_frecuencia >= 960.04 && a_frecuencia < 1017.13)
         {
             a_octava = 5;
             a_nombre = "B";
         }
-        else if(a_frecuencia == 1975.5)
+        else if (a_frecuencia >= 1920.08 && a_frecuencia < 2034.26)
         {
             a_octava = 6;
             a_nombre = "B";
         }
-        else if(a_frecuencia == 3951.1)
+        else if (a_frecuencia >= 3840.16 && a_frecuencia < 4068.52)
         {
             a_octava = 7;
             a_nombre = "B";
