@@ -6,6 +6,8 @@ import android.graphics.Paint;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 
+import com.tarareapp_3.reproductor_tarareapp.Color_Picker_t;
+
 import java.util.ArrayList;
 
 @RequiresApi(api = Build.VERSION_CODES.O)
@@ -21,6 +23,7 @@ public class Barra_Herramientas_t {
     private float [] a_pos_bar;
     private float a_max_top;
     private Paint a_pincel;
+    private Paint a_pincel_arrow;
 
     private ArrayList<Tools_Bar_t> av_tools;
 
@@ -32,15 +35,15 @@ public class Barra_Herramientas_t {
         float pos [] = a_vista.vista_init_pos_first_tool(a_pos_bar[1]);
         float ancho = pos[2] - pos[0];
 
-        av_tools.add(new Tools_Bar_t("Exportador", null, pos, Tools_Bar_t.type_tool_t.TOOL_EXPORT));
+        av_tools.add(new Tools_Bar_t("Editor", pos, Tools_Bar_t.type_tool_t.TOOL_EDIT_MODE, a_dp.dp_get_context()));
 
         pos[0] -= ancho;
         pos[2] -= ancho;
-        av_tools.add(new Tools_Bar_t("Reproductor", null, pos, Tools_Bar_t.type_tool_t.TOOL_PLAY));
+        av_tools.add(new Tools_Bar_t("Exportador", pos, Tools_Bar_t.type_tool_t.TOOL_EXPORT, a_dp.dp_get_context()));
 
         pos[0] -= ancho;
         pos[2] -= ancho;
-        av_tools.add(new Tools_Bar_t("Editor", null, pos, Tools_Bar_t.type_tool_t.TOOL_EDIT_MODE));
+        av_tools.add(new Tools_Bar_t("Reproductor", pos, Tools_Bar_t.type_tool_t.TOOL_PLAY, a_dp.dp_get_context()));
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -54,6 +57,7 @@ public class Barra_Herramientas_t {
 
     public Barra_Herramientas_t (Diagrama_Pianola_t p_dp, Vista_Canvas_t p_vista)
     {
+        Color_Picker_t picker = new Color_Picker_t();
         a_dp = p_dp;
         a_vista = p_vista;
 
@@ -65,9 +69,11 @@ public class Barra_Herramientas_t {
         i_init_pos_arrow();
         i_init_tools();
 
-        a_pincel = new Paint();
-        a_pincel.setColor(Color.RED);
-        a_pincel.setShadowLayer(4, 5, 0, Color.DKGRAY);
+        a_pincel = picker.getPincel(Color_Picker_t.type_color_t.MORADO);
+        a_pincel.setShadowLayer(5, 0, -4, Color.BLACK);
+
+        a_pincel_arrow = picker.getPincel(Color_Picker_t.type_color_t.SALMON);
+        a_pincel_arrow.setShadowLayer(10, 0, 0, Color.BLACK);
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -142,7 +148,7 @@ public class Barra_Herramientas_t {
         {
             if (a_opened)
             {
-                float top = a_pos_bar[1] - 5;
+                float top = a_pos_bar[1] - 10;
 
                 if (top > a_max_top)
                     a_pos_bar[1] = top;
@@ -154,7 +160,7 @@ public class Barra_Herramientas_t {
             }
             else
             {
-                float top = a_pos_bar[1] + 5;
+                float top = a_pos_bar[1] + 10;
                 float height_canvas = a_vista.vista_get_height_canvas();
 
                 if (top < height_canvas)
@@ -189,6 +195,6 @@ public class Barra_Herramientas_t {
             }
         }
 
-        p_canvas.drawCircle(a_pos_arrow[0], a_pos_arrow[1], a_pos_arrow[2], a_pincel);
+        p_canvas.drawCircle(a_pos_arrow[0], a_pos_arrow[1], a_pos_arrow[2], a_pincel_arrow);
     }
 }

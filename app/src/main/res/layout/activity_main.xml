@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -8,38 +7,293 @@
     android:orientation="vertical"
     tools:context="com.tarareapp_3.reproductor_tarareapp.MainActivity">
 
-    <Button
-        android:id="@+id/test_rep"
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:fontFamily="sans-serif-light"
+                    android:textColor="@android:color/secondary_text_light_nodisable"
+                    android:layout_marginLeft="16dp"
+                    android:text="Title" />
+
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Example title"
+                    android:textSize="16sp"
+                    android:fontFamily="sans-serif"
+                    android:layout_marginLeft="16dp"
+                    android:id="@+id/titleEditText"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:fontFamily="sans-serif-light"
+                    android:textColor="@android:color/secondary_text_light_nodisable"
+                    android:layout_marginLeft="16dp"
+                    android:text="Tempo" />
+
+                <EditText
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:text="60"
+                    android:textSize="16sp"
+                    android:fontFamily="sans-serif"
+                    android:layout_marginLeft="16dp"
+                    android:id="@+id/TempoEditText"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:layout_marginLeft="16dp"
+                    android:text="BPM" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="BPM"
+                    android:textSize="16sp"
+                    android:fontFamily="sans-serif"
+                    android:layout_marginLeft="10dp"
+                    android:id="@+id/actionSetBpm"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="90dp"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    android:textSize="20sp"
+                    android:fontFamily="sans-serif-light"
+                    android:textColor="@android:color/secondary_text_light_nodisable"
+                    android:layout_marginLeft="16dp"
+                    android:text="Time Signature" />
+
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="4"
+                    android:textSize="16sp"
+                    android:fontFamily="sans-serif"
+                    android:layout_marginLeft="16dp"
+                    android:id="@+id/bits"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:layout_marginLeft="16dp"
+                    android:text="/" />
+
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="4"
+                    android:textSize="16sp"
+                    android:fontFamily="sans-serif"
+                    android:layout_marginLeft="16dp"
+                    android:id="@+id/bitValue"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="90dp"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    android:textSize="20sp"
+                    android:fontFamily="sans-serif-light"
+                    android:textColor="@android:color/secondary_text_light_nodisable"
+                    android:layout_marginLeft="16dp"
+                    android:text="Max Bit Size" />
+
+                <Spinner
+                    android:id="@+id/precision"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30sp"
+                    android:layout_marginLeft="16dp"
+                    android:entries="@array/array_notas"
+                    android:prompt="@string/prompt_notas">
+                </Spinner>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="90dp"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    android:textSize="20sp"
+                    android:fontFamily="sans-serif-light"
+                    android:textColor="@android:color/secondary_text_light_nodisable"
+                    android:layout_marginLeft="16dp"
+                    android:text="Clef" />
+
+                <RadioGroup
+                    xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/typeClef"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <RadioButton android:id="@+id/radioG"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="G" />
+                    <RadioButton android:id="@+id/radioA"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16dp"
+                        android:text="A" />
+                </RadioGroup>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="90dp"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    android:textSize="20sp"
+                    android:fontFamily="sans-serif-light"
+                    android:textColor="@android:color/secondary_text_light_nodisable"
+                    android:layout_marginLeft="16dp"
+                    android:text="Key Signature" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <RadioGroup
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/typeSignature"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <RadioButton
+                            android:id="@+id/radioSostenido"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="#" />
+                        <RadioButton
+                            android:id="@+id/radioBemol"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="16dp"
+                            android:text="b" />
+                    </RadioGroup>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="20sp"
+                            android:layout_marginLeft="16dp"
+                            android:text="x" />
+
+                        <TextView
+                            android:id="@+id/qSignatures"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="20sp"
+                            android:layout_marginLeft="16dp"
+                            android:text="0" />
+
+                        <Button
+                            android:layout_width="50dp"
+                            android:layout_height="wrap_content"
+                            android:textSize="20sp"
+                            android:text="+"
+                            android:fontFamily="sans-serif"
+                            android:layout_marginLeft="16dp"
+                            android:id="@+id/actionPlus"/>
+
+                        <Button
+                            android:id="@+id/actionRest"
+                            android:layout_width="50dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:fontFamily="sans-serif"
+                            android:text="-"
+                            android:textSize="30sp" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Testeo de reproductor" />
+        android:orientation="horizontal">
 
-    <Button
-        android:id="@+id/test_dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Testeo diagrama pianola" />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:text="Start"
+            android:fontFamily="sans-serif"
+            android:layout_marginLeft="60dp"
+            android:id="@+id/actionGoEditor"/>
 
-    <Button
-        android:id="@+id/rep_detc_pitch"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Deteccion pitch" />
+        <Button
+            android:id="@+id/actionGoRecorder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:fontFamily="sans-serif"
+            android:text="Record Notes"
+            />
 
-    <Button
-        android:id="@+id/tarsos"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Prueba Tarsos"
-        android:onClick="pruebaTarsosDSP"/>
-
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
-        android:text="Frecuencia" />
+    </LinearLayout>
 
 </LinearLayout>

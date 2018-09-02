@@ -1,20 +1,27 @@
 package com.tarareapp_3.reproductor_tarareapp.CanvasTapp;
 
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 
+import com.tarareapp_3.reproductor_tarareapp.Color_Picker_t;
+import com.tarareapp_3.reproductor_tarareapp.Image_Picker_t;
+
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class Tools_Bar_t {
 
     private String a_name;
-    private Bitmap a_icon;
+    private Image_Picker_t a_icon;
     private float [] a_pos_x;
     private static float [] a_pos_y;
+
     private Paint a_pincel;
+    private Paint a_pincel_linea;
 
     private boolean disabled;
 
@@ -31,30 +38,14 @@ public class Tools_Bar_t {
 
     // ---------------------------------------------------------------------------------------------
 
-    public Tools_Bar_t (String p_name, Bitmap p_icon, float [] p_pos, type_tool_t p_type)
+    public Tools_Bar_t (String p_name, float [] p_pos, type_tool_t p_type, Context p_context)
     {
+        Color_Picker_t picker = new Color_Picker_t();
         a_name = p_name;
-        a_icon = p_icon;
         ae_type_tool = p_type;
         disabled = false;
 
-        a_pincel = new Paint();
-        switch (ae_type_tool)
-        {
-            case TOOL_EXPORT:
-
-                a_pincel.setColor(Color.GREEN);
-                break;
-            case TOOL_PLAY:
-
-                a_pincel.setColor(Color.BLUE);
-                break;
-
-            case TOOL_EDIT_MODE:
-
-                a_pincel.setColor(Color.YELLOW);
-                break;
-        }
+        a_icon = new Image_Picker_t(p_context);
 
         a_pos_x = new float [2];
         a_pos_x[0] = p_pos[0];
@@ -66,6 +57,33 @@ public class Tools_Bar_t {
             a_pos_y[0] = p_pos[1];
             a_pos_y[1] = p_pos[3];
         }
+
+        switch (ae_type_tool)
+        {
+            case TOOL_EXPORT:
+
+                a_pincel = picker.getPincel(Color_Picker_t.type_color_t.ROSA_LIGTH);
+                a_icon.initialize(Image_Picker_t.icon_t.SAVE, Color_Picker_t.type_color_t.BLANCO);
+                break;
+
+            case TOOL_PLAY:
+
+                a_pincel = picker.getPincel(Color_Picker_t.type_color_t.ROSA_LIGTH);
+                a_icon.initialize(Image_Picker_t.icon_t.PLAY, Color_Picker_t.type_color_t.BLANCO);
+                break;
+
+            case TOOL_EDIT_MODE:
+
+                a_pincel = picker.getPincel(Color_Picker_t.type_color_t.ROSA);
+                a_icon.initialize(Image_Picker_t.icon_t.EDIT, Color_Picker_t.type_color_t.BLANCO);
+                break;
+
+            default:
+                a_icon = null;
+                a_pincel = null;
+        }
+
+        a_pincel_linea = picker.getPincel(Color_Picker_t.type_color_t.BLANCO_VERDE);
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -141,7 +159,15 @@ public class Tools_Bar_t {
         if (p_canvas != null)
         {
             p_canvas.drawRect(a_pos_x[0], a_pos_y[0], a_pos_x[1], a_pos_y[1], a_pincel);
-            p_canvas.drawLine(a_pos_x[0], a_pos_y[0], a_pos_x[0], a_pos_y[1], p_pincel_negro);
+            p_canvas.drawLine(a_pos_x[0], a_pos_y[0], a_pos_x[0], a_pos_y[1], a_pincel_linea);
+
+            float [] icon_pos = new float [2];
+            icon_pos[0] = a_pos_x[0] + ((a_pos_x[1] - a_pos_x[0]) / 16) * 6;
+            icon_pos[1] = a_pos_y[0] + (a_pos_y[1] - a_pos_y[0]) / 4;
+
+
+            a_icon.setPos(icon_pos);
+            a_icon.draw(p_canvas);
         }
     }
 }

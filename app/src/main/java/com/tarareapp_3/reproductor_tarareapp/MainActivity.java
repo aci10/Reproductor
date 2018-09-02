@@ -7,27 +7,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.tarareapp_3.reproductor_tarareapp.Grabadora.Pitch_Detector_t;
-import com.tarareapp_3.reproductor_tarareapp.Grabadora.Recorder_t;
-import com.tarareapp_3.reproductor_tarareapp.Reproductor.Partitura_t;
-import com.tarareapp_3.reproductor_tarareapp.Reproductor.rep_activity;
 import com.tarareapp_3.reproductor_tarareapp.CanvasTapp.Dp_activity;
-
-import be.tarsos.dsp.AudioDispatcher;
-import be.tarsos.dsp.AudioEvent;
-import be.tarsos.dsp.AudioProcessor;
-import be.tarsos.dsp.io.android.AudioDispatcherFactory;
-import be.tarsos.dsp.pitch.PitchDetectionHandler;
-import be.tarsos.dsp.pitch.PitchDetectionResult;
-import be.tarsos.dsp.pitch.PitchProcessor;
-
+import com.tarareapp_3.reproductor_tarareapp.Grabadora.Recorder_t;
 
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class MainActivity extends AppCompatActivity {
 
-    private Pitch_Detector_t a_pd;
+    private int a_signatures;
+
     // ---------------------------------------------------------------------------------------------
 
     @Override
@@ -37,32 +29,50 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        crea_boton_enlace(R.id.test_rep, rep_activity.class);
-        crea_boton_enlace(R.id.test_dp, Dp_activity.class);
-        crea_boton_enlace(R.id.rep_detc_pitch, Recorder_t.class);
+        crea_boton_enlace(R.id.actionGoRecorder, Recorder_t.class);
+        crea_boton_enlace(R.id.actionGoEditor, Dp_activity.class);
+        crea_boton_enlace(R.id.actionSetBpm, Dp_activity.class);
 
-        a_pd = null;
+        i_create_action_button(R.id.actionPlus);
+        i_create_action_button(R.id.actionRest);
     }
 
     // ---------------------------------------------------------------------------------------------
 
     private void crea_boton_enlace(final int p_id_vista, final Class<?> cls)
     {
-        Button next = (Button) findViewById(p_id_vista);
-        next.setOnClickListener(new View.OnClickListener()
+        Button button = findViewById(p_id_vista);
+
+        button.setOnClickListener(new View.OnClickListener()
         {
             public void onClick(View view)
             {
                 Intent myIntent = new Intent(MainActivity.this, cls);
+                EditText myEditText;
 
-                if (p_id_vista == R.id.rep_detc_pitch)
-                {
-                    myIntent.putExtra("nombre", "ejemplo");
-                    myIntent.putExtra("bpm", 60);
-                    myIntent.putExtra("pulsos_compas", 4);
-                    myIntent.putExtra("valor_pulso", 4);
-                    myIntent.putExtra("precision", "semicorchea");
-                }
+                myEditText = findViewById(R.id.titleEditText);
+                String name = myEditText.getText().toString();
+
+                myEditText = findViewById(R.id.TempoEditText);
+                int tempo = Integer.parseInt(myEditText.getText().toString());
+
+                myEditText = findViewById(R.id.bits);
+                int pulsos = Integer.parseInt(myEditText.getText().toString());
+
+                myEditText = findViewById(R.id.bitValue);
+                int valorPulso = Integer.parseInt(myEditText.getText().toString());
+
+                Spinner sp_nombre = findViewById(R.id.precision);
+                String precision = sp_nombre.getSelectedItem().toString();
+
+                myIntent.putExtra("nombre", name);
+                myIntent.putExtra("bpm", tempo);
+                myIntent.putExtra("pulsos_compas", pulsos);
+                myIntent.putExtra("valor_pulso", valorPulso);
+                myIntent.putExtra("precision", precision);
+                myIntent.putExtra("clef", i_get_value_clef());
+                myIntent.putExtra("type_signature", i_get_type_signature());
+                myIntent.putExtra("q_signatures", a_signatures);
 
                 startActivity(myIntent);
             }
@@ -71,32 +81,65 @@ public class MainActivity extends AppCompatActivity {
 
     // ---------------------------------------------------------------------------------------------
 
-    public void pruebaTarsosDSP(View vista)
+    private void i_create_action_button(final int p_id_button)
     {
-        AudioDispatcher dispatcher = AudioDispatcherFactory.fromDefaultMicrophone(22050,1024,0);
+        Button button = findViewById(p_id_button);
 
-        PitchDetectionHandler pdh = new PitchDetectionHandler() {
-            @Override
-            public void handlePitch(PitchDetectionResult result, AudioEvent e)
+        button.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View view)
             {
-                final float pitchInHz = result.getPitch();
-
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run()
+                switch (p_id_button)
+                {
+                    case R.id.actionPlus:
                     {
-                        TextView text = findViewById(R.id.textView1);
-                        text.setText("" + pitchInHz);
+                        a_signatures++;
+                        TextView text = findViewById(R.id.qSignatures);
+                        text.setText("" + a_signatures);
+                        break;
                     }
-                });
+                    case R.id.actionRest:
+                    {
+                        if (a_signatures > 0)
+                        {
+                            a_signatures--;
+                            TextView text = findViewById(R.id.qSignatures);
+                            text.setText("" + a_signatures);
+                        }
+                        break;
+                    }
+                }
             }
-        };
+        });
+    }
 
-        AudioProcessor p = new PitchProcessor(PitchProcessor.PitchEstimationAlgorithm.FFT_YIN, 22050, 1024, pdh);
+    // ---------------------------------------------------------------------------------------------
 
-        dispatcher.addAudioProcessor(p);
+    private String i_get_value_clef()
+    {
+        RadioGroup types = findViewById(R.id.typeClef);
+        switch (types.getCheckedRadioButtonId()) {
+            case R.id.radioA:
+                return "A";
+            case R.id.radioG:
+            default:
+                return "G";
+        }
+    }
 
-        new Thread(dispatcher,"Audio Dispatcher").start();
+    // ---------------------------------------------------------------------------------------------
+
+    private String i_get_type_signature()
+    {
+        RadioGroup types = findViewById(R.id.typeSignature);
+
+        switch (types.getCheckedRadioButtonId()) {
+            case R.id.radioBemol:
+                return "b";
+            case R.id.radioSostenido:
+            default:
+                return "#";
+        }
     }
 }
 

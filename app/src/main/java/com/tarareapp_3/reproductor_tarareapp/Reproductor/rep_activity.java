@@ -29,7 +29,7 @@ public class rep_activity extends Activity {
     {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.prueba_reproductor);
+        setContentView(R.layout.activity_set_bpm);
 
         a_partitura = new Partitura_t(
                 "IntroGOT",
@@ -58,71 +58,6 @@ public class rep_activity extends Activity {
                 startActivity(myIntent);
             }
         });
-    }
-
-    // ---------------------------------------------------------------------------------------------
-
-    public void addNota(View view)
-    {
-        EditText et_indice_compas;
-        EditText et_bit_inicial;
-        EditText et_bit_final;
-        Spinner sp_nombre;
-        MyNumberPicker np_octava;
-
-        et_indice_compas = (EditText)findViewById(R.id.compasEditText);
-        int indice_compas = Integer.parseInt(et_indice_compas.getText().toString());
-
-        et_bit_inicial = (EditText)findViewById(R.id.bitInicialText);
-        int bit_inicial = Integer.parseInt(et_bit_inicial.getText().toString());
-
-        et_bit_final = (EditText)findViewById(R.id.bitFinalText);
-        int bit_final = Integer.parseInt(et_bit_final.getText().toString());
-
-        sp_nombre = (Spinner)findViewById(R.id.notaSpinner);
-        String nombre = sp_nombre.getSelectedItem().toString();
-
-        np_octava = (MyNumberPicker)findViewById(R.id.octavaPicker);
-        int octava = np_octava.getValue();
-
-        a_partitura.partitura_append_nota_a_compas(
-                indice_compas,
-                bit_inicial,
-                bit_final,
-                nombre,
-                octava);
-
-        a_partitura.partitura_muestra_vista();
-    }
-
-    // ---------------------------------------------------------------------------------------------
-
-    public void reproducirPartitura(View view)
-    {
-        if (a_partitura != null)
-        {
-            a_en_reproduccion = true;
-            a_partitura.partitura_reproducir_notas_compases();
-        }
-    }
-
-    // ---------------------------------------------------------------------------------------------
-
-    public void reproducirPartitura_desde_bit_x(View view)
-    {
-        if (a_partitura != null)
-        {
-            EditText et_indice_compas;
-            EditText et_bit_inicial;
-
-            et_indice_compas = findViewById(R.id.compasEditText);
-            int indice_compas = Integer.parseInt(et_indice_compas.getText().toString());
-
-            et_bit_inicial = findViewById(R.id.bitInicialText);
-            int bit_inicial = Integer.parseInt(et_bit_inicial.getText().toString());
-
-            a_partitura.partitura_reproducir_notas_compases(indice_compas, bit_inicial);
-        }
     }
 
     // ---------------------------------------------------------------------------------------------

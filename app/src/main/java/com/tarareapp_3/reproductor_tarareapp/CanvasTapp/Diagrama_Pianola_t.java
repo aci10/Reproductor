@@ -35,7 +35,14 @@ public class Diagrama_Pianola_t extends SurfaceView{
 
     // ---------------------------------------------------------------------------------------------
 
-    private int i_crea_fila_nota(String nombre, int octava, int indicador, float p_top_0, float p_bottom_0, float p_height_fila)
+    private int i_crea_fila_nota(
+                        String nombre,
+                        int octava,
+                        int indicador,
+                        float p_top_0, float p_bottom_0,
+                        float p_height_fila,
+                        boolean p_pincel_gris,
+                        boolean p_inicio_octava)
     {
         if (av_filas != null)
         {
@@ -52,7 +59,7 @@ public class Diagrama_Pianola_t extends SurfaceView{
                 bottom = top + p_height_fila;
             }
 
-            av_filas[indicador] = new Fila_Canvas_t(indicador, top, bottom, nombre, octava);
+            av_filas[indicador] = new Fila_Canvas_t(top, bottom, nombre, octava, p_pincel_gris, p_inicio_octava);
 
             indicador++;
         }
@@ -78,31 +85,31 @@ public class Diagrama_Pianola_t extends SurfaceView{
 
         for (int i = 1; i <= 8; i++)
         {
-            indicador = i_crea_fila_nota("C", i, indicador, top_0, bottom_0, alto_fila);
+            indicador = i_crea_fila_nota("C", i, indicador, top_0, bottom_0, alto_fila, false, false);
 
             if (i < 8)
             {
-                indicador = i_crea_fila_nota("C#", i, indicador, top_0, bottom_0, alto_fila);
+                indicador = i_crea_fila_nota("C#", i, indicador, top_0, bottom_0, alto_fila, true, false);
 
-                indicador = i_crea_fila_nota("D", i, indicador, top_0, bottom_0, alto_fila);
+                indicador = i_crea_fila_nota("D", i, indicador, top_0, bottom_0, alto_fila, false, false);
 
-                indicador = i_crea_fila_nota("D#", i, indicador, top_0, bottom_0, alto_fila);
+                indicador = i_crea_fila_nota("D#", i, indicador, top_0, bottom_0, alto_fila, true, false);
 
-                indicador = i_crea_fila_nota("E", i, indicador, top_0, bottom_0, alto_fila);
+                indicador = i_crea_fila_nota("E", i, indicador, top_0, bottom_0, alto_fila, false, false);
 
-                indicador = i_crea_fila_nota("F", i, indicador, top_0, bottom_0, alto_fila);
+                indicador = i_crea_fila_nota("F", i, indicador, top_0, bottom_0, alto_fila, false, false);
 
-                indicador = i_crea_fila_nota("F#", i, indicador, top_0, bottom_0, alto_fila);
+                indicador = i_crea_fila_nota("F#", i, indicador, top_0, bottom_0, alto_fila, true, false);
 
-                indicador = i_crea_fila_nota("G", i, indicador, top_0, bottom_0, alto_fila);
+                indicador = i_crea_fila_nota("G", i, indicador, top_0, bottom_0, alto_fila, false, false);
 
-                indicador = i_crea_fila_nota("G#", i, indicador, top_0, bottom_0, alto_fila);
+                indicador = i_crea_fila_nota("G#", i, indicador, top_0, bottom_0, alto_fila, true, false);
 
-                indicador = i_crea_fila_nota("A", i, indicador, top_0, bottom_0, alto_fila);
+                indicador = i_crea_fila_nota("A", i, indicador, top_0, bottom_0, alto_fila, false, false);
 
-                indicador = i_crea_fila_nota("A#", i, indicador, top_0, bottom_0, alto_fila);
+                indicador = i_crea_fila_nota("A#", i, indicador, top_0, bottom_0, alto_fila, true, false);
 
-                indicador = i_crea_fila_nota("B", i, indicador, top_0, bottom_0, alto_fila);
+                indicador = i_crea_fila_nota("B", i, indicador, top_0, bottom_0, alto_fila, false, true);
             }
         }
     }
@@ -156,6 +163,12 @@ public class Diagrama_Pianola_t extends SurfaceView{
                 }
             }
         });
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
+    public Context dp_get_context(){
+        return a_context;
     }
 
     // ---------------------------------------------------------------------------------------------

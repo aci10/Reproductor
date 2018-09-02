@@ -6,6 +6,7 @@ import android.graphics.Paint;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 
+import com.tarareapp_3.reproductor_tarareapp.Color_Picker_t;
 import com.tarareapp_3.reproductor_tarareapp.Reproductor.Nota_t;
 
 @RequiresApi(api = Build.VERSION_CODES.O)
@@ -17,32 +18,41 @@ public class Fila_Canvas_t {
     private int a_octava;
 
     private Paint a_pincel;
+    private Paint a_pincel_linea;
+    private static Paint a_pincel_texto;
+
     private static Paint [] a_pinceles_filas = new Paint [2];
 
     // -----------------------------------------------------------------------------------------
 
-    public Fila_Canvas_t(int p_pincel, float p_top, float p_bottom, String p_nombre, int p_octava)
+    public Fila_Canvas_t(float p_top, float p_bottom, String p_nombre, int p_octava, boolean p_pincel_gris, boolean p_inicio_octava)
     {
-        if (a_pinceles_filas[0] == null)
+        Color_Picker_t picker = new Color_Picker_t();
+
+        if (a_pinceles_filas[0] == null || a_pinceles_filas[1] == null)
         {
-            a_pinceles_filas[0] = new Paint();
-            a_pinceles_filas[0].setColor(Color.WHITE);
-            a_pinceles_filas[0].setShadowLayer(4, 5, 0, Color.DKGRAY);
+            a_pinceles_filas[0] = picker.getPincel(Color_Picker_t.type_color_t.GRIS);
+            a_pinceles_filas[0].setShadowLayer(4, 5, 0, Color.BLACK);
+
+            a_pinceles_filas[1] = picker.getPincel(Color_Picker_t.type_color_t.SALMON);
+            a_pinceles_filas[1].setShadowLayer(4, 5, 0, Color.BLACK);
         }
 
-        if (a_pinceles_filas[1] == null)
-        {
-            a_pinceles_filas[1] = new Paint();
-            a_pinceles_filas[1].setColor(Color.GRAY);
-            a_pinceles_filas[1].setShadowLayer(4, 5, 0, Color.DKGRAY);
-        }
-
-        if (p_pincel % 2 == 0)
+        if (p_pincel_gris)
             a_pincel = a_pinceles_filas[0];
         else
         {
             a_pincel = a_pinceles_filas[1];
         }
+
+        if (p_inicio_octava)
+            a_pincel_linea = picker.getPincel(Color_Picker_t.type_color_t.VIOLETA_LIGHT);
+        else
+            a_pincel_linea = picker.getPincel(Color_Picker_t.type_color_t.BLANCO_VIOLETA);
+
+        a_pincel_texto = picker.getPincel(Color_Picker_t.type_color_t.BLANCO);
+        a_pincel_texto.setTextSize(20);
+        a_pincel_texto.setStrokeWidth(1);
 
         a_pos = new float [2];
         a_pos[0] = p_top;
@@ -136,6 +146,7 @@ public class Fila_Canvas_t {
     {
         if (p_canvas != null && p_y_vista != null)
         {
+            Color_Picker_t picker = new Color_Picker_t();
             float top, bottom;
 
             if (a_pos[0] < p_y_vista[0])
@@ -164,11 +175,17 @@ public class Fila_Canvas_t {
 
             // Dibujamos la linea divisoria superior que marca la fila de esta nota
             if (a_pos[1] <= p_y_vista[1])
-                p_canvas.drawLine(p_filas_right, bottom, p_width_canvas, bottom, p_pincel);
+                p_canvas.drawLine(p_filas_right, bottom, p_width_canvas, bottom, a_pincel_linea);
 
             // Dibujamos el nombre de la nota
             if ((bottom - top) >= ((a_pos[1] - a_pos[0]) / 2))
-                p_canvas.drawText(a_nombre + a_octava, p_filas_right / 4, bottom + ((top - bottom) / 2), p_pincel);
+            {
+                p_canvas.drawText(
+                        a_nombre + a_octava,
+                        p_filas_right / 4,
+                        bottom + (((top - bottom) / 12) * 5),
+                        a_pincel_texto);
+            }
         }
     }
 }

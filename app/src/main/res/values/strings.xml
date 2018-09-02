@@ -3,18 +3,13 @@
     <string name="prompt_notas">Escoge una Nota</string>
 
     <string-array name="array_notas">
-        <item>C</item>
-        <item>C#</item>
-        <item>D</item>
-        <item>D#</item>
-        <item>E</item>
-        <item>F</item>
-        <item>F#</item>
-        <item>G</item>
-        <item>G#</item>
-        <item>A</item>
-        <item>A#</item>
-        <item>B</item>
+        <item>redonda</item>
+        <item>blanca</item>
+        <item>negra</item>
+        <item>corchea</item>
+        <item>semicorchea</item>
+        <item>fusa</item>
+        <item>semifusa</item>
     </string-array>
 
 </resources>

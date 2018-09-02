@@ -5,8 +5,8 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
-import android.util.Log;
 
+import com.tarareapp_3.reproductor_tarareapp.Color_Picker_t;
 import com.tarareapp_3.reproductor_tarareapp.Reproductor.Compas_t;
 import com.tarareapp_3.reproductor_tarareapp.Reproductor.Nota_t;
 
@@ -23,7 +23,7 @@ public class Compas_Canvas_t {
     private float [] a_pos_en_canvas;
 
     private int a_tipo_pincel;
-    private static Paint [] a_pincel = null;
+    private static Paint [][] a_pincel = null;
     private static Paint [][] a_pincel_rejilla = null;
     private static Paint [] a_pincel_notas = null;
 
@@ -41,19 +41,15 @@ public class Compas_Canvas_t {
 
         if (a_pincel_rejilla == null)
         {
+            Color_Picker_t picker = new Color_Picker_t();
+
             a_pincel_rejilla = new Paint[2][2];
 
-            a_pincel_rejilla[0][0] = new Paint();
-            a_pincel_rejilla[0][0].setColor(Color.GREEN);
+            a_pincel_rejilla[0][0] = picker.getPincel(Color_Picker_t.type_color_t.MORADO);
+            a_pincel_rejilla[0][1] = picker.getPincel(Color_Picker_t.type_color_t.VIOLETA_LIGHT);
 
-            a_pincel_rejilla[0][1] = new Paint();
-            a_pincel_rejilla[0][1].setColor(Color.WHITE);
-
-            a_pincel_rejilla[1][0] = new Paint();
-            a_pincel_rejilla[1][0].setColor(Color.YELLOW);
-
-            a_pincel_rejilla[1][1] = new Paint();
-            a_pincel_rejilla[1][1].setColor(Color.BLUE);
+            a_pincel_rejilla[1][0] = picker.getPincel(Color_Picker_t.type_color_t.MORADO_LIGHT);
+            a_pincel_rejilla[1][1] = picker.getPincel(Color_Picker_t.type_color_t.BLANCO_VIOLETA);
         }
 
         if (p_num_rejillas > 0)
@@ -110,14 +106,20 @@ public class Compas_Canvas_t {
 
             if (a_pincel == null)
             {
-                a_pincel = new Paint[2];
-                a_pincel[0] = new Paint();
-                a_pincel[0].setColor(Color.GREEN);
-                a_pincel[0].setShadowLayer(4, 0, 5, Color.DKGRAY);
+                Color_Picker_t picker = new Color_Picker_t();
 
-                a_pincel[1] = new Paint();
-                a_pincel[1].setColor(Color.BLUE);
-                a_pincel[1].setShadowLayer(4, 0, 5, Color.DKGRAY);
+                a_pincel = new Paint[2][2];
+                a_pincel[0][0] = picker.getPincel(Color_Picker_t.type_color_t.MORADO);
+                a_pincel[0][0].setShadowLayer(4, 0, 5, Color.BLACK);
+                a_pincel[0][1] = picker.getPincel(Color_Picker_t.type_color_t.BLANCO);
+                a_pincel[0][1].setTextSize(30);
+                a_pincel[0][1].setStrokeWidth(1);
+
+                a_pincel[1][0] = picker.getPincel(Color_Picker_t.type_color_t.MORADO_LIGHT);
+                a_pincel[1][0].setShadowLayer(4, 0, 5, Color.BLACK);
+                a_pincel[1][1] = picker.getPincel(Color_Picker_t.type_color_t.BLANCO);
+                a_pincel[1][1].setTextSize(30);
+                a_pincel[1][1].setStrokeWidth(1);
             }
 
             if (p_tipo_pincel % 2 == 0)
@@ -213,15 +215,15 @@ public class Compas_Canvas_t {
 
                 if (a_pincel_notas == null)
                 {
+                    Color_Picker_t picker = new Color_Picker_t();
+
                     a_pincel_notas = new Paint [2];
 
-                    a_pincel_notas[0] = new Paint();
-                    a_pincel_notas[0].setColor(Color.GRAY);
-                    a_pincel_notas[0].setShadowLayer(4, 3, 3, Color.DKGRAY);
+                    a_pincel_notas[0] = picker.getPincel(Color_Picker_t.type_color_t.SALMON);
+                    a_pincel_notas[0].setShadowLayer(4, 3, 3, Color.BLACK);
 
-                    a_pincel_notas[1] = new Paint();
-                    a_pincel_notas[1].setColor(Color.RED);
-                    a_pincel_notas[1].setShadowLayer(4, 3, 3, Color.DKGRAY);
+                    a_pincel_notas[1] = picker.getPincel(Color_Picker_t.type_color_t.VIOLETA);
+                    a_pincel_notas[1].setShadowLayer(4, 3, 3, Color.BLACK);
                 }
             }
             else if (p_nota.nota_es_hija())
@@ -347,12 +349,10 @@ public class Compas_Canvas_t {
                     right = left + (av_rejillas[i][1] - av_rejillas[i][0]);
             }
 
-            if (i % 2 == 0)
-                pincel = a_pincel_rejilla[a_tipo_pincel][0];
-            else
-                pincel = a_pincel_rejilla[a_tipo_pincel][1];
+            pincel = a_pincel_rejilla[a_tipo_pincel][0];
 
             p_canvas.drawRect(left, a_yf[1], right, p_canvas.getHeight(), pincel);
+            p_canvas.drawLine(left, a_yf[1], left, p_canvas.getHeight(), a_pincel_rejilla[a_tipo_pincel][1]);
         }
     }
 
@@ -410,10 +410,12 @@ public class Compas_Canvas_t {
 
             p_canvas.drawLine(right, a_yf[1], right, p_canvas.getHeight(), p_pincel_negro);
 
-            p_canvas.drawRect(left, a_yf[0], right, a_yf[1], a_pincel[a_tipo_pincel]);
+            p_canvas.drawRect(left, a_yf[0], right, a_yf[1], a_pincel[a_tipo_pincel][0]);
+
+            float tamanyo = right - left;
 
             if ((right - left) >= ((a_x0[1] - a_x0[0]) / 2))
-                p_canvas.drawText("C" + (a_compas.compas_get_id() + 1), left + ((right - left) / 2), a_yf[1] / 2, p_pincel_negro);
+                p_canvas.drawText("C" + (a_compas.compas_get_id() + 1), left + ((tamanyo / 16) * 7), (a_yf[1] / 3) * 2, a_pincel[a_tipo_pincel][1]);
         }
     }
 
@@ -449,7 +451,7 @@ public class Compas_Canvas_t {
 
     public void cmp_dibuja_notas(Canvas p_canvas, float [] p_x_vista, float [] p_y_vista, float [] p_vista_0, boolean p_es_primer_compas)
     {
-        if (p_canvas != null && a_pos_en_canvas != null && av_notas != null)
+        if (p_canvas != null && a_pos_en_canvas != null && av_notas != null && a_pincel_notas != null)
         {
             Paint pincel = a_pincel_notas[a_tipo_pincel];
 

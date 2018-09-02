@@ -17,8 +17,8 @@ import java.util.ArrayList;
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class Dp_activity extends Activity{
 
-    Diagrama_Pianola_t a_diagrama;
-    Partitura_t a_partitura;
+    private Diagrama_Pianola_t a_diagrama;
+    private Partitura_t a_partitura;
 
     // ---------------------------------------------------------------------------------------------
 
@@ -43,7 +43,10 @@ public class Dp_activity extends Activity{
                 num_bits);
 
         Bundle args = intent.getBundleExtra("notas");
-        ArrayList<Data_Note_t> notes = (ArrayList<Data_Note_t>) args.getSerializable("ARRAYLIST");
+        ArrayList<Data_Note_t> notes = null;
+
+        if (args != null)
+            notes = (ArrayList<Data_Note_t>) args.getSerializable("ARRAYLIST");
 
         i_add_notes_to_score(notes);
 

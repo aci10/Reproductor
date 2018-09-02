@@ -7,6 +7,8 @@ import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
 
+import com.tarareapp_3.reproductor_tarareapp.Color_Picker_t;
+
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class Vista_Canvas_t {
 
