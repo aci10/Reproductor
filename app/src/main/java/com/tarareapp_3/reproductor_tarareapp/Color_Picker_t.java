@@ -10,6 +10,9 @@ public class Color_Picker_t {
     private Paint a_pincel;
     private final static int ALPHA = 250;
 
+    private final static String HEXA_PINK = "#e76593";
+    private final static String HEXA_PINK_LIGHT = "#e587a8";
+
     // ---------------------------------------------------------------------------------------------
 
     public enum type_color_t
@@ -84,5 +87,34 @@ public class Color_Picker_t {
         }
 
         return a_pincel;
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
+    public String [] getAnimation(type_color_t p_color)
+    {
+        String [] hexacolor = new String[2];
+
+        switch(p_color)
+        {
+            case ROSA:
+
+                hexacolor[0] = HEXA_PINK;
+                hexacolor[1] = HEXA_PINK_LIGHT;
+                break;
+
+            case ROSA_LIGTH:
+
+                hexacolor[0] = HEXA_PINK_LIGHT;
+                hexacolor[1] = HEXA_PINK;
+                break;
+
+            default:
+
+                hexacolor = null;
+                break;
+        }
+
+        return hexacolor;
     }
 }

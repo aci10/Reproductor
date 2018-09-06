@@ -83,7 +83,7 @@ public class Diagrama_Pianola_t extends SurfaceView{
 
         indicador = 0;
 
-        for (int i = 1; i <= 8; i++)
+        for (int i = 8; i > 0; i--)
         {
             indicador = i_crea_fila_nota("C", i, indicador, top_0, bottom_0, alto_fila, false, false);
 
@@ -214,7 +214,10 @@ public class Diagrama_Pianola_t extends SurfaceView{
     public void dp_stop_score(boolean pause)
     {
         if (a_partitura != null)
+        {
             a_partitura.partitura_detener_reproduccion(pause);
+            a_tool_bar.bh_change_play_button();
+        }
     }
 
     // ---------------------------------------------------------------------------------------------

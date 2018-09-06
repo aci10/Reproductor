@@ -3,11 +3,11 @@
     <string name="prompt_notas">Escoge una Nota</string>
 
     <string-array name="array_notas">
+        <item>semicorchea</item>
         <item>redonda</item>
         <item>blanca</item>
         <item>negra</item>
         <item>corchea</item>
-        <item>semicorchea</item>
         <item>fusa</item>
         <item>semifusa</item>
     </string-array>

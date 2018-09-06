@@ -37,6 +37,8 @@ public class Vista_Canvas_t {
     private final static double X100_WIDTH_MEASURE_LS = 0.3;
     private final static double X100_HEIGHT_MEASURE_LS = 0.1;
 
+    private final static double X100_TOOL_WIDTH = 0.125;
+
     private float a_width_compas;
     private float a_height_compas;
 
@@ -350,7 +352,7 @@ public class Vista_Canvas_t {
     {
         float [] pos_bar = new float [4];
 
-        pos_bar[0] = a_width_canvas - a_width_fila * 2;
+        pos_bar[0] = (float)(a_width_canvas - a_width_canvas * X100_TOOL_WIDTH);
         pos_bar[1] = top;
         pos_bar[2] = a_width_canvas;
         pos_bar[3] = a_height_canvas;

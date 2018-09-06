@@ -35,15 +35,35 @@ public class Barra_Herramientas_t {
         float pos [] = a_vista.vista_init_pos_first_tool(a_pos_bar[1]);
         float ancho = pos[2] - pos[0];
 
-        av_tools.add(new Tools_Bar_t("Editor", pos, Tools_Bar_t.type_tool_t.TOOL_EDIT_MODE, a_dp.dp_get_context()));
+        av_tools.add(new Tools_Bar_t(a_dp,pos, Tools_Bar_t.type_tool_t.TOOL_EDIT_MODE, a_dp.dp_get_context()));
 
         pos[0] -= ancho;
         pos[2] -= ancho;
-        av_tools.add(new Tools_Bar_t("Exportador", pos, Tools_Bar_t.type_tool_t.TOOL_EXPORT, a_dp.dp_get_context()));
+        av_tools.add(new Tools_Bar_t(a_dp, pos, Tools_Bar_t.type_tool_t.TOOL_REDO, a_dp.dp_get_context()));
 
         pos[0] -= ancho;
         pos[2] -= ancho;
-        av_tools.add(new Tools_Bar_t("Reproductor", pos, Tools_Bar_t.type_tool_t.TOOL_PLAY, a_dp.dp_get_context()));
+        av_tools.add(new Tools_Bar_t(a_dp, pos, Tools_Bar_t.type_tool_t.TOOL_UNDO, a_dp.dp_get_context()));
+
+        pos[0] -= ancho;
+        pos[2] -= ancho;
+        av_tools.add(new Tools_Bar_t(a_dp, pos, Tools_Bar_t.type_tool_t.TOOL_STOP, a_dp.dp_get_context()));
+
+        pos[0] -= ancho;
+        pos[2] -= ancho;
+        av_tools.add(new Tools_Bar_t(a_dp, pos, Tools_Bar_t.type_tool_t.TOOL_PLAY, a_dp.dp_get_context()));
+
+        pos[0] -= ancho;
+        pos[2] -= ancho;
+        av_tools.add(new Tools_Bar_t(a_dp, pos, Tools_Bar_t.type_tool_t.TOOL_NEXT, a_dp.dp_get_context()));
+
+        pos[0] -= ancho;
+        pos[2] -= ancho;
+        av_tools.add(new Tools_Bar_t(a_dp, pos, Tools_Bar_t.type_tool_t.TOOL_EXPORT, a_dp.dp_get_context()));
+
+        pos[0] -= ancho;
+        pos[2] -= ancho;
+        av_tools.add(new Tools_Bar_t(a_dp, pos, Tools_Bar_t.type_tool_t.TOOL_AJUSTES, a_dp.dp_get_context()));
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -181,6 +201,17 @@ public class Barra_Herramientas_t {
 
     // ---------------------------------------------------------------------------------------------
 
+    public void bh_change_play_button()
+    {
+        for (int i = 0; i < av_tools.size(); i++)
+        {
+            if (av_tools.get(i).tb_change_to_play())
+                break;
+        }
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
     public void bh_draw(Canvas p_canvas, Paint p_pincel_negro)
     {
         i_start_animation();
@@ -191,7 +222,7 @@ public class Barra_Herramientas_t {
 
             for (int i = 0; i < av_tools.size(); i++)
             {
-                av_tools.get(i).tb_draw(p_canvas, p_pincel_negro);
+                av_tools.get(i).tb_draw(p_canvas);
             }
         }
 

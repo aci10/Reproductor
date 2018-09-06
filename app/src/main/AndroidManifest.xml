@@ -16,7 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity" android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 
@@ -24,19 +24,25 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".Reproductor.rep_activity" >
+        <activity android:name=".Reproductor.rep_activity" android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.DEFAULT" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".CanvasTapp.Dp_activity" >
+        <activity android:name=".CanvasTapp.Dp_activity" android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.DEFAULT" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".Grabadora.Recorder_t" >
+        <activity android:name=".Grabadora.Recorder_t" android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".Bpm_Detector_t" android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.DEFAULT" />
             </intent-filter>

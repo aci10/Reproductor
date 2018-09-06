@@ -5,6 +5,7 @@ import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,6 +20,7 @@ import com.tarareapp_3.reproductor_tarareapp.Grabadora.Recorder_t;
 public class MainActivity extends AppCompatActivity {
 
     private int a_signatures;
+    private int a_tempo;
 
     // ---------------------------------------------------------------------------------------------
 
@@ -31,10 +33,32 @@ public class MainActivity extends AppCompatActivity {
 
         crea_boton_enlace(R.id.actionGoRecorder, Recorder_t.class);
         crea_boton_enlace(R.id.actionGoEditor, Dp_activity.class);
-        crea_boton_enlace(R.id.actionSetBpm, Dp_activity.class);
+        crea_boton_enlace(R.id.actionSetBpm, Bpm_Detector_t.class);
 
         i_create_action_button(R.id.actionPlus);
         i_create_action_button(R.id.actionRest);
+
+        a_tempo = 60;
+
+        Intent intent = getIntent();
+        Bundle extras = null;
+
+        if (intent != null)
+            extras = intent.getExtras();
+
+        System.out.println(extras);
+
+        if (extras != null)
+        {
+            int tempo;
+            tempo = extras.getInt("bpm");
+
+            if (tempo > 0)
+                a_tempo = tempo;
+        }
+
+        EditText text = findViewById(R.id.TempoEditText);
+        text.setText("" + a_tempo);
     }
 
     // ---------------------------------------------------------------------------------------------

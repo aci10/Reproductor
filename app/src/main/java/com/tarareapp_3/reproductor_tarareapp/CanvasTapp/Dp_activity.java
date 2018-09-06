@@ -35,12 +35,29 @@ public class Dp_activity extends Activity{
         int valor_pulso = intent.getExtras().getInt("valor_pulso");
         int num_bits = intent.getExtras().getInt("num_bits");
 
-        a_partitura = new Partitura_t(
-                nombre,
-                bpm,
-                pulsos_compas,
-                valor_pulso,
-                num_bits);
+        if (num_bits > 0)
+        {
+            a_partitura = new Partitura_t(
+                    nombre,
+                    bpm,
+                    pulsos_compas,
+                    valor_pulso,
+                    num_bits);
+        }
+        else
+        {
+            String precision = intent.getExtras().getString("precision");
+
+            if (precision != null)
+            {
+                a_partitura = new Partitura_t(
+                        nombre,
+                        bpm,
+                        pulsos_compas,
+                        valor_pulso,
+                        precision);
+            }
+        }
 
         Bundle args = intent.getBundleExtra("notas");
         ArrayList<Data_Note_t> notes = null;

@@ -202,6 +202,23 @@ public class Pitch_Detector_t {
 
     // ---------------------------------------------------------------------------------------------
 
+    private ArrayList<Data_Note_t> i_suavizado_notas(ArrayList<Data_Note_t> p_notas)
+    {
+        ArrayList<Data_Note_t> notas = null;
+
+        if (p_notas != null)
+        {
+            ArrayList<Data_Note_t>      lista_notas_contiguas = new ArrayList<>();
+            notas = new ArrayList<>();
+
+
+        }
+
+        return notas;
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
     public ArrayList<Data_Note_t> pd_get_notes_attributes(int p_num_bits_compas)
     {
         ArrayList<Data_Note_t> notes_attributes = null;
@@ -355,6 +372,8 @@ public class Pitch_Detector_t {
                 }
             }
         }
+
+
 
         return notes_attributes;
     }

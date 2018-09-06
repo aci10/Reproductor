@@ -12,7 +12,7 @@ public class Bpm_Detector_t extends Activity
 {
     private int a_muestras;
     private double a_sumatorio;
-    private double a_bpm;
+    private int a_bpm;
     private long a_last_click;
     private boolean a_started;
 
@@ -73,7 +73,7 @@ public class Bpm_Detector_t extends Activity
 
                 media = a_sumatorio / a_muestras;
 
-                a_bpm = 60000 / media;
+                a_bpm = (int)(60000 / media);
 
                 TextView text = findViewById(R.id.textBPM);
                 text.setText("" + a_bpm);
@@ -97,13 +97,12 @@ public class Bpm_Detector_t extends Activity
             {
                 Intent myIntent = new Intent(Bpm_Detector_t.this, cls);
 
-
                 myIntent.putExtra("nombre", a_name);
 
                 if (p_id_vista != R.id.btnCancel && a_bpm > 0)
-                    myIntent.putExtra("bpm", a_tempo);
-                else
                     myIntent.putExtra("bpm", a_bpm);
+                else
+                    myIntent.putExtra("bpm", a_tempo);
 
                 myIntent.putExtra("pulsos_compas", a_pulsos);
                 myIntent.putExtra("valor_pulso", a_valor_pulso);
