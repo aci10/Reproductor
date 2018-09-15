@@ -179,6 +179,21 @@ public class Data_Note_t implements Serializable
 
     // ---------------------------------------------------------------------------------------------
 
+    private boolean i_anyade_nota(ArrayList<Data_Note_t> p_notas)
+    {
+        boolean added = false;
+
+        if (p_notas != null)
+        {
+            p_notas.add(this);
+            added = true;
+        }
+
+        return added;
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
     public ArrayList<Data_Note_t> dn_compara_ids(ArrayList<Data_Note_t> p_notas)
     {
         ArrayList<Data_Note_t> notas = null;
@@ -193,10 +208,7 @@ public class Data_Note_t implements Serializable
                 int diferencia = p_notas.get(0).a_id - a_id;
 
                 if (diferencia >= -1 && diferencia <= 1)
-                {
-                    notas.add(this);
-                    added = true;
-                }
+                    added = i_anyade_nota(notas);
                 else if (diferencia >= -2 && diferencia <= 2)
                 {
                     if (p_notas.size() > 1)
@@ -206,19 +218,15 @@ public class Data_Note_t implements Serializable
                             int diferencia_aux = p_notas.get(i).a_id - a_id;
 
                             if (diferencia_aux >= -1 && diferencia_aux <= 1)
-                            {
-                                notas.add(this);
-                                added = true;
-                            }
+                                added = i_anyade_nota(notas);
                         }
                     }
                     else
-                    {
-                        notas.add(this);
-                        added = true;
-                    }
+                        added = i_anyade_nota(notas);
                 }
             }
+            else
+                added = i_anyade_nota(notas);
         }
 
         if (!added)

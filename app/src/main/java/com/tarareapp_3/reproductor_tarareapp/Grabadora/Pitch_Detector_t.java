@@ -208,10 +208,42 @@ public class Pitch_Detector_t {
 
         if (p_notas != null)
         {
-            ArrayList<Data_Note_t>      lista_notas_contiguas = new ArrayList<>();
+            ArrayList<Data_Note_t> lista_notas_contiguas = new ArrayList<>();
             notas = new ArrayList<>();
 
+            for (int i = 0; i < p_notas.size(); i++)
+            {
+                ArrayList<Data_Note_t> aux_lista;
 
+                if (!p_notas.get(i).dn_get_nombre().equals("NONE"))
+                {
+                    aux_lista = p_notas.get(i).dn_compara_ids(lista_notas_contiguas);
+
+                    if (aux_lista != null)
+                    {
+                        lista_notas_contiguas = aux_lista;
+                    }
+                    else if (lista_notas_contiguas != null && lista_notas_contiguas.size() > 0)
+                    {
+                        notas.add(lista_notas_contiguas.get(0).dn_calcula_nota_media(lista_notas_contiguas));
+
+                        lista_notas_contiguas = new ArrayList<>();
+                        lista_notas_contiguas.add(p_notas.get(i));
+                    }
+                }
+                else
+                {
+                    if (lista_notas_contiguas != null && lista_notas_contiguas.size() > 0)
+                    {
+                        notas.add(lista_notas_contiguas.get(0).dn_calcula_nota_media(lista_notas_contiguas));
+
+                        lista_notas_contiguas = new ArrayList<>();
+                        lista_notas_contiguas.add(p_notas.get(i));
+
+                        notas.add(p_notas.get(i));
+                    }
+                }
+            }
         }
 
         return notas;
@@ -373,7 +405,8 @@ public class Pitch_Detector_t {
             }
         }
 
-
+        if (notes_attributes != null)
+            notes_attributes = i_suavizado_notas(notes_attributes);
 
         return notes_attributes;
     }

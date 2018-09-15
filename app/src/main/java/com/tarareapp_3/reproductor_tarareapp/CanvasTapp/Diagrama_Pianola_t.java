@@ -238,12 +238,12 @@ public class Diagrama_Pianola_t extends SurfaceView{
 
         if (p_nota != null)
         {
-            int i_inicial = (p_nota.nota_get_octava() * 12) - 12;
+            int i_inicial = av_filas.length - (p_nota.nota_get_octava() * 12) + 11;
 
             if (i_inicial < 0)
                 i_inicial = 0;
 
-            for (int i = i_inicial; i < (i_inicial + 12); i++)
+            for (int i = i_inicial; i > (i_inicial - 12); i--)
             {
                 pos = av_filas[i].fila_get_pos(p_nota);
 
